@@ -3,3 +3,7 @@ apt install -y build-essential lsb-release apt-transport-https module-assistant 
 apt install -y lxde-core
 
 apt install -y xrdp
+
+cp /etc/default/grub /etc/default/grub.bkp
+sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet|GRUB_CMDLINE_LINUX_DEFAULT="quiet splash nomodeset|g' /etc/default/grub
+sudo update-grub
