@@ -1,3 +1,8 @@
+#Teste IOMMU support Windows
+(Get-VMHost).IovSupport; (Get-VMHost).IovSupportReasons
+get-vmswitch | fl *iov*
+Get-VM | Format-List -Property *
+
 #https://www.youtube.com/watch?v=g--fe8_kEcw
 
 sudo apt install -y cpu-checker
