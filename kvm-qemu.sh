@@ -23,7 +23,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 sudo reboot
 
-cat 'EOF' >> /etc/modprobe.d/vfio.conf
+cat <<'EOF'>> /etc/modprobe.d/vfio.conf
 options vfio-pci ids=10de:1f99,10de:10fa
 softdep nvidia pre: vfio-pci
 EOF
