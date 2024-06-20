@@ -1,4 +1,6 @@
 
+pwd=412190
+
 ip4=$(hostname -I | cut -d '.' -f 4 | cut -d ' ' -f 1)
 ip3=$(hostname -I | cut -d '.' -f 3 | cut -d ' ' -f 1)
 ip2=$(hostname -I | cut -d '.' -f 2 | cut -d ' ' -f 1)
@@ -12,8 +14,8 @@ websockify -D --web=/usr/share/novnc/ --cert=/home/$USER/novnc.pem 6080 localhos
 
 
 apt -y install tigervnc-standalone-server
-vncserver
-vncserver -kill :1
+echo $pwd|$pwd && vncserver
+sudo vncserver -kill :*
 
 ls -l /usr/share/*sessions/
 ls -l /usr/bin/*session
@@ -24,18 +26,19 @@ geometry=1024x768
 localhostalwaysshared
 EOF
 
-echo ":1=$USER" >> /etc/tigervnc/vncserver.users
+echo ":0=$USER" >> /etc/tigervnc/vncserver.users
+
 systemctl start tigervncserver@:1.service
 systemctl enable tigervncserver@:1.service
 systemctl status tigervncserver@:1.service
 
-mkdir /home/$myuser/.vnc
-echo $mypasswd | vncpasswd -f > /home/$myuser/.vnc/passwd
-chown -R $myuser:$myuser /home/$myuser/.vnc
-chmod 0600 /home/$myuser/.vnc/passwd
+mkdir /home/$USER/.vnc
+echo $pwd | vncpasswd -f > /home/$USER/.vnc/passwd
+chown -R $USER:$USER /home/$USER/.vnc
+chmod 0600 /home/$USER/.vnc/passwd
 
 echo 'Cadastre a senha noVNC"
 
 echo
-echo "Acesse via browser http://$ip1.$ip2.$ip3.$ip4::6080/vnc.html"
+echo "Acesse via browser http://$ip1.$ip2.$ip3.$ip4:6080/vnc.html"
 echo
