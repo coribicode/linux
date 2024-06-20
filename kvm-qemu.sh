@@ -1,10 +1,3 @@
-## Teste IOMMU support Windows
-## (Get-VMHost).IovSupport; (Get-VMHost).IovSupportReasons
-## get-vmswitch | fl *iov*
-## Get-VM | Format-List -Property *
-
-#https://www.youtube.com/watch?v=g--fe8_kEcw
-
 sudo apt install -y cpu-checker
 sudo kvm-ok
 
@@ -19,24 +12,33 @@ sudo sed -i 's|#uri_default = "qemu:///system"|uri_default = "qemu:///system"|g'
 virsh --connect=qemu:///system net-autostart default
 
 sudo modprobe vhost_net
-echo vhost_net | sudo tee -a /etc/modules
+cat <<"EOF">> /etc/modules
+vhost_net
+vfio
+vfio_iommu_type1
+vfio_pci
+vfio_virqfd
+EOF
 
-
-sudo sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet"|GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt vfio-pci.ids=10de:1f99,10de:10fa"|g' /etc/default/grub
+sudo sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet"|GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt"|g' /etc/default/grub
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-sudo reboot
-
-cat <<'EOF'>> /etc/modprobe.d/vfio.conf
-options vfio-pci ids=10de:1f99,10de:10fa
-softdep nvidia pre: vfio-pci
-EOF
-
 sudo update-initramfs -c -k $(uname -r)
 
-sudo reboot
+###################################################################################
+## Teste IOMMU support pelo Windows via powershell
+## (Get-VMHost).IovSupport; (Get-VMHost).IovSupportReasons
+## get-vmswitch | fl *iov*
+## Get-VM | Format-List -Property *
 
-lspci -k | grep -E "vfio-pci|NVIDIA"
+## https://www.youtube.com/watch?v=g--fe8_kEcw
 
-wget -P /opt/ https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
+## cat <<'EOF'>> /etc/modprobe.d/vfio.conf
+## options vfio-pci ids=10de:1f99,10de:10fa
+## softdep nvidia pre: vfio-pci
+## EOF
+
+## lspci -k | grep -E "vfio-pci|NVIDIA"
+
+## wget -P /opt/ https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso
