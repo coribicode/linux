@@ -6,14 +6,14 @@
 ## Altere a senha abaixo          ##
 ####################################
 
-pwd=123
+passwdvnc=123
 
 ####################################
 
 apt-get install x11vnc -y
 
 mkdir $PWD/.vnc
-echo $pwd | vncpasswd -f > $PWD/.vnc/passwd
+echo $passwdvnc | vncpasswd -f > $PWD/.vnc/passwd
 chown -R $USER:$USER $PWD/.vnc
 chmod 0600 $PWD/.vnc/passwd
 
