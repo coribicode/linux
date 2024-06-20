@@ -12,12 +12,20 @@ sudo sed -i 's|#uri_default = "qemu:///system"|uri_default = "qemu:///system"|g'
 virsh --connect=qemu:///system net-autostart default
 
 sudo modprobe vhost_net
+
+
+
 cat <<"EOF">> /etc/modules
 vhost_net
 vfio
 vfio_iommu_type1
 vfio_pci
 vfio_virqfd
+
+## options vfio-pci ids=XXXX:XXXX, YYYY:YYYY
+## Para adicionar o ID do PCI para passtrough, use o comando "lspci -nn" para listar os dispositivos, as ids estão entre cochetes "[]".
+## Copie e cole em "options vfio-pci ids=XXXX:XXXX que são a numeração coletadas acima, separadas por virgula cada dispositivo.
+
 EOF
 
 sudo sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet"|GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt"|g' /etc/default/grub
