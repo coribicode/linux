@@ -45,6 +45,7 @@ sudo update-initramfs -u
 
 
 sudo sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet"|GRUB_CMDLINE_LINUX_DEFAULT="quiet preempt=voluntary iommu=pt amd_iommu=on intel_iommu=on"|g' /etc/default/grub
+# Fonte: https://github.com/small-hack/smol-gpu-passthrough
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
