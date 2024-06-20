@@ -29,7 +29,22 @@ vfio_virqfd
 
 EOF
 
-sudo sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet"|GRUB_CMDLINE_LINUX_DEFAULT="intel_iommu=on iommu=pt"|g' /etc/default/grub
+# Check os drivers em uso do Kernel com o comando: "lspci -vnn"
+# Depois crie o arquivo para desativar os drvers da inicialização do kernel
+
+# cat <<"EOF">> /etc/modprobe.d/vfio.conf
+# softdep nouveau pre: vfio-pci
+# softdep snd_hda_intel pre: vfio-pci
+# options vfio-pci ids=XXXX:XXXX,YYYY:YYYY
+# EOF
+
+sudo update-initramfs -u
+
+# Depois, pré-check os drivers em uso do Kernel com o comando: "lspci -vnn" e verifique se "vfio-pci" aparece em uso para os dispostivos selecionados.
+# Fonte: https://gist.github.com/nephest/c2d2c31417be545c3c6eef2cec0e796e
+
+
+sudo sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="quiet"|GRUB_CMDLINE_LINUX_DEFAULT="quiet preempt=voluntary iommu=pt amd_iommu=on intel_iommu=on"|g' /etc/default/grub
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
