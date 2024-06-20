@@ -25,6 +25,7 @@ vfio_virqfd
 ## options vfio-pci ids=XXXX:XXXX, YYYY:YYYY
 ## Para adicionar o ID do PCI para passtrough, use o comando "lspci -nn" para listar os dispositivos, as ids estão entre cochetes "[]".
 ## Copie e cole em "options vfio-pci ids=XXXX:XXXX que são a numeração coletadas acima, separadas por virgula cada dispositivo.
+## Para listar os dispositivos adicionados ao IOMMU, digite o comando: "journalctl -b 0 | grep -i iommu"
 
 EOF
 
