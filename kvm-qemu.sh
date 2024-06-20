@@ -1,7 +1,7 @@
 sudo apt install -y cpu-checker
 sudo kvm-ok
 
-sudo apt-get install -y qemu-kvm qemu-user-static qemu-utils bridge-utils dnsmasq virt-manager libvirt-clients libvirt-daemon-system libguestfs-tools libosinfo-bin ovmf
+sudo apt-get install -y qemu-kvm qemu-user-static qemu-utils bridge-utils dnsmasq virt-manager libvirt-clients libvirt-daemon-system libguestfs-tools libosinfo-bin ovmf virtinst
 sudo systemctl start libvirtd
 sudo systemctl enable libvirtd
 
