@@ -13,7 +13,7 @@ cat "/opt/$apt_dist.list" >> /etc/apt/sources.list.d/$apt_dist.list
 
 sed -i "s|keyring_gpg_path|$keyring_gpg_path|g" /etc/apt/sources.list.d/$apt_dist.list
 
-apt-get install -y gnupg wget ntp
+apt-get install -y gnupg wget systemd-timesyncd
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
 
