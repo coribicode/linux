@@ -34,5 +34,5 @@ echo
 echo "Acesse http://$ip"
 echo
 echo "Login: admin"
-echi "Senha: openmediavault"
+echo "Senha: openmediavault"
 echo
