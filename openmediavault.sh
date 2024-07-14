@@ -13,7 +13,7 @@ cat "/opt/$apt_dist.list" >> /etc/apt/sources.list.d/$apt_dist.list
 
 sed -i "s|keyring_gpg_path|$keyring_gpg_path|g" /etc/apt/sources.list.d/$apt_dist.list
 
-apt-get install -y gnupg wget
+apt-get install -y gnupg wget ntp
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
 
@@ -28,3 +28,11 @@ apt-get --yes --auto-remove --show-upgraded \
     --option DPkg::Options::="--force-confold" \
     install openmediavault
 
+ip=$(hostname -I | cut -d ' ' -f 1)
+
+echo
+echo "Acesse http://$ip"
+echo
+echo "Login: admin"
+echi "Senha: openmediavault"
+echo
