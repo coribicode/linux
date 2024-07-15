@@ -19,11 +19,11 @@ cp /etc/network/interfaces /etc/network/interfaces.bkp
 
 cp /etc/resolv.conf /etc/resolv.conf.bkp
 
-apt update && apt upgrade -y
-
 apt-get install -y wget gnupg sudo systemd-timesyncd 
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
+
+apt update && apt upgrade -y
 
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
