@@ -27,6 +27,7 @@ libxml-perl \
 libdbd-mysql-perl \
 libnet-ip-perl \
 libsoap-lite-perl \
+libsoap-wsdl-perl \
 libio-compress-perl \
 libcrypt-ssleay-perl \
 libnet-snmp-perl \
@@ -36,11 +37,15 @@ libnet-netmask-perl \
 libarchive-zip-perl \
 libmojolicious-perl \
 libswitch-perl \
+libyaml-perl \
+libghc-libyaml-dev \
 libplack-handler-anyevent-fcgi-perl
 
-cpan install YAML
-yes | cpan -f XML::Entities
-cpan -f SOAP::Transport::HTTP
+cpan -i YAML
+cpan -i XML::Entities
+cpan -i Apache2::SOAP
+cpan -i SOAP::Transport::HTTP
+
 
 PHP_VERSION=$(php -v | head -n1 | cut -d " " -f 2 | cut -d "." -f 1,2)
 
@@ -167,6 +172,9 @@ systemctl restart apache2
 systemctl reload apache2.service
 
 echo
+sudo apache2ctl -t
+echo
+echo
 echo "Instalação Concluída"
 echo
 echo "Acesse via broswer http://$HOST_IP/ocsreports"
@@ -189,6 +197,14 @@ echo
 # cpan install XML::Entities
 # cpan install YAML
 # cpan -f SOAP::Transport::HTTP
+# cpan install YAML
+
+# yes | cpan -f XML::Entities
+
+# cpan -f YAML
+# cpan -f XML::Entities
+# cpan -f SOAP::Transport::HTTP
+
 
 # export PERL_MM_USE_DEFAULT=1
 # perl -MCPAN -e 'install Mojolicious'
