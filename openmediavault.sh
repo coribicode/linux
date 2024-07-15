@@ -64,8 +64,8 @@ networkctl
 echo
 echo "Buscando as últimas atualizações do OpenMediaVault..."
 echo
-apt --only-upgrade install openmediavault
-# sudo omv-upgrade
+sudo apt --only-upgrade install openmediavault
+sudo omv-upgrade
 echo
 
 echo
