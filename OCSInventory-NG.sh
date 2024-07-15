@@ -12,7 +12,7 @@ HOST_IP=$(hostname -I | head -n1 | cut -f1 -d' ')
 
 apt install -y build-essential sudo wget git curl perl make cmake gcc unzip
 
-apt install -y mariadb-server php
+apt install -y mariadb-server php apache2-dev
 
 apt install -y net-tools pciutils smartmontools read-edid nmap
 
@@ -156,6 +156,8 @@ echo "Senha: admin"
 echo
 
 # yes | cpan -f XML::Entities
+# cpan install XML::Entities
+# cpan install YAML
 # cpan -f SOAP::Transport::HTTP
 
 # export PERL_MM_USE_DEFAULT=1
