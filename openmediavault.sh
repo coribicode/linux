@@ -4,6 +4,7 @@
 echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
 
 nic=$(ip -4 link | grep "state UP" | cut -d ':' -f 2 | tr -d ' ')
+mac=$(ip add | grep link/ether | awk '{print $2}')
 
 apt_dist='openmediavault'
 
@@ -22,10 +23,6 @@ cat "/opt/$apt_dist.list" >> /etc/apt/sources.list.d/$apt_dist.list
 
 sed -i "s|keyring_gpg_path|$keyring_gpg_path|g" /etc/apt/sources.list.d/$apt_dist.list
 
-cp /etc/network/interfaces /etc/network/interfaces.bkp
-
-cp /etc/resolv.conf /etc/resolv.conf.bkp
-
 apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
@@ -34,37 +31,6 @@ wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyri
 sudo dpkg -l | grep keyring
 
 apt update && apt upgrade -y
-
-mac=$(ip add | grep link/ether | awk '{print $2}')
-
-
-
-sudo systemctl restart networking.service
-sudo systemctl status networking.service
-
-
-mkdir /run/systemd/network
-
-cat <<"EOF">> /run/systemd/network/10-netplan-eth0.network
-[Match]
-Name=NIC
-PermanentMACAddress=MAC
-
-[Network]
-DHCP=ipv4
-LinkLocalAddressing=no
-
-[DHCP]
-RouteMetric=100
-UseMTU=true
-UseDomains=true
-EOF
-
-sed -i "s|MAC|$mac|g" /run/systemd/network/10-netplan-eth0.network
-sed -i "s|NIC|$nic|g" /run/systemd/network/10-netplan-eth0.network
-
-sudo systemctl restart systemd-networkd.service
-sudo systemctl status systemd-networkd.service
 
 networkctl
 
@@ -91,16 +57,7 @@ EOF
 
 sudo netplan apply
 
-
-cp /etc/network/interfaces.bkp /etc/network/interfaces
-
-cp /etc/resolv.conf.bkp /etc/resolv.conf
-
-
 /etc/init.d/networking restart
-
-
-sudo omv-salt deploy run systemd-networkd
 
 echo
 echo "Buscando as últimas atualizações do OpenMediaVault..."
