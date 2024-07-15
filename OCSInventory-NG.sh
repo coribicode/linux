@@ -134,6 +134,7 @@ chown -R www-data:www-data /var/lib/ocsinventory-reports
 echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 systemctl restart apache2
+systemctl reload apache2.service
 
 echo
 echo "Instalação Concluída"
