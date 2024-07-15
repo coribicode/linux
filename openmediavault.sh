@@ -37,6 +37,7 @@ sudo systemctl status networking.service
 
 mac=$(ip add | grep link/ether | awk '{print $2}')
 
+
 mkdir /run/systemd/network
 
 cat <<"EOF">> /run/systemd/network/10-netplan-eth0.network
@@ -67,6 +68,17 @@ apt-get --yes --auto-remove --show-upgraded \
     --option DPkg::Options::="--force-confdef" \
     --option DPkg::Options::="--force-confold" \
     install openmediavault
+
+cp /etc/netplan/10-openmediavault-default.yaml /etc/netplan/10-openmediavault-default.yaml.bkp
+
+cat <<"EOF">> /etc/netplan/10-openmediavault-default.yaml
+    ethernets:
+        eth0:
+        dhcp4:true
+EOF
+
+sudo netplan apply
+
 
 cp /etc/network/interfaces.bkp /etc/network/interfaces
 
