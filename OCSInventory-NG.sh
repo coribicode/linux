@@ -18,14 +18,6 @@ apt install -y libapache2-mod-perl2 libapache-dbi-perl libapache-db-perl libapac
 
 PHP_VERSION=$(php -v | head -n1 | cut -d " " -f 2 | cut -d "." -f 1,2)
 
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "date.timezone ="
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "upload_max_filesize ="
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "file_uploads ="
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "memory_limit ="
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "max_execution_time ="
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "max_input_time ="
-cat /etc/php/"$PHP_VERSION"/apache2/php.ini | grep "post_max_size ="
-
 sudo sed -i 's/;date.timezone =/date.timezone = America\/Sao_Paulo/g' /etc/php/"$PHP_VERSION"/apache2/php.ini
 sudo sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 512M/g' /etc/php/"$PHP_VERSION"/apache2/php.ini
 sudo sed -i 's/file_uploads = On/file_uploads = On/g' /etc/php/"$PHP_VERSION"/apache2/php.ini
@@ -145,6 +137,9 @@ echo "Servidor Mysql: localhost"
 echo "Porta MySQL : 3306"
 echo "Habilitar SSL: Não"
 echo
+echo
+echo "Usuario: admin"
+echo "Senha: admin"
 echo
 echo "Mais informações, acesse: https://github.com/davigalucio/ocsinventoryserver"
 echo
