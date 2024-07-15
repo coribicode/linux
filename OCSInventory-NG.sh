@@ -128,6 +128,7 @@ ln -s /etc/apache2/conf-available/zz-ocsinventory-restapi.conf /etc/apache2/conf
 sudo a2enconf ocsinventory-reports
 sudo a2enconf z-ocsinventory-server
 sudo a2enconf zz-ocsinventory-restapi
+sudo a2enmod perl
 
 chown -R www-data:www-data /var/lib/ocsinventory-reports
 
