@@ -23,6 +23,9 @@ apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
 
+## Lista as KEY
+dpkg -l | grep keyring
+
 apt update && apt upgrade -y
 
 export LANG=C.UTF-8
