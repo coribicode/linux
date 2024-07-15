@@ -89,6 +89,8 @@ export APACHE_BIN_FOUND=/usr/sbin/apache2ctl
 
 cd $OCS_PATH
 
+export APACHE_BIN_FOUND=/usr/sbin/apache2ctl
+
 echo "y" | sh ./setup.sh
 
 cp /etc/apache2/conf-available/z-ocsinventory-server.conf /etc/apache2/conf-available/z-ocsinventory-server.conf.bkp
