@@ -1,3 +1,10 @@
+#####################
+## Prioridade IPV4 ##
+#####################
+echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
+
+nic=$(ip -4 link | grep "state UP" | cut -d ':' -f 2 | tr -d ' ')
+
 apt_dist='openmediavault'
 
 keyring_gpg_path="/usr/share/keyrings/"$apt_dist"-archive-keyring.gpg"
@@ -24,25 +31,24 @@ apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
 
 ## Lista as KEY
-dpkg -l | grep keyring
+sudo dpkg -l | grep keyring
 
 apt update && apt upgrade -y
 
-sudo systemctl restart systemd-networkd.service
-sudo systemctl status systemd-networkd.service
+mac=$(ip add | grep link/ether | awk '{print $2}')
+
 
 
 sudo systemctl restart networking.service
 sudo systemctl status networking.service
-
-mac=$(ip add | grep link/ether | awk '{print $2}')
 
 
 mkdir /run/systemd/network
 
 cat <<"EOF">> /run/systemd/network/10-netplan-eth0.network
 [Match]
-PermanentMACAddress=mac
+Name=NIC
+PermanentMACAddress=MAC
 
 [Network]
 DHCP=ipv4
@@ -54,7 +60,11 @@ UseMTU=true
 UseDomains=true
 EOF
 
-sed -i "s|mac|$mac|g" /run/systemd/network/10-netplan-eth0.network
+sed -i "s|MAC|$mac|g" /run/systemd/network/10-netplan-eth0.network
+sed -i "s|NIC|$nic|g" /run/systemd/network/10-netplan-eth0.network
+
+sudo systemctl restart systemd-networkd.service
+sudo systemctl status systemd-networkd.service
 
 networkctl
 
@@ -67,14 +77,16 @@ apt-get --yes --auto-remove --show-upgraded \
     --no-install-recommends \
     --option DPkg::Options::="--force-confdef" \
     --option DPkg::Options::="--force-confold" \
-    install openmediavault
+    install openmediavault openvswitch-switch-dpdk
+
+sudo omv-salt deploy run systemd-networkd
 
 cp /etc/netplan/10-openmediavault-default.yaml /etc/netplan/10-openmediavault-default.yaml.bkp
 
 cat <<"EOF">> /etc/netplan/10-openmediavault-default.yaml
-    ethernets:
-        eth0:
-        dhcp4:true
+  ethernets:
+   eth0:
+     dhcp4: true
 EOF
 
 sudo netplan apply
