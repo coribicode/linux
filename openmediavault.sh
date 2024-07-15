@@ -28,6 +28,35 @@ dpkg -l | grep keyring
 
 apt update && apt upgrade -y
 
+sudo systemctl restart systemd-networkd.service
+sudo systemctl status systemd-networkd.service
+
+
+sudo systemctl restart networking.service
+sudo systemctl status networking.service
+
+mac=$(ip add | grep link/ether | awk '{print $2}')
+
+mkdir /run/systemd/network
+
+cat <<"EOF">> /run/systemd/network/10-netplan-eth0.network
+[Match]
+PermanentMACAddress=mac
+
+[Network]
+DHCP=ipv4
+LinkLocalAddressing=no
+
+[DHCP]
+RouteMetric=100
+UseMTU=true
+UseDomains=true
+EOF
+
+sed -i "s|mac|$mac|g" /run/systemd/network/10-netplan-eth0.network
+
+networkctl
+
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
