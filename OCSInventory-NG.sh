@@ -38,8 +38,8 @@ libmojolicious-perl \
 libswitch-perl \
 libplack-handler-anyevent-fcgi-perl
 
-yes | cpan -f XML::Entities
 cpan install YAML
+yes | cpan -f XML::Entities
 cpan -f SOAP::Transport::HTTP
 
 PHP_VERSION=$(php -v | head -n1 | cut -d " " -f 2 | cut -d "." -f 1,2)
