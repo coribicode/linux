@@ -85,12 +85,7 @@ sudo sed -i "s|DB_SERVER_PORT=OCS_DB_PORT|DB_SERVER_PORT="$OCS_DB_PORT"|g" $OCS_
 sudo sed -i "s|DB_SERVER_USER=OCS_DB_USER|DB_SERVER_USER="$OCS_DB_USER"|g" $OCS_PATH/./setup.sh
 sudo sed -i "s|DB_SERVER_PWD=OCS_DB_PASSWORD|DB_SERVER_PWD="$OCS_DB_PASSWORD"|g" $OCS_PATH/./setup.sh
 
-APACHE_BIN='"/usr/sbin/apache2ctl"'
-
-sudo sed -i 's|APACHE_BIN="${APACHE_BIN:-}"|APACHE_BIN=APACHE_BIN|g' $OCS_PATH/./setup.sh
-sudo sed -i "s|APACHE_BIN=APACHE_BIN|APACHE_BIN="$APACHE_BIN"|g" $OCS_PATH/./setup.sh
-
-# export APACHE_BIN=/usr/sbin/apache2ctl
+export APACHE_BIN_FOUND=/usr/sbin/apache2ctl
 
 cd $OCS_PATH
 
@@ -105,6 +100,8 @@ OCS_DB_USER=$(echo $OCS_DB_USER | cut -d '"' -f2)
 OCS_DB_PASSWORD=$(echo $OCS_DB_PASSWORD | cut -d '"' -f2)
 
 PTH_ZZ_OCS_RESTAPI=/etc/apache2/conf-available/zz-ocsinventory-restapi.conf
+
+cp $PTH_ZZ_OCS_RESTAPI $PTH_ZZ_OCS_RESTAPI.bkp
 
 sudo sed -i "s|$ENV{OCS_DB_HOST} = 'localhost';;|$ENV{OCS_DB_HOST} = 'localhost';|" $PTH_ZZ_OCS_RESTAPI
 sudo sed -i "s|$ENV{OCS_DB_PORT} = '3306';|$ENV{OCS_DB_PORT} = '$OCS_DB_PORT';|" $PTH_ZZ_OCS_RESTAPI
