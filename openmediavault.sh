@@ -19,7 +19,7 @@ cp /etc/network/interfaces /etc/network/interfaces.bkp
 
 cp /etc/resolv.conf /etc/resolv.conf.bkp
 
-apt-get install -y wget gnupg sudo systemd-timesyncd 
+apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
 
