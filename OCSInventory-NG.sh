@@ -38,9 +38,6 @@ libmojolicious-perl \
 libswitch-perl \
 libplack-handler-anyevent-fcgi-perl
 
-yes | cpan -f XML::Entities
-cpan -f SOAP::Transport::HTTP
-
 PHP_VERSION=$(php -v | head -n1 | cut -d " " -f 2 | cut -d "." -f 1,2)
 
 PHP_PATH=$(php --ini | grep "Path" | cut -d ':' -f 2 | tr -d ' ')
@@ -150,6 +147,9 @@ echo
 echo "Usuario: admin"
 echo "Senha: admin"
 echo
+
+# yes | cpan -f XML::Entities
+# cpan -f SOAP::Transport::HTTP
 
 # export PERL_MM_USE_DEFAULT=1
 # perl -MCPAN -e 'install Mojolicious'
