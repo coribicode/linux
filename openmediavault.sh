@@ -59,26 +59,13 @@ sudo netplan apply
 
 /etc/init.d/networking restart
 
+networkctl
+
 echo
 echo "Buscando as últimas atualizações do OpenMediaVault..."
 echo
 apt --only-upgrade install openmediavault
-sudo omv-upgrade
-echo
-
-echo
-echo "Instalando pacotes essencias do OpenMediaVault..."
-echo
-apt install -y \
-openmediavault-apt \
-openmediavault-clamav \
-openmediavault-diskstats \
-openmediavault-filebrowser \
-openmediavault-ftp \
-openmediavault-photoprism \
-openmediavault-snmp \
-openmediavault-usbbackup \
-openmediavault-wetty
+# sudo omv-upgrade
 echo
 
 echo
