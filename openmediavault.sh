@@ -17,6 +17,10 @@ sed -i "s|keyring_gpg_path|$keyring_gpg_path|g" /etc/apt/sources.list.d/$apt_dis
 
 cp /etc/network/interfaces /etc/network/interfaces.bkp
 
+cp /etc/resolv.conf /etc/resolv.conf.bkp
+
+apt update && apt upgrade -y
+
 apt-get install -y wget gnupg sudo systemd-timesyncd 
 
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path"
@@ -33,6 +37,9 @@ apt-get --yes --auto-remove --show-upgraded \
     install openmediavault
 
 cp /etc/network/interfaces.bkp /etc/network/interfaces
+
+cp /etc/resolv.conf.bkp /etc/resolv.conf
+
 
 /etc/init.d/networking restart
 
