@@ -41,7 +41,7 @@ libyaml-perl \
 libghc-libyaml-dev \
 libplack-handler-anyevent-fcgi-perl
 
-cpan -i YAML
+yes | cpan -i YAML
 cpan -i XML::Entities
 cpan -i Apache2::SOAP
 cpan -i SOAP::Transport::HTTP
