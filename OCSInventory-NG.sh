@@ -8,7 +8,7 @@ OCS_PASSWORD='"ocs_password"'
 
 HOST_IP=$(hostname -I | head -n1 | cut -f1 -d' ')
 
-apt install -y git curl perl wget make cmake gcc perl unzip sudo 
+apt install -y git curl perl wget make cmake gcc unzip sudo 
 
 apt install -y apache2 mariadb-server php nmap -y
 
