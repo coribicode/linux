@@ -18,6 +18,8 @@ apt install -y libapache2-mod-perl2 libapache-dbi-perl libapache-db-perl libapac
 
 PHP_VERSION=$(php -v | head -n1 | cut -d " " -f 2 | cut -d "." -f 1,2)
 
+PHP_PATH=$(php --ini | grep "Path" | cut -d ':' -f 2 | tr -d ' ')
+
 sudo sed -i 's/;date.timezone =/date.timezone = America\/Sao_Paulo/g' /etc/php/"$PHP_VERSION"/apache2/php.ini
 sudo sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 512M/g' /etc/php/"$PHP_VERSION"/apache2/php.ini
 sudo sed -i 's/file_uploads = On/file_uploads = On/g' /etc/php/"$PHP_VERSION"/apache2/php.ini
