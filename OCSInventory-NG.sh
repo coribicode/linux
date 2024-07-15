@@ -121,6 +121,31 @@ sudo sed -i "s|PerlSetEnv OCS_DB_USER ocs|PerlSetEnv OCS_DB_USER $OCS_DB_USER|" 
 sudo sed -i "s|PerlSetVar OCS_DB_PWD ocs|PerlSetVar OCS_DB_PWD $OCS_DB_PASSWORD|" $PTH_Z_OCS
 sudo sed -i "s|PerlSetEnv OCS_OPT_ACCEPT_TAG_UPDATE_FROM_CLIENT 0|PerlSetEnv OCS_OPT_ACCEPT_TAG_UPDATE_FROM_CLIENT 1|" $PTH_Z_OCS
 
+APACHE_RUN_USER=$(cat /etc/apache2/envvars | grep APACHE_RUN_USER | cut -d '=' -f 2)
+APACHE_RUN_GROUP=$(cat /etc/apache2/envvars | grep APACHE_RUN_GROUP | cut -d '=' -f 2)
+APACHE_PID_FILE=$(cat /etc/apache2/envvars | grep APACHE_PID_FILE | cut -d '=' -f 2| tr -d '$SUFFIX')
+APACHE_LOG_DIR=$(cat /etc/apache2/envvars | grep APACHE_LOG_DIR | cut -d '=' -f 2| tr -d '$SUFFIX')
+APACHE_PATH_FILE=/etc/apache2/apache2.conf
+
+sed -i 's|${APACHE_RUN_USER}|APACHE_RUN_USER|g' $APACHE_PATH_FILE
+sed -i 's|${APACHE_RUN_GROUP}|APACHE_RUN_GROUP|g' $APACHE_PATH_FILE
+sed -i 's|${APACHE_PID_FILE}|APACHE_PID_FILE|g' $APACHE_PATH_FILE
+sed -i 's|${APACHE_LOG_DIR}|APACHE_LOG_DIR|g' $APACHE_PATH_FILE
+
+sed -i "s|APACHE_RUN_USER|$APACHE_RUN_USER|g" $APACHE_PATH_FILE
+sed -i "s|APACHE_RUN_GROUP|$APACHE_RUN_GROUP|g" $APACHE_PATH_FILE
+sed -i "s|APACHE_PID_FILE|$APACHE_PID_FILE|g" $APACHE_PATH_FILE
+sed -i "s|APACHE_LOG_DIR|$APACHE_LOG_DIR|g" $APACHE_PATH_FILE
+
+sed -i 's/OCS_OPT_GENERATE_OCS_FILES_SNMP 0/OCS_OPT_GENERATE_OCS_FILES_SNMP 0 \
+  # PerlSetEnv SNMP_LINK_TAG 0\
+  PerlSetEnv OCS_OPT_SNMP_LINK_TAG 0/g' /etc/apache2/conf-enabled/z-ocsinventory-server.conf
+
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+rm /etc/apache2/sites-enabled/000-default.conf
+rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf
+
 ln -s /etc/apache2/conf-available/ocsinventory-reports.conf /etc/apache2/conf-enabled/ocsinventory-reports.conf
 ln -s /etc/apache2/conf-available/z-ocsinventory-server.conf /etc/apache2/conf-enabled/z-ocsinventory-server.conf
 ln -s /etc/apache2/conf-available/zz-ocsinventory-restapi.conf /etc/apache2/conf-enabled/zz-ocsinventory-restapi.conf
@@ -131,8 +156,7 @@ sudo a2enconf zz-ocsinventory-restapi
 sudo a2enmod perl
 
 chown -R www-data:www-data /var/lib/ocsinventory-reports
-
-echo "ServerName localhost" >> /etc/apache2/apache2.conf
+chown -R www-data:www-data /var/run/apache2
 
 systemctl restart apache2
 systemctl reload apache2.service
