@@ -38,6 +38,10 @@ libmojolicious-perl \
 libswitch-perl \
 libplack-handler-anyevent-fcgi-perl
 
+yes | cpan -f XML::Entities
+cpan install YAML
+cpan -f SOAP::Transport::HTTP
+
 PHP_VERSION=$(php -v | head -n1 | cut -d " " -f 2 | cut -d "." -f 1,2)
 
 PHP_PATH=$(php --ini | grep "Path" | cut -d ':' -f 2 | tr -d ' ')
@@ -138,15 +142,6 @@ sed -i "s|APACHE_RUN_GROUP|$APACHE_RUN_GROUP|g" $APACHE_PATH_FILE
 sed -i "s|APACHE_PID_FILE|$APACHE_PID_FILE|g" $APACHE_PATH_FILE
 sed -i "s|APACHE_LOG_DIR|$APACHE_LOG_DIR|g" $APACHE_PATH_FILE
 
-sed -i 's/OCS_OPT_GENERATE_OCS_FILES_SNMP 0/OCS_OPT_GENERATE_OCS_FILES_SNMP 0 \
-  # PerlSetEnv SNMP_LINK_TAG 0\
-  PerlSetEnv OCS_OPT_SNMP_LINK_TAG 0/g' /etc/apache2/conf-enabled/z-ocsinventory-server.conf
-
-echo "ServerName localhost" >> /etc/apache2/apache2.conf
-
-rm /etc/apache2/sites-enabled/000-default.conf
-rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf
-
 ln -s /etc/apache2/conf-available/ocsinventory-reports.conf /etc/apache2/conf-enabled/ocsinventory-reports.conf
 ln -s /etc/apache2/conf-available/z-ocsinventory-server.conf /etc/apache2/conf-enabled/z-ocsinventory-server.conf
 ln -s /etc/apache2/conf-available/zz-ocsinventory-restapi.conf /etc/apache2/conf-enabled/zz-ocsinventory-restapi.conf
@@ -158,6 +153,15 @@ sudo a2enmod perl
 
 chown -R www-data:www-data /var/lib/ocsinventory-reports
 chown -R www-data:www-data /var/run/apache2
+
+sed -i 's/OCS_OPT_GENERATE_OCS_FILES_SNMP 0/OCS_OPT_GENERATE_OCS_FILES_SNMP 0 \
+  # PerlSetEnv SNMP_LINK_TAG 0\
+  PerlSetEnv OCS_OPT_SNMP_LINK_TAG 0/g' /etc/apache2/conf-enabled/z-ocsinventory-server.conf
+
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+rm /etc/apache2/sites-enabled/000-default.conf
+rm /etc/apache2/conf-enabled/other-vhosts-access-log.conf
 
 systemctl restart apache2
 systemctl reload apache2.service
