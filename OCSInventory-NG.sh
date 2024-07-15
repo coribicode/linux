@@ -87,6 +87,7 @@ sudo sed -i "s|DB_SERVER_PWD=OCS_DB_PASSWORD|DB_SERVER_PWD="$OCS_DB_PASSWORD"|g"
 
 cd $OCS_PATH
 
+export APACHE_BIN=/usr/sbin/apache2ctl
 export APACHE_BIN_FOUND=/usr/sbin/apache2ctl
 
 echo "y" | sh ./setup.sh
