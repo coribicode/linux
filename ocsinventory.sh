@@ -69,7 +69,7 @@ echo
 echo
 echo "Instalação Concluída"
 echo
-echo "Acesse via broswer http://$HOST_IP/ocsreports"
+echo "Acesse via broswer http://$(hostname -I | head -n1 | cut -f1 -d' ')/ocsreports"
 echo
 echo "Usuario: admin"
 echo "Senha: admin"
