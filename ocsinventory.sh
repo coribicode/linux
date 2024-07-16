@@ -63,3 +63,15 @@ echo "ServerName localhost" >> /etc/apache2/apache2.conf
 systemctl reload apache2.service
 systemctl restart apache2
 
+echo
+sudo apache2ctl -t
+echo
+echo
+echo "Instalação Concluída"
+echo
+echo "Acesse via broswer http://$HOST_IP/ocsreports"
+echo
+echo "Usuario: admin"
+echo "Senha: admin"
+echo
+
