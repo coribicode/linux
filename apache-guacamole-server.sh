@@ -13,7 +13,7 @@ HOST_IP=$(hostname -I | cut -d ' ' -f1)
 # Instalação dos Pacotes Essenciais  #
 ######################################
 apt update && apt upgrade -y
-
+systemctl daemon-reload
 apt install -y sudo wget build-essential
 
 ############################################
