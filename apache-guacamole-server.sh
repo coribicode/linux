@@ -94,7 +94,9 @@ mysql -u root < /opt/config.sql
 
 mkdir -p /etc/guacamole
 
-mkdir -p /etc/guacamole/{extensions,lib}
+mkdir -p /etc/guacamole/extensions
+
+mkdir -p /etc/guacamole/lib
 
 echo "GUACAMOLE_HOME=/etc/guacamole" >> /etc/default/tomcat$TOMCAT_VERSION
 
