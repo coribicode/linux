@@ -207,16 +207,28 @@ sudo systemctl restart guacd
 sudo systemctl restart tomcat"$TOMCAT_VERSION"
 
 echo
+echo "---------------------------------------------------------"
 sudo nginx -t
+echo "---------------------------------------------------------"
 echo
+echo "Status do Guacd"
+echo "---------------------------------------------------------"
+sudo service guacd status | grep -E "Loaded|Active"
+echo "---------------------------------------------------------"
+echo
+echo "Status do Guacd"
+echo "---------------------------------------------------------"
+sudo service tomcat$TOMCAT_VERSION status | grep -E "Loaded|Active"
+echo "---------------------------------------------------------"
+echo 
 echo "Instalação concluída!"
 echo
-echo "Apache Guacamole Server + MariaDB + Proxy Reverso NGNIX + Autenticação duplo Fator TOTP(Opcional) "
-echo
+echo "---------------------------------------------------------"
 echo "Acesse via broswer http://$(hostname -I | cut -d ' ' -f1)"
 echo
 echo "Usuario: guacadmin"
 echo "Senha: guacadmin"
+echo "---------------------------------------------------------"
 echo
 
 ######################################
