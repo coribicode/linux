@@ -207,6 +207,7 @@ sudo systemctl restart guacd
 sudo systemctl restart tomcat"$TOMCAT_VERSION"
 
 echo
+echo "Status do Arquivo do NGINX com Proxy Reverso da porta 8080"
 echo "---------------------------------------------------------"
 sudo nginx -t
 echo "---------------------------------------------------------"
@@ -216,7 +217,7 @@ echo "---------------------------------------------------------"
 sudo service guacd status | grep -E "Loaded|Active"
 echo "---------------------------------------------------------"
 echo
-echo "Status do Guacd"
+echo "Status do TomCat$TOMCAT_VERSION"
 echo "---------------------------------------------------------"
 sudo service tomcat$TOMCAT_VERSION status | grep -E "Loaded|Active"
 echo "---------------------------------------------------------"
