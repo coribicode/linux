@@ -9,6 +9,7 @@ DBCMD="mysql"
 # Command to be used if credentials are defined in this script
 #DBCMD="mysql --user=$DBUSER --password=$DBPASS"
 
+
 if [ $# -ne 1 ]
 then
         echo "Usage: $0 <username>"
