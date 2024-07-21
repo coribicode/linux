@@ -265,7 +265,6 @@ echo
 echo "Verificando arquivos de instalação do Nextcloud"
 echo "----------------------------------------"
 sudo -u www-data truncate /var/www/html/nextcloud/data/nextcloud.log --size 0 # Limpa o Log
-sudo -u www-data php /var/www/html/nextcloud/occ integrity:check-core # Verifica a integridade do sistema
 sudo -u www-data php /var/www/html/nextcloud/occ files:scan --all # Procura erros de configuração no sistema
 echo
 echo
@@ -280,8 +279,13 @@ echo "Senha: $NC_USER_PASS"
 echo
 date
 echo
-ls -ll /var/www/html/nextcloud/config/config.php
 
-#echo "DNS_CNAME"
-#echo "----------------------------------------"
+#ls -ll /var/www/html/nextcloud/config/config.php
+#sudo -u www-data php /var/www/html/nextcloud/occ integrity:check-core # Verifica a integridade do sistema
+#sudo -u www-data php /var/www/html/nextcloud/occ files:cleanup
+#sudo -u www-data php /var/www/html/nextcloud/occ config:system:set maintenance_window_start --type=integer --value=1
+#sudo -u www-data php --define apc.enable_cli=1 /var/www/html/nextcloud/occ maintenance:repair
+#sudo -u www-data php /var/www/html/nextcloud/occ maintenance:repair
+#sudo -u www-data php /var/www/html/nextcloud/occ files:scan --all
+#sudo -u www-data php /var/www/html/nextcloud/occ integrity:check-core
 #cat /var/www/html/nextcloud/lib/private/Http/Client/DnsPinMiddleware.php | grep DNS_CNAME
