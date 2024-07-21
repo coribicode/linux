@@ -7,7 +7,7 @@ apt install -y php-zip php-pclzip php-gd php-curl php-json php-mbstring php-xml 
 apt_dist=ocsinventory
 
 dist_codenome=$(cat /etc/*release* | grep CODENAME | cut -d "=" -f 2)
-dist_id=$(cat /etc/issue | cut -d ' ' -f1 | tr 'A-Z' 'a-z')
+dist_id=$(cat /etc/*relea* | grep "^[ID=]" | cut -d '=' -f2)
 
 keyring_gpg_path=/usr/share/keyrings/$apt_dist.gpg
 
