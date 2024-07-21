@@ -172,9 +172,14 @@ sudo -u www-data php /var/www/html/nextcloud/occ  maintenance:install \
 --database-user="$NC_DB_USER" --database-pass="$NC_DB_PASS" \
 --admin-user="$NC_USER_NAME" --admin-pass="$NC_USER_PASS"
 
-sed -i "s|0 => 'localhost|0 => '$HOST_IP|g" /var/www/html/nextcloud/config/config.php
+
 
 ## FIXES
+DIR_NC_CONFIG=/var/www/html/nextcloud/config/config.php
+cp $DIR_NC_CONFIG $DIR_NC_CONFIG.bkp
+
+sed -i "s|0 => 'localhost|0 => '$HOST_IP|g" $DIR_NC_CONFIG
+
 sudo sed -i 's|);||g' $DIR_NC_CONFIG
 
 cat >> $DIR_NC_CONFIG << EOL
