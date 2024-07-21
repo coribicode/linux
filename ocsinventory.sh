@@ -6,17 +6,18 @@ apt install -y php-zip php-pclzip php-gd php-curl php-json php-mbstring php-xml 
 
 apt_dist=ocsinventory
 
+dist_codenome=$(cat /etc/*release* | grep CODENAME | cut -d "=" -f 2)
+dist_id=$(cat /etc/issue | cut -d ' ' -f1 | tr 'A-Z' 'a-z')
+
 keyring_gpg_path=/usr/share/keyrings/$apt_dist.gpg
 
-dist_codenome=$(cat /etc/*release* | grep CODENAME | cut -d "=" -f 2)
-
 uri_gpg=http://deb.ocsinventory-ng.org/pubkey.gpg
-uri_deb="http://deb.ocsinventory-ng.org/debian/"
+uri_repo=http://deb.ocsinventory-ng.org/$dist_id/
 
 curl -fsSL $uri_gpg | sudo gpg --dearmor -o $keyring_gpg_path
 
 cat >> /etc/apt/sources.list.d/$apt_dist.list << EOL
-deb [signed-by=$keyring_gpg_path] $uri_deb $dist_codenome main
+deb [signed-by=$keyring_gpg_path] $uri_repo $dist_codenome main
 EOL
 
 apt update
