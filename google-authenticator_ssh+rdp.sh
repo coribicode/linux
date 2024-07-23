@@ -32,3 +32,21 @@ auth    required                        pam_google_authenticator.so|g' $path
 
 # google-authenticator -t -D -W -r 3 -R 30
 
+key=$(y | google-authenticator -t -D -W -r 3 -R 30 | grep 'is:' | cut -d ':' -f2 | tr -d ' ')
+
+key=$(date | tr -d A-z/:/" "/-)
+
+cat > /etc/users.oath << EOF
+HOTP root - $key
+EOF
+
+chmod go-rw /etc/users.oath
+
+oathtool -w 5 -b $key
+
+
+
+find / | grep pam_oath.so
+
+apt install -y libpam-oath oathtool
+
