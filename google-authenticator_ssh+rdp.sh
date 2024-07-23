@@ -14,7 +14,10 @@ sudo systemctl restart sshd
 #################################
 # Para todo acesso RDP com xrdp #
 #################################
-apt install -y xrdp
+
+apt install -y sudo xrdp ssl-cert
+sudo adduser xrdp ssl-cert
+sudo systemctl restart xrdp
 
 path=/etc/pam.d/xrdp-sesman
 mv $path $path.bkp
