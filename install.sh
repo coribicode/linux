@@ -4,31 +4,31 @@
 echo
 echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
 echo
-
-for nome in nano sudo grub xrdp vim
+package_list="nano sudo git build-essntials"
+for package in $package_list
   do
-    pacote=$(dpkg --get-selections | grep ^"$nome" | grep -w install)
+    pacote=$(dpkg --get-selections | grep ^"$package" | grep -w install)
     sleep 2
     if [ -n "$pacote" ] ;
       then
-      echo "Pacote [ $nome ]: OK!"
+      echo "Pacote [ $package ]: OK!"
       echo "--------------------------------------------------------------------"
     else
-      check_repo=$(apt-cache search $nome| grep ^"$nome ")
+      check_repo=$(apt-cache search $package| grep ^"$package ")
       if [ ! -n "$check_repo" ]
         then
-        echo "Pacote [ $nome ]: Não Instalado!"
+        echo "Pacote [ $package ]: Não Instalado!"
         sleep 2
-        echo "Pacote [ $nome ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
+        echo "Pacote [ $package ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
         echo "--------------------------------------------------------------------"
         exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
       fi
-    echo "Pacote [ $nome ]: Não instalado!"
+    echo "Pacote [ $package ]: Não instalado!"
     sleep 2
-    echo "Pacote [ $nome ]: Instalando pacote..."
+    echo "Pacote [ $package ]: Instalando pacote..."
     sleep 2
-    #apt install -qq -y $pacote
-    echo "Pacote [ $nome ]: OK!"
+    apt install -qq -y $package
+    echo "Pacote [ $package ]: OK!"
     echo "--------------------------------------------------------------------"
     fi
 done
