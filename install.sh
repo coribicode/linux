@@ -21,7 +21,7 @@ for nome in nano sudo grub xrdp vim
         sleep 2
         echo "Pacote [ $nome ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
         echo "--------------------------------------------------------------------"
-        exit
+        exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
       fi
     echo "Pacote [ $nome ]: Não instalado!"
     sleep 2
