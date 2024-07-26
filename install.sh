@@ -1,15 +1,15 @@
-#!/bin/bash
+  GNU nano 7.2                                                 install.sh                                                           #!/bin/bash
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
 echo
 echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
 echo
-package_list="nano sudo git build-essntials"
+package_list="nano aptitude hplip-gui"
 for package in $package_list
   do
-    pacote=$(dpkg --get-selections | grep ^"$package" | grep -w install)
+    package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
     sleep 2
-    if [ -n "$pacote" ] ;
+    if [ -n "$package_installed" ] ;
       then
       echo "Pacote [ $package ]: OK!"
       echo "--------------------------------------------------------------------"
@@ -27,8 +27,26 @@ for package in $package_list
     sleep 2
     echo "Pacote [ $package ]: Instalando pacote..."
     sleep 2
-    apt install -qq -y $package
-    echo "Pacote [ $package ]: OK!"
-    echo "--------------------------------------------------------------------"
+    echo "atualizando"
+    apt update -qq 2>&1 | grep "E:" | cut -d '.' -f1,2
+    echo "fim da atualizacao"
+    echo
+    echo "Instalando.."
+    apt install -qq -y $package | grep "E:\d\k upgrade"
+    echo "Fim da instalação"
+    check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
+    sleep 2
+    if [ -n "$check_package_installed" ] ;
+      then
+      echo
+      echo "Pacote [ $package ]: Instalado!"
+      echo "--------------------------------------------------------------------"
+    else
+      echo "Pacote [ $package ]: Não Instalado!"
+      sleep 2
+      echo "Houve erro na instalação, verifique os erros e tente novamnete"
+      echo "--------------------------------------------------------------------"
+      exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
     fi
+  fi
 done
