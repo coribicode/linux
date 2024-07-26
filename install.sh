@@ -1,10 +1,10 @@
-  GNU nano 7.2                                                 install.sh                                                           #!/bin/bash
+#!/bin/bash
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
 echo
 echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
 echo
-package_list="nano aptitude hplip-gui"
+package_list="nano aptitude notepadqq"
 for package in $package_list
   do
     package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
@@ -27,12 +27,10 @@ for package in $package_list
     sleep 2
     echo "Pacote [ $package ]: Instalando pacote..."
     sleep 2
-    echo "atualizando"
-    apt update -qq 2>&1 | grep "E:" | cut -d '.' -f1,2
-    echo "fim da atualizacao"
+    apt update -qq 2>&1 | grep "E:"
     echo
     echo "Instalando.."
-    apt install -qq -y $package | grep "E:\d\k upgrade"
+    apt install -qq -y $package 2>/dev/null | grep "E:"
     echo "Fim da instalação"
     check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
     sleep 2
