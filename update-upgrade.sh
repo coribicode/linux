@@ -1,3 +1,4 @@
+#!/bin/bash
 VERSION_CODENAME=$(cat /etc/*release* | grep ^VERSION_CODENAME | cut -d '=' -f 2)
 ID=$(cat /etc/*release* | grep ^ID | cut -d '=' -f2)
 
@@ -26,4 +27,6 @@ Signed-By: $SIGNED
 EOF
 
 apt update && apt upgrade -y && systemctl daemon-reload
+
+
 
