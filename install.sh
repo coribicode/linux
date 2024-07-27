@@ -4,13 +4,6 @@
 echo
 echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
 echo
-echo "Atualizando o sistema..."
-echo
-apt update -qq 2>&1 | grep "E:"
-apt upgrade -qq -y 2>&1 | grep "E:"
-systemctl daemon-reload 2>&1 | grep "E:"
-apt --fix-broken -qq install 2>&1 | grep "E:"
-echo
 
 package_list="nano aptitude notepadqq"
 
