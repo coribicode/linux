@@ -4,7 +4,16 @@
 echo
 echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
 echo
+echo "Atualizando o sistema..."
+echo
+apt update -qq 2>&1 | grep "E:"
+apt upgrade -qq -y 2>&1 | grep "E:"
+systemctl daemon-reload 2>&1 | grep "E:"
+apt --fix-broken -qq install 2>&1 | grep "E:"
+echo
+
 package_list="nano aptitude notepadqq"
+
 for package in $package_list
   do
     package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
@@ -26,12 +35,9 @@ for package in $package_list
     echo "Pacote [ $package ]: Não instalado!"
     sleep 2
     echo "Pacote [ $package ]: Instalando pacote..."
-    sleep 2
-    apt update -qq 2>&1 | grep "E:"
     echo
-    echo "Instalando.."
+    sleep 2
     apt install -qq -y $package 2>/dev/null | grep "E:"
-    echo "Fim da instalação"
     check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
     sleep 2
     if [ -n "$check_package_installed" ] ;
@@ -42,7 +48,7 @@ for package in $package_list
     else
       echo "Pacote [ $package ]: Não Instalado!"
       sleep 2
-      echo "Houve erro na instalação, verifique os erros e tente novamnete"
+      echo "Houve erro na instalação, verifique os logs e tente novamnete"
       echo "--------------------------------------------------------------------"
       exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
     fi
