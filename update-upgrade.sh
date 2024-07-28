@@ -14,7 +14,7 @@ PATH_SOURCE="/etc/apt/sources.list.d/$ID.sources"
 mv /etc/apt/sources.list /etc/apt/sources.list.bkp
 
 cat <<EOF>> $PATH_SOURCE 
-## STABLE
+## DEBIAN STABLE RESPOSITORY 
 Types: $TYPES
 URIs: $URIS
 Suites: $SUITES
