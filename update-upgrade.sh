@@ -27,7 +27,7 @@ Signed-By: $SIGNED
 EOF
 
 apt update -qq 2>&1 | grep "E:"
-apt upgrade -qq -y 2>&1 | grep "E:"
+apt upgrade -qqy 2>&1 | grep "E:"
 systemctl daemon-reload 2>&1 | grep "E:"
 apt --fix-broken -qq install 2>&1 | grep "E:"
 
