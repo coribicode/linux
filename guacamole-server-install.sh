@@ -42,7 +42,7 @@ else
   apt update 2>&1 | grep "E:"
 fi
 
-if [ grep PACKAGE_NAME $INSTALLER ];
+if [ grep PACKAGE_NAME $INSTALLER > /dev/null];
   then
     sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
     sh $INSTALLER
@@ -161,7 +161,7 @@ if [ -e $FILE ];
     echo "[ $FILE ]: Baixando ..."
 wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P /etc/guacamole/download/ 2>&1 | grep "E:"
     echo "[ $FILE ]: Instalando ..."
-sudo dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb
+sudo dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb 2>&1 | grep "E:"
     echo "[ $FILE ]: Configurando ..."
 cp /usr/share/java/mysql-connector-java-*.jar /etc/guacamole/lib/mysql-connector.jar
   echo "[ $FILE ]: OK!"
