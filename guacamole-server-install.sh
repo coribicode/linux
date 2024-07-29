@@ -22,14 +22,24 @@ PACKAGES_DEPENDECES="tomcat$TOMCAT_VERSION mariadb-server"
 PACKAGES_LIBS="uuid-dev freerdp2-dev libpng-dev libtool-bin libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev  libssl-dev libvorbis-dev libwebp-dev libcairo2-dev libjpeg62-turbo-dev libpango1.0-dev libssh2-1-dev"
 package_list="$PACKAGES_ESSENTIALS $PACKAGES_DEPENDECES $PACKAGES_LIBS"
 
+URI_DOWNLOAD_GUAC_SERVER=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/source/guacamole-server-$GUAC_VERSION.tar.gz
+URI_DOWNLOAD_WAR=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-$GUAC_VERSION.war
+URI_DOWNLOAD_AUTH_JDBC=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-auth-jdbc-$GUAC_VERSION.tar.gz
+URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA=https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j_$MYSQL_CONNECTOR_JAVA_VERSION-1debian$DEBIAN_VERSION_ID_all.deb
+
 echo
 echo "Instalando Guacamole Server $GUAC_VERSION..."
 echo
 
 cat >> INSTALL_GUAC_SERVER << EOF
 
-echo "deb http://deb.debian.org/debian/ bullseye main" >> /etc/apt/sources.list.d/guac.list
-apt update
+if [ -e /etc/apt/sources.list.d/guac.list ];
+  then
+  apt update
+else
+  echo "deb http://deb.debian.org/debian/ bullseye main" >> /etc/apt/sources.list.d/guac.list
+  apt update
+fi
 
 sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
 sh $INSTALLER
@@ -46,7 +56,6 @@ mkdir -p /etc/guacamole/config
 mkdir -p /etc/guacamole/extensions
 mkdir -p /etc/guacamole/lib
 
-URI_DOWNLOAD_GUAC_SERVER=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/source/guacamole-server-$GUAC_VERSION.tar.gz
 wget $URI_DOWNLOAD_GUAC_SERVER -P /etc/guacamole/download/
 tar -xzf /etc/guacamole/download/guacamole-server-$GUAC_VERSION.tar.gz -C /etc/guacamole/system/
 mv /etc/guacamole/system/guacamole-server-$GUAC_VERSION /etc/guacamole/system/guacamole-server
@@ -78,18 +87,15 @@ bind_host = 0.0.0.0
 bind_port = 4822
 EOL
 
-URI_DOWNLOAD_AUTH_JDBC=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-auth-jdbc-$GUAC_VERSION.tar.gz
 wget "$URI_DOWNLOAD_AUTH_JDBC" -P /etc/guacamole/download/
 tar -xf /etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz -C /etc/guacamole/download/
 cat /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u root $GUAC_DB
 cp /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/guacamole-auth-jdbc-mysql-*.jar /etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar
 
-URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA=https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j_$MYSQL_CONNECTOR_JAVA_VERSION-1debian$DEBIAN_VERSION_ID_all.deb
 wget "$URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA" -P /etc/guacamole/download/
 dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb
 cp /usr/share/java/mysql-connector-java-*.jar /etc/guacamole/lib/mysql-connector.jar
 
-URI_DOWNLOAD_WAR=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-$GUAC_VERSION.war
 wget "$URI_DOWNLOAD_WAR" -P /etc/guacamole/download/
 cp /etc/guacamole/download/guacamole-*.war /etc/guacamole/guacamole.war
 
