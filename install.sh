@@ -32,14 +32,12 @@ for package in $package_list
     echo "Pacote [ $package ]: Não instalado!"
     sleep 2
     echo "Pacote [ $package ]: Instalando pacote..."
-    echo
     sleep 2
     apt install -qq -y $package 2>/dev/null | grep "E:"
     check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
     sleep 2
     if [ -n "$check_package_installed" ] ;
       then
-      echo
       echo "Pacote [ $package ]: Instalado!"
       echo "--------------------------------------------------------------------"
     else
