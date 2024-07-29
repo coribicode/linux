@@ -44,7 +44,7 @@ fi
 sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
 sh $INSTALLER
 
-#echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 systemctl daemon-reload
 source /etc/profile
 ldconfig
