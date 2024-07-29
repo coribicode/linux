@@ -5,6 +5,10 @@ sh debian_stable_repository.sh
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
 INSTALLER="install.sh"
 
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+source ~/.bashrc
+ldconfig
+
 GUAC_VERSION=1.5.5
 TOMCAT_VERSION=9
 MYSQL_CONNECTOR_JAVA_VERSION=9.0.0
