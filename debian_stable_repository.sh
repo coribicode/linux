@@ -41,6 +41,9 @@ fi
 
 echo
 echo "SISTEMA: Atualizando..."
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+source ~/.bashrc
+ldconfig
 apt update -qq 2>&1 | grep "E:"
 apt upgrade -qqy 2>&1 | grep "E:"
 systemctl daemon-reload 2>&1 | grep "E:"
