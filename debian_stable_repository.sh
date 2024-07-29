@@ -12,34 +12,37 @@ PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
 
 if [ -e PATH_SOURCE ];
-then
-  echo
-  echo "Lista de repositórios atualizado"
-  echo
-else
-  echo
-  echo "Atualizando lista de repositórios..."
-  echo
-  mv /etc/apt/sources.list /etc/apt/sources.list.bkp
+  then
+    echo
+    echo "Lista de repositórios atualizado"
+    echo
+  else
+    echo
+    echo "Atualizando lista de repositórios..."
+    echo
+    mv /etc/apt/sources.list /etc/apt/sources.list.bkp
 
-  cat <<EOF>> $PATH_SOURCE 
-  ## DEBIAN STABLE RESPOSITORY 
-  Types: $TYPES
-  URIs: $URIS
-  Suites: $SUITES
-  Components: $COMPONENTES
-  Signed-By: $SIGNED
+    cat <<EOF>> $PATH_SOURCE 
+    ## DEBIAN STABLE RESPOSITORY 
+    Types: $TYPES
+    URIs: $URIS
+    Suites: $SUITES
+    Components: $COMPONENTES
+    Signed-By: $SIGNED
 
-  Types: $TYPES
-  URIs: $URIS_SEC
-  Suites: $SUITES_SEC
-  Components: $COMPONENTES
-  Signed-By: $SIGNED
-  EOF
+    Types: $TYPES
+    URIs: $URIS_SEC
+    Suites: $SUITES_SEC
+    Components: $COMPONENTES
+    Signed-By: $SIGNED
+    EOF
 
-  sleep 2  
-  echo "OK!"
+    sleep 2  
+    echo "OK!"
+  fi
 fi
+
+echo
 echo "Atualizando sistema..."
 echo
 apt update -qq 2>&1 | grep "E:"
@@ -48,3 +51,4 @@ systemctl daemon-reload 2>&1 | grep "E:"
 apt --fix-broken -qq install 2>&1 | grep "E:"
 echo
 echo "Sistema Atualizado!"
+echo
