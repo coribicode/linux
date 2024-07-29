@@ -9,7 +9,7 @@ apt install -y curl 2>/dev/null | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/debian_stable_repository.sh 2>/dev/null | grep "E:"
 sh debian_stable_repository.sh
 
-package_list="nano sudo"
+package_list="PACKAGE_NAME"
 
 for package in $package_list
   do
