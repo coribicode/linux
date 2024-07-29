@@ -94,6 +94,9 @@ cat /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u 
 cp /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/guacamole-auth-jdbc-mysql-*.jar /etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar
 
 wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P /etc/guacamole/download/
+systemctl daemon-reload
+source /etc/profile
+ldconfig
 dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb
 cp /usr/share/java/mysql-connector-java-*.jar /etc/guacamole/lib/mysql-connector.jar
 
