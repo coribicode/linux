@@ -87,16 +87,16 @@ bind_host = 0.0.0.0
 bind_port = 4822
 EOL
 
-wget "$URI_DOWNLOAD_AUTH_JDBC" -P /etc/guacamole/download/
+wget $URI_DOWNLOAD_AUTH_JDBC -P /etc/guacamole/download/
 tar -xf /etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz -C /etc/guacamole/download/
 cat /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u root $GUAC_DB
 cp /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/guacamole-auth-jdbc-mysql-*.jar /etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar
 
-wget "$URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA" -P /etc/guacamole/download/
+wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P /etc/guacamole/download/
 dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb
 cp /usr/share/java/mysql-connector-java-*.jar /etc/guacamole/lib/mysql-connector.jar
 
-wget "$URI_DOWNLOAD_WAR" -P /etc/guacamole/download/
+wget $URI_DOWNLOAD_WAR -P /etc/guacamole/download/
 cp /etc/guacamole/download/guacamole-*.war /etc/guacamole/guacamole.war
 
 echo 'GUACAMOLE_HOME=/etc/guacamole' >> /etc/default/tomcat$TOMCAT_VERSION
