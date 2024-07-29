@@ -103,7 +103,7 @@ sudo systemctl restart tomcat$TOMCAT_VERSION
 
 EOF
 
-sh INSTALL_GUAC_SERVER 2>/dev/null | grep "E:"
+sh INSTALL_GUAC_SERVER
 
 echo "Instalado"
 
