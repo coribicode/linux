@@ -5,7 +5,11 @@ echo
 echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
 echo
 
-package_list="nano aptitude notepadqq"
+apt install -y curl 2>/dev/null | grep "E:"
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/debian_stable_repository.sh 2>/dev/null | grep "E:"
+sh debian_stable_repository.sh
+
+package_list="nano sudo"
 
 for package in $package_list
   do
