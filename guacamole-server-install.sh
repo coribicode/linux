@@ -1,3 +1,4 @@
+#!/bin/bash
 apt install -y curl 2>/dev/null | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/debian_stable_repository.sh 2>/dev/null | grep "E:"
 sh debian_stable_repository.sh
@@ -29,84 +30,193 @@ URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA=https://cdn.mysql.com//Downloads/Connector-J/m
 
 
 echo
-echo "Instalando Guacamole Server $GUAC_VERSION..."
+echo "Instalando Guacamole Server $GUAC_VERSION ..."
 echo
 
-cat >> INSTALL_GUAC_SERVER << EOF
-
-if [ -e /etc/apt/sources.list.d/guac.list ];
+FILE=/etc/apt/sources.list.d/guac.list
+if [ -e $FILE ];
   then
   apt update 2>&1 | grep "E:"
 else
-  echo "deb http://deb.debian.org/debian/ bullseye main" >> /etc/apt/sources.list.d/guac.list
+  echo "deb http://deb.debian.org/debian/ bullseye main" >> $FILE
   apt update 2>&1 | grep "E:"
 fi
 
-sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
-sh $INSTALLER
+if grep PACKAGE_NAME $INSTALLER > /dev/null
+  then
+	  sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
+  else
+    sh $INSTALLER
+fi
 
-echo
-mkdir -p /etc/guacamole
-mkdir -p /etc/guacamole/system
-mkdir -p /etc/guacamole/download
-mkdir -p /etc/guacamole/config
-mkdir -p /etc/guacamole/extensions
-mkdir -p /etc/guacamole/lib
+cat > DIR_GUAC << EOF
+/etc/guacamole
+/etc/guacamole/system
+/etc/guacamole/download
+/etc/guacamole/config
+/etc/guacamole/extensions
+/etc/guacamole/lib
+EOF
 
-wget $URI_DOWNLOAD_GUAC_SERVER -P /etc/guacamole/download/
-tar -xzf /etc/guacamole/download/guacamole-server-$GUAC_VERSION.tar.gz -C /etc/guacamole/system/
-mv /etc/guacamole/system/guacamole-server-$GUAC_VERSION /etc/guacamole/system/guacamole-server
-cd /etc/guacamole/system/guacamole-server
-./configure --with-systemd-dir=/etc/systemd/system/
-make
-make install
-sudo systemctl enable --now guacd
+for directoy in $(cat DIR_GUAC)
+do
+  if [ -d $directoy ];
+    then
+      echo "[ $directoy ]: OK!"
+    else
+      echo "[ $directoy ]: Criando ..."
+      mkdir -p $directoy
+      sleep 2
+      echo "[ $directoy ]: OK!"
+  fi
+done
 
-cat >> /etc/guacamole/config/config.sql << EOL
+FILE=/etc/guacamole/config/config.sql
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Criando ..."
+cat > $FILE << EOF
 CREATE DATABASE $GUAC_DB;
 CREATE USER '$GUAC_DB_USER'@'localhost' IDENTIFIED BY '$GUAC_DB_USER_PWD';
 GRANT SELECT,INSERT,UPDATE,DELETE ON $GUAC_DB.* TO $GUAC_DB_USER@localhost;
 FLUSH PRIVILEGES;
-EOL
-mysql -u root < /etc/guacamole/config/config.sql
+EOF
+mysql -u root < $FILE
+    sleep 2
+    echo "[ $FILE ]: OK!"
+fi
 
-cat >> /etc/guacamole/guacamole.properties << EOL
+FILE=/etc/guacamole/guacamole.properties
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Criando ..."
+cat > $FILE << EOF
 mysql-hostname: localhost
 mysql-port: 3306
 mysql-database: $GUAC_DB
 mysql-username: $GUAC_DB_USER
 mysql-password: $GUAC_DB_USER_PWD
-EOL
+EOF
+    sleep 2
+    echo "[ $FILE ]: OK!"
+fi
 
-cat >> /etc/guacamole/guacd.conf << EOL
+FILE=/etc/guacamole/guacd.conf
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Criando ..."
+cat > /etc/guacamole/guacd.conf << EOF
 [server]
 bind_host = 0.0.0.0
 bind_port = 4822
-EOL
+EOF
+    sleep 2
+    echo "[ $FILE ]: OK!"
+fi
 
-wget $URI_DOWNLOAD_AUTH_JDBC -P /etc/guacamole/download/
-tar -xf /etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz -C /etc/guacamole/download/
+FILE=/etc/guacamole/download/guacamole-server-$GUAC_VERSION.tar.gz
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Baixando ..."
+wget $URI_DOWNLOAD_GUAC_SERVER -P /etc/guacamole/download/ 2>&1 | grep "E:"
+    echo "[ $FILE ]: Instalando ..."
+tar -xzf /etc/guacamole/download/guacamole-server-$GUAC_VERSION.tar.gz -C /etc/guacamole/system/ 2>&1 | grep "E:"
+mv /etc/guacamole/system/guacamole-server-$GUAC_VERSION /etc/guacamole/system/guacamole-server
+cd /etc/guacamole/system/guacamole-server
+./configure --with-systemd-dir=/etc/systemd/system/ 2>&1 | grep "E:"
+make 2>&1 | grep "E:"
+make install 2>&1 | grep "E:"
+sudo systemctl enable --now guacd
+    echo "[ $FILE ]: OK!"
+fi
+
+FILE=/etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Baixando ..."
+wget $URI_DOWNLOAD_AUTH_JDBC -P /etc/guacamole/download/ 2>&1 | grep "E:"
+    echo "[ $FILE ]: Instalando ..."
+tar -xf /etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz -C /etc/guacamole/download/ 2>&1 | grep "E:"
 cat /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u root $GUAC_DB
 cp /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/guacamole-auth-jdbc-mysql-*.jar /etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar
+    echo "[ $FILE ]: OK!"
+fi
 
-wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P /etc/guacamole/download/
+FILE=/etc/guacamole/download/mysql-connector-j_*_all.deb
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Baixando ..."
+wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P /etc/guacamole/download/ 2>&1 | grep "E:"
+    echo "[ $FILE ]: Instalando ..."
 sudo dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb
+    echo "[ $FILE ]: Configurando ..."
 cp /usr/share/java/mysql-connector-java-*.jar /etc/guacamole/lib/mysql-connector.jar
+  echo "[ $FILE ]: OK!"
+fi
 
-wget $URI_DOWNLOAD_WAR -P /etc/guacamole/download/
+FILE=/etc/guacamole/download/guacamole-*.war
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Baixando ..."
+wget $URI_DOWNLOAD_WAR -P /etc/guacamole/download/ 2>&1 | grep "E:"
+    echo "[ $FILE ]: Configurando ..."
 cp /etc/guacamole/download/guacamole-*.war /etc/guacamole/guacamole.war
+    sleep 2
+  echo "[ $FILE ]: OK!"    
+fi
 
-echo 'GUACAMOLE_HOME=/etc/guacamole' >> /etc/default/tomcat$TOMCAT_VERSION
+GUAC_VARIABLE="GUACAMOLE_HOME=/etc/guacamole"
+TOMCAT_FILE="/etc/default/tomcat$TOMCAT_VERSION"
+
+if grep $GUAC_VARIABLE $TOMCAT_FILE > /dev/null
+  then
+	  echo "[ $GUAC_VARIABLE ]: OK"
+  else
+  echo "[ $GUAC_VARIABLE ]: Configurando ..."
+echo 'GUACAMOLE_HOME=/etc/guacamole' > /etc/default/tomcat$TOMCAT_VERSION
+  sleep 2
+  echo "[ $GUAC_VARIABLE ]: OK"
+fi
+
+FILE=/var/lib/tomcat$TOMCAT_VERSION/webapps/guacamole.war
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ $FILE ]: Configurando ..."
 ln -s /etc/guacamole/guacamole.war /var/lib/tomcat$TOMCAT_VERSION/webapps
-ln -s /etc/guacamole /usr/share/tomcat$TOMCAT_VERSION/.guacamole
+  sleep 2
+  echo "[ $FILE ]: OK!"
+fi
+
+DIR=/usr/share/tomcat$TOMCAT_VERSION/.guacamole
+if [ -d $DIR ];
+  then
+    echo "[ $DIR ]: OK!"
+  else
+  echo "[ $DIR ]: Configurando ...."
+ln -s /etc/guacamole $DIR
+  sleep 2
+  echo "[ $DIR ]: OK!"
+fi
 
 sudo systemctl enable --now tomcat$TOMCAT_VERSION
 sudo systemctl restart guacd
 sudo systemctl restart tomcat$TOMCAT_VERSION
-
-EOF
-
-sh INSTALL_GUAC_SERVER
 
 echo "Instalado"
 
