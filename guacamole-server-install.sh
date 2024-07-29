@@ -25,7 +25,7 @@ package_list="$PACKAGES_ESSENTIALS $PACKAGES_DEPENDECES $PACKAGES_LIBS"
 URI_DOWNLOAD_GUAC_SERVER=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/source/guacamole-server-$GUAC_VERSION.tar.gz
 URI_DOWNLOAD_WAR=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-$GUAC_VERSION.war
 URI_DOWNLOAD_AUTH_JDBC=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-auth-jdbc-$GUAC_VERSION.tar.gz
-URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA=https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j_$MYSQL_CONNECTOR_JAVA_VERSION-1debian$DEBIAN_VERSION_ID_all.deb
+URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA=https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j_"$MYSQL_CONNECTOR_JAVA_VERSION"-1debian"$DEBIAN_VERSION_ID"_all.deb
 
 echo
 echo "Instalando Guacamole Server $GUAC_VERSION..."
@@ -44,9 +44,10 @@ fi
 sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
 sh $INSTALLER
 
-echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
-sudo source ~/.bashrc
-sudo ldconfig
+#echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+systemctl daemon-reload
+source /etc/profile
+ldconfig
 
 echo
 mkdir -p /etc/guacamole
