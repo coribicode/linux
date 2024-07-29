@@ -35,10 +35,10 @@ cat >> INSTALL_GUAC_SERVER << EOF
 
 if [ -e /etc/apt/sources.list.d/guac.list ];
   then
-  apt update
+  apt update 2>&1 | grep "E:"
 else
   echo "deb http://deb.debian.org/debian/ bullseye main" >> /etc/apt/sources.list.d/guac.list
-  apt update
+  apt update 2>&1 | grep "E:"
 fi
 
 sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
