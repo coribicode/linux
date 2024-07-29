@@ -5,10 +5,6 @@ sh debian_stable_repository.sh
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
 INSTALLER="install.sh"
 
-echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
-source ~/.bashrc
-ldconfig
-
 GUAC_VERSION=1.5.5
 TOMCAT_VERSION=9
 MYSQL_CONNECTOR_JAVA_VERSION=9.0.0
@@ -21,23 +17,27 @@ DEBIAN_VERSION_CODENOME=$(cat /etc/*release* | grep CODENAME | cut -d '=' -f 2)
 DEBIAN_VERSION_ID=$(cat /etc/*release* | grep VERSION_ID | cut -d '"' -f 2)
 HOST_IP=$(hostname -I | cut -d ' ' -f1)
 
-echo "deb http://deb.debian.org/debian/ bullseye main" >> /etc/apt/sources.list.d/guac.list
-apt update
-
 PACKAGES_ESSENTIALS="sudo wget make"
 PACKAGES_DEPENDECES="tomcat$TOMCAT_VERSION mariadb-server"
 PACKAGES_LIBS="uuid-dev freerdp2-dev libpng-dev libtool-bin libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev  libssl-dev libvorbis-dev libwebp-dev libcairo2-dev libjpeg62-turbo-dev libpango1.0-dev libssh2-1-dev"
-
 package_list="$PACKAGES_ESSENTIALS $PACKAGES_DEPENDECES $PACKAGES_LIBS"
-
-sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
-sh $INSTALLER
 
 echo
 echo "Instalando Guacamole Server $GUAC_VERSION..."
 echo
 
 cat >> INSTALL_GUAC_SERVER << EOF
+
+echo "deb http://deb.debian.org/debian/ bullseye main" >> /etc/apt/sources.list.d/guac.list
+apt update
+
+sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
+sh $INSTALLER
+
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+sudo source ~/.bashrc
+sudo ldconfig
+
 echo
 mkdir -p /etc/guacamole
 mkdir -p /etc/guacamole/system
