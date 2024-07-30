@@ -42,7 +42,7 @@ else
   apt update 2>&1 | grep "E:"
 fi
 
-if grep PACKAGE_NAME $INSTALLER 2>&1
+if grep PACKAGE_NAME $INSTALLER 2>&1 | grep "E:"
   then
     sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
     sh $INSTALLER
@@ -135,7 +135,7 @@ cd /etc/guacamole/system/guacamole-server
 ./configure --with-systemd-dir=/etc/systemd/system/ 2>&1 | grep "E:"
 make 2>&1 | grep "E:"
 make install 2>&1 | grep "E:"
-sudo systemctl enable --now guacd
+sudo systemctl enable --now guacd 2>&1 | grep "E:"
     echo "[ $FILE ]: OK!"
 fi
 
@@ -215,7 +215,7 @@ ln -s /etc/guacamole $DIR
   echo "[ $DIR ]: OK!"
 fi
 
-sudo systemctl enable --now tomcat$TOMCAT_VERSION
+sudo systemctl enable --now tomcat$TOMCAT_VERSION 2>&1 | grep "E:"
 sudo systemctl restart guacd
 sudo systemctl restart tomcat$TOMCAT_VERSION
 
