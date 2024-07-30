@@ -307,31 +307,38 @@ if [ -e $FILE ];
 sleep 2
 cat > $FILE << 'EOF'
 server {
-    listen 80; # 443 ssl http2
-    server_name HOST_IP;
-    
+  listen 80;
+  server_name HOST_IP;
+  return 301 https://$host$request_uri;
+}
+server  {
+  listen 443 ssl;
+  server_name  HOST_IP;
+
+  root /var/www/html;
+  index index.html;
+  access_log /var/log/nginx/guacamole-access.log;
+  error_log /var/log/nginx/guacamole-error.log;
+
+  #ssl on;
+  ssl_certificate DIR_GUAC_SSL/cert.pem;
+  ssl_certificate_key  DIR_GUAC_SSL/key.pem;
+  #rewrite ^ https://$server_name$request_uri? permanent;
+  
+  location  / {
+    proxy_buffering  off;
+    proxy_pass  http://127.0.0.1:8080/guacamole/;
+    proxy_http_version  1.1;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  Upgrade $http_upgrade;
+    proxy_set_header  Connection $http_connection;
+    access_log  off;
+    #try_files $uri $uri/ =404;
+  }
+  location /.well-known/ {
+    allow all;
     root /var/www/html;
-    index index.html;
-    access_log /var/log/nginx/guacamole-access.log;
-    error_log /var/log/nginx/guacamole-error.log;
-
-    ssl_certificate DIR_GUAC_SSL/cert.pem;
-    ssl_certificate_key DIR_GUAC_SSL/key.pem;
-    rewrite ^ https://$server_name$request_uri? permanent;
-
-    #location / {
-    #   try_files $uri $uri/ =404;
-    #}
-
-    location / {
-        proxy_pass http://127.0.0.1:8080/guacamole/;
-        proxy_buffering off;
-        proxy_http_version 1.1;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $http_connection;
-        access_log off;
-    }
+  }
 }
 EOF
 echo "[ $FILE ]: OK!"
@@ -380,7 +387,7 @@ echo
 echo "Instalação concluída!"
 echo
 echo "---------------------------------------------------------"
-echo "Acesse via broswer http://$(hostname -I | cut -d ' ' -f1)"
+echo "Acesse via broswer https://$(hostname -I | cut -d ' ' -f1)"
 echo
 echo "Usuario: guacadmin"
 echo "Senha: guacadmin"
