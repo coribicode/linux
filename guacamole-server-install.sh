@@ -42,7 +42,7 @@ else
   apt update 2>&1 | grep "E:"
 fi
 
-if grep PACKAGE_NAME $INSTALLER
+if grep PACKAGE_NAME $INSTALLER 2>&1
   then
     sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
     sh $INSTALLER
