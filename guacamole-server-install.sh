@@ -17,7 +17,7 @@ DEBIAN_VERSION_ID=$(cat /etc/*release* | grep VERSION_ID | cut -d '"' -f 2)
 HOST_IP=$(hostname -I | cut -d ' ' -f1)
 
 PACKAGES_ESSENTIALS="sudo wget make"
-PACKAGES_DEPENDECES="tomcat$TOMCAT_VERSION mariadb-server"
+PACKAGES_DEPENDECES="tomcat$TOMCAT_VERSION mariadb-server nginx"
 PACKAGES_LIBS="uuid-dev freerdp2-dev libpng-dev libtool-bin libossp-uuid-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev libtelnet-dev libvncserver-dev libwebsockets-dev libpulse-dev  libssl-dev libvorbis-dev libwebp-dev libcairo2-dev libjpeg62-turbo-dev libpango1.0-dev libssh2-1-dev"
 package_list="$PACKAGES_ESSENTIALS $PACKAGES_DEPENDECES $PACKAGES_LIBS"
 
@@ -31,15 +31,30 @@ echo
 echo "Instalando Guacamole Server $GUAC_VERSION ..."
 echo
 
+echo
+echo "[ guac.list ]"
 FILE=/etc/apt/sources.list.d/guac.list
 if [ -e $FILE ];
   then
+  echo "[ ]: Atualizando repositorio Guacamole ..."
   apt update 2>&1 | grep "E:"
+  sleep 2
+  echo "[ $FILE ]: OK!"
 else
+  echo "[ $FILE ]: Adicioando repositorio Guacamole ..."
   echo "deb http://deb.debian.org/debian/ bullseye main" >> $FILE
+  sleep 2
+  echo "[ $FILE ]: OK!"
+  echo "[ $FILE ]: Atualizando repositorio Guacamole ..."
   apt update 2>&1 | grep "E:"
+  sleep 2
+  echo "[ $FILE ]: OK!"
 fi
+echo "[ guac.list ]: OK!"
+sleep 2
 
+echo
+echo "[ Instalação de Pacotes ]"
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
     sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
@@ -47,12 +62,17 @@ if grep PACKAGE_NAME $INSTALLER > /dev/null
   else
     sh $INSTALLER
 fi
+echo "[ Instalação de Pacotes ]: OK!"
+sleep 2
 
+echo
+echo "[ Diretório Guacamole Server ]"
 cat > DIR_GUAC << EOF
 /etc/guacamole
 /etc/guacamole/system
-/etc/guacamole/download
-/etc/guacamole/config
+/etc/guacamole/system/ssl
+/etc/guacamole/system/download
+/etc/guacamole/system/config
 /etc/guacamole/extensions
 /etc/guacamole/lib
 EOF
@@ -69,8 +89,20 @@ do
       echo "[ $directoy ]: OK!"
   fi
 done
+echo "[ Diretório Guacamole Server ]: OK!"
+sleep 2
 
-FILE=/etc/guacamole/config/config.sql
+DIR_GUAC=/etc/guacamole
+DIR_GUAC_SYSTEM=/etc/guacamole/system
+DIR_GUAC_SSL=/etc/guacamole/system/ssl
+DIR_GUAC_DOWNLOAD=/etc/guacamole/system/download
+DIR_GUAC_CONFIG=/etc/guacamole/system/config
+DIR_GUAC_EXTENSION=/etc/guacamole/extensions
+DIR_GUAC_LIB=/etc/guacamole/lib
+
+echo
+echo "[ config.sql ]"
+FILE=$DIR_GUAC_CONFIG/config.sql
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
@@ -86,8 +118,12 @@ mysql -u root < $FILE
     sleep 2
     echo "[ $FILE ]: OK!"
 fi
+echo "[ config.sql ]: OK"
+sleep 2
 
-FILE=/etc/guacamole/guacamole.properties
+echo
+echo "[ guacamole.properties ]"
+FILE=$DIR_GUAC/guacamole.properties
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
@@ -103,14 +139,18 @@ EOF
     sleep 2
     echo "[ $FILE ]: OK!"
 fi
+echo "[ guacamole.properties ]: OK!"
+sleep 2
 
-FILE=/etc/guacamole/guacd.conf
+echo
+echo "[ guacd.conf ]"
+FILE=$DIR_GUAC/guacd.conf
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
   else
     echo "[ $FILE ]: Criando ..."
-cat > /etc/guacamole/guacd.conf << EOF
+cat > $FILE << EOF
 [server]
 bind_host = 0.0.0.0
 bind_port = 4822
@@ -118,114 +158,154 @@ EOF
     sleep 2
     echo "[ $FILE ]: OK!"
 fi
+echo "[ guacd.conf ]: OK!"
+sleep 2
 
-FILE=/etc/guacamole/download/guacamole-server-$GUAC_VERSION.tar.gz
+echo
+echo "[ guacamole-server-$GUAC_VERSION.tar.gz ]"
+FILE=$DIR_GUAC_DOWNLOAD/guacamole-server-$GUAC_VERSION.tar.gz
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
   else
     echo "[ $FILE ]: Baixando ..."
-wget $URI_DOWNLOAD_GUAC_SERVER -P /etc/guacamole/download/ 2>&1 | grep "E:"
+wget $URI_DOWNLOAD_GUAC_SERVER -P $DIR_GUAC_DOWNLOAD/ 2>&1 | grep "E:"
     echo "[ $FILE ]: Instalando ..."
-tar -xzf /etc/guacamole/download/guacamole-server-$GUAC_VERSION.tar.gz -C /etc/guacamole/system/ 2>&1 | grep "E:"
-mv /etc/guacamole/system/guacamole-server-$GUAC_VERSION /etc/guacamole/system/guacamole-server
-cd /etc/guacamole/system/guacamole-server
+tar -xzf $FILE -C $DIR_GUAC_SYSTEM/ 2>&1 | grep "E:"
+mv $DIR_GUAC_SYSTEM/guacamole-server-$GUAC_VERSION $DIR_GUAC_SYSTEM/guacamole-server
+cd $DIR_GUAC_SYSTEM/guacamole-server
 ./configure --with-systemd-dir=/etc/systemd/system/ 2>&1 | grep "E:"
 make 2>&1 | grep "E:"
 make install 2>&1 | grep "E:"
 sudo systemctl enable --now guacd 2>&1 | grep "E:"
     echo "[ $FILE ]: OK!"
 fi
+echo "[ guacamole-server-$GUAC_VERSION.tar.gz ]: OK!"
+sleep 2
 
-FILE=/etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz
+echo
+echo "[ guacamole-auth-jdbc-mysql-*.jar ]"
+FILE=$DIR_GUAC_DOWNLOAD/guacamole-auth-jdbc-*.tar.gz
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
   else
     echo "[ $FILE ]: Baixando ..."
-wget $URI_DOWNLOAD_AUTH_JDBC -P /etc/guacamole/download/ 2>&1 | grep "E:"
+wget $URI_DOWNLOAD_AUTH_JDBC -P $DIR_GUAC_DOWNLOAD/ 2>&1 | grep "E:"
     echo "[ $FILE ]: Instalando ..."
-tar -xf /etc/guacamole/download/guacamole-auth-jdbc-*.tar.gz -C /etc/guacamole/download/ 2>&1 | grep "E:"
-cat /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u root $GUAC_DB
-cp /etc/guacamole/download/guacamole-auth-jdbc-*/mysql/guacamole-auth-jdbc-mysql-*.jar /etc/guacamole/extensions/guacamole-auth-jdbc-mysql.jar
+tar -xf $FILE -C $DIR_GUAC_DOWNLOAD/ 2>&1 | grep "E:"
+cat $DIR_GUAC_DOWNLOAD/guacamole-auth-jdbc-*/mysql/schema/*.sql | mysql -u root $GUAC_DB
+cp $DIR_GUAC_DOWNLOAD/guacamole-auth-jdbc-*/mysql/guacamole-auth-jdbc-mysql-*.jar $DIR_GUAC_EXTENSION/guacamole-auth-jdbc-mysql.jar
     echo "[ $FILE ]: OK!"
 fi
+echo "[ guacamole-auth-jdbc-mysql-*.jar ]: OK!"
+sleep 2
 
-FILE=/etc/guacamole/download/mysql-connector-j_*_all.deb
+echo
+echo "[ mysql-connector-j_*_all.deb ]"
+FILE=$DIR_GUAC_DOWNLOAD/mysql-connector-j_*_all.deb
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
   else
     echo "[ $FILE ]: Baixando ..."
-wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P /etc/guacamole/download/ 2>&1 | grep "E:"
+wget $URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA -P $DIR_GUAC_DOWNLOAD/ 2>&1 | grep "E:"
     echo "[ $FILE ]: Instalando ..."
-sudo dpkg -i /etc/guacamole/download/mysql-connector-j_*_all.deb 2>&1 | grep "E:"
-    echo "[ $FILE ]: Configurando ..."
-cp /usr/share/java/mysql-connector-java-*.jar /etc/guacamole/lib/mysql-connector.jar
+sudo dpkg -i $FILE 2>&1 | grep "E:"
+    echo "[ ]: Configurando ..."
+cp /usr/share/java/mysql-connector-java-*.jar $DIR_GUAC_LIB/mysql-connector.jar
   echo "[ $FILE ]: OK!"
 fi
+echo "[ mysql-connector-j_*_all.deb ]: OK!"
+sleep 2
 
-FILE=/etc/guacamole/download/guacamole-*.war
+echo
+echo "[ guacamole.war ]"
+FILE=$DIR_GUAC_DOWNLOAD/guacamole-*.war
 if [ -e $FILE ];
   then
     echo "[ $FILE ]: OK!"
   else
     echo "[ $FILE ]: Baixando ..."
-wget $URI_DOWNLOAD_WAR -P /etc/guacamole/download/ 2>&1 | grep "E:"
-    echo "[ $FILE ]: Configurando ..."
-cp /etc/guacamole/download/guacamole-*.war /etc/guacamole/guacamole.war
+wget $URI_DOWNLOAD_WAR -P $DIR_GUAC_DOWNLOAD/ 2>&1 | grep "E:"
+    echo "[ ]: Configurando ..."
+cp $FILE $DIR_GUAC/guacamole.war
     sleep 2
   echo "[ $FILE ]: OK!"    
 fi
+echo "[ guacamole.war ]: OK!"
+sleep 2
 
-GUAC_VARIABLE="GUACAMOLE_HOME=/etc/guacamole"
+echo
+echo "[ TOMCAT$TOMCAT_VERSION ]"
+GUAC_VARIABLE="GUACAMOLE_HOME=$DIR_GUAC"
 TOMCAT_FILE="/etc/default/tomcat$TOMCAT_VERSION"
+
+systemctl enable --now tomcat$TOMCAT_VERSION 2>&1 | grep "E:"
 
 if grep $GUAC_VARIABLE $TOMCAT_FILE > /dev/null
   then
-	  echo "[ $GUAC_VARIABLE ]: OK"
+  echo "[ $GUAC_VARIABLE ]: OK"
   else
-  echo "[ $GUAC_VARIABLE ]: Configurando ..."
-echo 'GUACAMOLE_HOME=/etc/guacamole' > /etc/default/tomcat$TOMCAT_VERSION
+  echo "[ ]: Configurando ..."
+echo "$GUAC_VARIABLE" > /etc/default/tomcat$TOMCAT_VERSION
   sleep 2
   echo "[ $GUAC_VARIABLE ]: OK"
 fi
+sleep 2
 
 FILE=/var/lib/tomcat$TOMCAT_VERSION/webapps/guacamole.war
 if [ -e $FILE ];
   then
-    echo "[ $FILE ]: OK!"
+  echo "[ $FILE ]: OK!"
   else
-    echo "[ $FILE ]: Configurando ..."
-ln -s /etc/guacamole/guacamole.war /var/lib/tomcat$TOMCAT_VERSION/webapps
-  sleep 2
+  echo "[ ]: Configurando ..."
+ln -s $DIR_GUAC/guacamole.war /var/lib/tomcat$TOMCAT_VERSION/webapps
+sleep 2
   echo "[ $FILE ]: OK!"
 fi
+sleep 2
 
 DIR=/usr/share/tomcat$TOMCAT_VERSION/.guacamole
 if [ -d $DIR ];
   then
-    echo "[ $DIR ]: OK!"
+  echo "[ $DIR ]: OK!"
   else
-  echo "[ $DIR ]: Configurando ...."
-ln -s /etc/guacamole $DIR
-  sleep 2
+  echo "[ ]: Configurando ...."
+ln -s $DIR_GUAC $DIR
+sleep 2
   echo "[ $DIR ]: OK!"
 fi
+echo "[ TOMCAT$TOMCAT_VERSION ]: OK!"
+sleep 2
 
-sudo systemctl enable --now tomcat$TOMCAT_VERSION 2>&1 | grep "E:"
-sudo systemctl restart guacd
-sudo systemctl restart tomcat$TOMCAT_VERSION
+echo
+echo "[ SSL ]"
+FILE=$DIR_GUAC_SSL/key.pem
+if [ -e $FILE ];
+  then
+  ls -l $DIR_GUAC_SSL
+  echo "[ $FILE ]: OK!"
+  else
+  echo "[ ]: Configurando ...."
+openssl req -x509 -newkey rsa:4096 -keyout $DIR_GUAC_SSL/key.pem -out $DIR_GUAC_SSL/cert.pem -sha256 -days 3650 -nodes -subj "/C=BR/ST=Parana/L=Curitiba/O=ApacheGuacamoleServer/OU=GuacamoleServer/CN=127.0.0.1" 2>&1 | grep "E:"
+  ls -l $DIR_GUAC_SSL
+  echo "[ $FILE ]: OK!"
+fi
+echo "[ SSL ]: OK!"
+sleep 2
 
-echo "Instalado"
+echo
+echo "[ NGINX ]"
+FILE=/etc/nginx/sites-available/guacamole
+if [ -e $FILE ];
+  then
+    echo "[ $FILE ]: OK!"
+  else
+    echo "[ ]: Configurando ...."
 
-######################################
-# Instalação NGINX com Proxy Reverso #
-######################################
-
-sudo apt install nginx -y
-
-cat <<'EOF'>> /etc/nginx/sites-available/guacamole
+sleep 2
+cat > $FILE << 'EOF'
 server {
     listen 80; # 443 ssl http2
     server_name HOST_IP;
@@ -235,9 +315,9 @@ server {
     access_log /var/log/nginx/guacamole-access.log;
     error_log /var/log/nginx/guacamole-error.log;
 
-    #ssl_certificate /etc/letsencrypt/live/example.io/fullchain.pem;
-    #ssl_certificate_key /etc/letsencrypt/live/example.io/privkey.pem;
-    #rewrite ^ https://$server_name$request_uri? permanent;
+    ssl_certificate DIR_GUAC_SSL/cert.pem;
+    ssl_certificate_key DIR_GUAC_SSL/key.pem;
+    rewrite ^ https://$server_name$request_uri? permanent;
 
     #location / {
     #   try_files $uri $uri/ =404;
@@ -254,19 +334,55 @@ server {
     }
 }
 EOF
+echo "[ $FILE ]: OK!"
 
-sudo sed -i "s/HOST_IP/$HOST_IP/g" /etc/nginx/sites-available/guacamole
+sleep 2
+sudo sed -i "s|HOST_IP|$HOST_IP|g" /etc/nginx/sites-available/guacamole
+echo "[ $HOST_IP ]: OK!"
 
-sudo ln -s /etc/nginx/sites-available/guacamole /etc/nginx/sites-enabled/
+sleep 2
+sudo sed -i "s|DIR_GUAC_SSL|$DIR_GUAC_SSL|g" /etc/nginx/sites-available/guacamole
+echo "[ $DIR_GUAC_SSL ]: OK!"
 
-sudo systemctl restart nginx
+sleep 2
+rm /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/guacamole /etc/nginx/sites-enabled/
+ls -l /etc/nginx/sites-enabled/
+echo "[ NGINX - enable]: OK!"
+fi
+echo "[ NGINX ]: OK!"
+sleep 2
 
 ##########################################
 # CORREÇÃO DE FALHA DE LOGIN RDP WINDOWS #
 ##########################################
+echo
+echo "[ Correção: Falha de Login RDP Windows ]"
+if grep User=root /etc/systemd/system/guacd.service > /dev/null
+  then
+  echo "echo "[ Correção: Falha de Login RDP Windows ]: Correção Aplicada!"
+  else
+  echo "[ Correção: Falha de Login RDP Windows ]: Aplicando correção ..."
 cp /etc/systemd/system/guacd.service /etc/systemd/system/guacd.service.bkp
-sudo sed -i "s/User=daemon/User=root/g" /etc/systemd/system/guacd.service
+sed -i "s/User=daemon/User=root/g" /etc/systemd/system/guacd.service
+echo "echo "[ Correção: Falha de Login RDP Windows ]: OK!"
+fi
+sleep 2
 
-sudo systemctl daemon-reload
-sudo systemctl restart guacd
-sudo systemctl restart tomcat"$TOMCAT_VERSION"
+systemctl daemon-reload
+systemctl restart tomcat"$TOMCAT_VERSION" 2>&1 | grep "E:"
+systemctl restart guacd
+systemctl enable nginx 2>&1 | grep "E:"
+sudo nginx -t
+systemctl restart nginx
+
+echo 
+echo "Instalação concluída!"
+echo
+echo "---------------------------------------------------------"
+echo "Acesse via broswer http://$(hostname -I | cut -d ' ' -f1)"
+echo
+echo "Usuario: guacadmin"
+echo "Senha: guacadmin"
+echo "---------------------------------------------------------"
+echo
