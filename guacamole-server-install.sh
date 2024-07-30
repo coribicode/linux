@@ -1,9 +1,7 @@
 #!/bin/bash
 apt install -y curl 2>/dev/null | grep "E:"
-curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/debian_stable_repository.sh 2>/dev/null | grep "E:"
-sh debian_stable_repository.sh
-
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
+
 INSTALLER="install.sh"
 
 GUAC_VERSION=1.5.5
@@ -42,7 +40,7 @@ else
   apt update 2>&1 | grep "E:"
 fi
 
-if grep PACKAGE_NAME $INSTALLER 2>&1 | grep "E:"
+if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
     sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
     sh $INSTALLER
