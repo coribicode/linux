@@ -25,7 +25,7 @@ apt-get --yes --auto-remove --show-upgraded \
     --no-install-recommends \
     --option DPkg::Options::="--force-confdef" \
     --option DPkg::Options::="--force-confold" \
-    install openmediavault openvswitch-switch-dpdk
+    install openmediavault
 
 echo
 echo "Buscando as últimas atualizações do OpenMediaVault..."
