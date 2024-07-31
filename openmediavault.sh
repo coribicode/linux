@@ -53,7 +53,7 @@ apt-get --yes --auto-remove --show-upgraded \
 sleep 2
 
 echo "[ OpenMediaVault ]: Reconfigurando Conexão de Rede ..."
-#sudo omv-salt deploy run systemd-networkd 2>&1 | grep -E "Succeeded|Failed"
+sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
 sleep 2
 
 cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
