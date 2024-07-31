@@ -40,7 +40,7 @@ echo "[ Sistema ]: OK!"
 sleep 2
 
 echo
-echo "[OpenMediaVault]: Instalando OpenMediaVault ..."
+echo "[ OpenMediaVault ]: Instalando OpenMediaVault ..."
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
