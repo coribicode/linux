@@ -55,7 +55,7 @@ apt-get --yes --auto-remove --show-upgraded \
 sleep 2
 
 echo "[ OpenMediaVault ]: Reconfigurando Conexão de Rede ..."
-sudo omv-salt deploy run systemd-networkd 2>&1 | grep -E "Succeeded|Failed"
+#sudo omv-salt deploy run systemd-networkd 2>&1 | grep -E "Succeeded|Failed"
 sleep 2
 
 cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
@@ -67,6 +67,8 @@ sudo netplan apply 2>&1
 echo "[ OpenMediaVault ]: Conexão de Rede - OK!"
 sleep 2
 
+echo
+echo "[ OpenMediaVault ]: Instalação Concluída!"
 echo
 echo "Acesse http://$IP"
 echo
