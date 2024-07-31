@@ -25,7 +25,19 @@ apt-get --yes --auto-remove --show-upgraded \
     --no-install-recommends \
     --option DPkg::Options::="--force-confdef" \
     --option DPkg::Options::="--force-confold" \
-    install openmediavault
+    install openmediavault openvswitch-switch
+
+FILE=/etc/netplan/*openmediavault*.yaml
+NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
+cp  /etc/netplan/openmediavault.yaml.bkp
+
+cat >> $FILE << "EOF"
+ethernets:
+  $NIC:
+    dhcp4: true
+EOF
+
+sudo netplan apply
 
 echo
 echo "Buscando as últimas atualizações do OpenMediaVault..."
@@ -33,7 +45,6 @@ echo
 sudo apt --only-upgrade install openmediavault
 sudo omv-upgrade
 echo
-
 echo
 echo "Acesse http://$(hostname -I | cut -d ' ' -f 1)"
 echo
