@@ -1,0 +1,45 @@
+#!/bin/bash
+apt install -y curl
+
+CODENAME=sandworm
+URIS=http://packages.openmediavault.org/public
+TYPES=deb
+URIS_RELEASE=$URIS/dists/$CODENAME/InRelease
+PATH_FILE_SIGNED=/usr/share/keyrings/$CODENAME.gpg
+SUITES=$(curl -fsSL $URIS/dists/$CODENAME/InRelease | grep Suite | cut -d ":" -f2)
+COMPONENTES=$(curl -fsSL $URIS/dists/$CODENAME/InRelease | grep Components | cut -d ":" -f2)
+
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$CODENAME.sources
+
+curl -fsSL $URIS/dists/$CODENAME/InRelease | sudo gpg --dearmor -o $PATH_FILE_SIGNED
+
+curl https://packages.openmediavault.org/public/dists/sandworm/Release.gpg | gpg --dearmor > /usr/share/keyrings/omv-archive-keyring.gpg
+
+if [ -e $PATH_FILE_SOURCE ];
+  then
+    echo
+    echo "Repositório [$PATH_FILE_SOURCE]: OK!"
+  else
+    echo
+    echo "Repositório []: Configurando ..."
+cat > $PATH_FILE_SOURCE << EOF
+Types: $TYPES
+URIs: $URIS
+Suites: $SUITES
+Components: $COMPONENTES
+Signed-By: $PATH_FILE_SIGNED
+EOF
+    echo "Repositório [$PATH_FILE_SOURCE]: Configurado!"
+fi
+sleep 2
+
+echo
+echo "SISTEMA: Atualizando..."
+apt update -qq 2>&1 | grep "E:"
+apt upgrade -qqy 2>&1 | grep "E:"
+systemctl daemon-reload 2>&1 | grep "E:"
+apt --fix-broken -qq install 2>&1 | grep "E:"
+sleep 2
+echo "SISTEMA: OK!"
+echo
+sleep 2
