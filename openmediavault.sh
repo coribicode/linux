@@ -8,32 +8,37 @@ NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
 echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
 
 echo
-echo "[OpenMediaVault]: Instalando dependências..."
+echo "[ OpenMediaVault - Dependências ]: Instalando ..."
 apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates > /dev/null
-echo "[OpenMediaVault]: Verificando repositórios ..."
+echo "[ OpenMediaVault - Dependências ]: OK!"
 sleep 2
 
+echo
+echo "[ OpenMediaVault - Repositórios ]: Verificando ..."
+sleep 2
 if [ -e $FILE ]
   then
-    echo "[OpenMediaVault]: Repositórios - OK!"
+    echo "[ OpenMediaVault - Repositórios ]: OK!"
   else
-    echo "[OpenMediaVault]: Atualizando repositórios ..."
+    echo "[ OpenMediaVault - Repositórios ]: Configurando ..."
 cat > $FILE << EOF
 deb [signed-by=$keyring_gpg_path] http://packages.openmediavault.org/public/ sandworm main
 deb [signed-by=$keyring_gpg_path] https://openmediavault.github.io/packages/ sandworm main
 EOF
 wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path" > /dev/null
-    echo "[OpenMediaVault]: Repositórios - OK!"
+    echo "[ OpenMediaVault - Repositórios ]: OK!"
 fi
 sleep 2
 
-echo "[OpenMediaVault]: Atualizando o Sistema ..."
+echo
+echo "[ OpenMediaVault - Sistema ]: Atualizando ..."
 apt-get update > /dev/null
 apt-get upgrade -y > /dev/null
 systemctl daemon-reload
-echo "[OpenMediaVault]: Sistema - OK!"
+echo "[ OpenMediaVault - Sistema ]: OK!"
 sleep 2
 
+echo
 echo "[OpenMediaVault]: Instalando OpenMediaVault ..."
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
@@ -47,7 +52,7 @@ apt-get --yes --auto-remove --show-upgraded \
 sleep 2
 
 echo "[OpenMediaVault]: Reconfigurando Conexão de Rede ..."
-sudo omv-salt deploy run systemd-networkd 2>&1
+sudo omv-salt deploy run systemd-networkd 2>&1 | grep -E "Succeeded|Failed"
 sleep 2
 
 cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
