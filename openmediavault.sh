@@ -51,7 +51,7 @@ sudo omv-salt deploy run systemd-networkd 2>&1
 sleep 2
 ls /etc/netplan/
 sleep 2
-cat >> /etc/netplan/10-openmediavault-default.yaml << "EOF"
+cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
   ethernets:
     $NIC:
       dhcp4: true
