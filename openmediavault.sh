@@ -3,6 +3,7 @@ keyring_gpg_path=/usr/share/keyrings/$apt_dist-archive-keyring.gpg
 key_uri='https://packages.openmediavault.org/public/archive.key'
 FILE=/etc/apt/sources.list.d/$apt_dist.list
 NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
+IP=$(hostname -I | cut -d ' ' -f 1)
 
 ## Prioridade IPV4 ##
 echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
@@ -60,12 +61,12 @@ cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
     $NIC:
       dhcp4: true
 EOF
-sudo netplan apply > /dev/null
+sudo netplan apply 2>&1
 echo "[OpenMediaVault]: Conexão de Rede - OK!"
 sleep 2
 
 echo
-echo "Acesse http://$(hostname -I | cut -d ' ' -f 1)"
+echo "Acesse http://$IP"
 echo
 echo "Login: admin"
 echo "Senha: openmediavault"
