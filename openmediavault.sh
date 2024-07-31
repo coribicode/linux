@@ -5,8 +5,6 @@ FILE=/etc/apt/sources.list.d/$apt_dist.list
 NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
 IP=$(hostname -I | cut -d ' ' -f 1)
 
-clear
-
 ## Prioridade IPV4 ##
 echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
 
