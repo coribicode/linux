@@ -29,7 +29,8 @@ apt-get --yes --auto-remove --show-upgraded \
 
 FILE=/etc/netplan/*openmediavault*.yaml
 NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
-cp  /etc/netplan/openmediavault.yaml.bkp
+
+cp $FILE /etc/netplan/openmediavault.yaml.bkp
 
 cat >> $FILE << "EOF"
 ethernets:
