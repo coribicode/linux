@@ -1,11 +1,7 @@
 #!/bin/bash
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
-echo
-echo "Este script verifica uma lista de pacotes instalados ou nao, e instala se possível!"
-echo
 
-apt install -y curl 2>/dev/null | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh 2>/dev/null | grep "E:"
 sh debian_repository.sh
 
