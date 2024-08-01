@@ -3,7 +3,7 @@ apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
 ID=openmediavault
 CODENAME=sandworm
 URIS=http://packages.openmediavault.org/public
-PACKAGES='openmediavault openvswitch-switch'
+PACKAGES='systemd-timesyncd openvswitch-switch openmediavault'
 URI_KEY=$URIS/archive.key
 COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
 PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
