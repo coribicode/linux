@@ -10,6 +10,8 @@ export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 
+apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
+
 cat > repo << EOF
 #!/bin/bash
 URI_KEY=$URIS/archive.key
@@ -34,7 +36,6 @@ fi
 EOF
 sleep 2
 
-apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
 INSTALLER="install.sh"
 
