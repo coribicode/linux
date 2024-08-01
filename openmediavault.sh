@@ -10,9 +10,8 @@ export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 
-cat > repo << 'EOF'
+cat > repo << EOF
 #!/bin/bash
-
 URI_KEY=$URIS/archive.key
 COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
 PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
