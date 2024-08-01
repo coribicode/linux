@@ -10,6 +10,13 @@ SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
 echo
+echo "[ Sistema ]: Definindo IPv4 como prioridade"
+echo "-------------------------------------------------"
+echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
+sleep 2
+echo "OK!"
+
+echo
 echo "[ Sistema ]: Verificando ... "
 sleep 2
 
