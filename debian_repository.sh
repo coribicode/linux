@@ -37,7 +37,6 @@ Suites: $SUITES_SEC
 Components: $COMPONENTES
 Signed-By: $SIGNED
 EOF
-    ls /etc/apt/sources.list.d/ | grep "$CODENAME.sources"
     echo "[ Repositório ]: OK!"
     sleep 2
 fi
@@ -47,16 +46,16 @@ if [ -e repo ];
   sleep 2
   then
   echo "[ Repositório ]: Configurando NOVOS repositórios ..."
-  sh repo 2>1 | grep "E:"
+sh repo
   echo "[ Repositório ]: NOVOS repositórios OK!"
 fi
 
 echo
 echo "[ Sistema ]: Atualizando ..."
-apt update -qq 2>&1 | grep "E:"
-apt upgrade -qqy 2>&1 | grep "E:"
-systemctl daemon-reload 2>&1 | grep "E:"
-apt --fix-broken -qq install 2>&1 | grep "E:"
+apt update -qq 2>&1
+apt upgrade -qqy 2>&1"
+systemctl daemon-reload 2>&1
+apt --fix-broken -qq install
 sleep 2
 echo "[ Sistema ]: OK!"
 echo
