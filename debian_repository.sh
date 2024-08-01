@@ -6,7 +6,7 @@ URIS_SEC='http://deb.debian.org/debian-security'
 SUITES="$CODENAME $CODENAME-updates $CODENAME-backports"
 SUITES_SEC="$CODENAME-security"
 COMPONENTES='main contrib non-free non-free-firmware'
-SIGNED="/usr/share/keyrings/$CODENAME-archive-keyring.gpg"
+SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
 echo "[ Sistema ]: Verificando ... "
