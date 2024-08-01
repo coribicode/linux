@@ -9,21 +9,20 @@ COMPONENTES='main contrib non-free non-free-firmware'
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
-echo "[ Sistema ]: Verificando ... "
 echo
+echo "[ Sistema ]: Verificando ... "
 sleep 2
 
+echo
 if [ -e $PATH_SOURCE ];
   then
-    echo
-    ls /etc/apt/sources.list.d/ | grep "$CODENAME.sources"
+    #ls /etc/apt/sources.list.d/ | grep "$CODENAME.sources"
     echo "[ Repositório ]: OK!"
     sleep 2
   else
-    echo
     echo "[ Repositório ]: Configurando ..."
     sleep 2
-    mv /etc/apt/sources.list /etc/apt/sources.list.bkp
+    mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
     sleep 2
 cat > $PATH_SOURCE << EOF
 ## $CODENAME RESPOSITORY ##
