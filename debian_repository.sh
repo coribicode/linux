@@ -52,10 +52,10 @@ fi
 
 echo
 echo "[ Sistema ]: Atualizando ..."
-apt update -qq 2>&1
-apt upgrade -qqy 2>&1"
-systemctl daemon-reload 2>&1
-apt --fix-broken -qq install
+apt update -qq 2>&1 | grep "E:"
+apt upgrade -qqy 2>&1 | grep "E:"
+systemctl daemon-reload 2>&1 | grep "E:"
+apt --fix-broken -qq install | grep "E:"
 sleep 2
 echo "[ Sistema ]: OK!"
 echo
