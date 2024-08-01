@@ -25,7 +25,7 @@ if [ -e $PATH_SOURCE ];
     sleep 2
     mv /etc/apt/sources.list /etc/apt/sources.list.bkp
     sleep 2
-cat > $PATH_SOURCE << "EOF"
+cat > $PATH_SOURCE << EOF
 ## $CODENAME RESPOSITORY ##
 Types: $TYPES
 URIs: $URIS
