@@ -40,6 +40,7 @@ apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
 INSTALLER="install.sh"
 
+echo
 echo "[ OpenMediaVault ]: Instalando ..."
 echo
 echo "[ Instalação de Pacotes ]"
