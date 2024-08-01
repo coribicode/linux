@@ -1,0 +1,38 @@
+cat > repo << 'EOF'
+#!/bin/bash
+apt install -y curl
+
+ID=openmediavault
+CODENAME=sandworm
+URIS=http://packages.openmediavault.org/public
+URI_KEY=$URIS/archive.key
+
+COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
+
+PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
+
+if [ ! -e $PATH_FILE_SOURCE ];
+  then
+  echo
+  echo "[ Repositório ]: Configurando ..."
+
+cat > $PATH_FILE_SOURCE << EOL
+deb [signed-by=$PATH_FILE_SIGNED] $URIS $CODENAME $COMPONENTS
+EOL
+
+wget --quiet --output-document=- $URI_KEY | gpg --dearmor --yes --output $PATH_FILE_SIGNED > /dev/null
+sleep 2
+
+  echo "[ Repositório ]: OK!"
+  echo
+  echo "[ Repositório ]: Atualizando..."
+  apt update -qq 2>&1 | grep "E:"
+  apt upgrade -qqy 2>&1 | grep "E:"
+  systemctl daemon-reload 2>&1 | grep "E:"
+  apt --fix-broken -qq install 2>&1 | grep "E:"
+  echo "[ Repositório ]: OK!"
+  echo
+fi
+sleep 2
+EOF
