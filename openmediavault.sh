@@ -1,3 +1,5 @@
+apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
+
 ID=openmediavault
 CODENAME=sandworm
 URIS=http://packages.openmediavault.org/public
@@ -13,8 +15,6 @@ IP=$(hostname -I | cut -d ' ' -f 1)
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
-
-apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
 
 cat > repo << EOF
 #!/bin/bash
