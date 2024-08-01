@@ -1,8 +1,17 @@
-cat > repo << 'EOF'
-#!/bin/bash
 ID=openmediavault
 CODENAME=sandworm
 URIS=http://packages.openmediavault.org/public
+PACKAGES="openmediavault openvswitch-switch"
+
+NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
+IP=$(hostname -I | cut -d ' ' -f 1)
+
+export LANG=C.UTF-8
+export DEBIAN_FRONTEND=noninteractive
+export APT_LISTCHANGES_FRONTEND=none
+
+cat > repo << 'EOF'
+#!/bin/bash
 
 URI_KEY=$URIS/archive.key
 COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
@@ -26,16 +35,6 @@ fi
 EOF
 sleep 2
 
-PACKAGES="openmediavault openvswitch-switch"
-PACKAGES_LIST="$PACKAGES"
-
-NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
-IP=$(hostname -I | cut -d ' ' -f 1)
-
-export LANG=C.UTF-8
-export DEBIAN_FRONTEND=noninteractive
-export APT_LISTCHANGES_FRONTEND=none
-
 apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
 INSTALLER="install.sh"
@@ -46,7 +45,7 @@ echo
 echo "[ Instalação de Pacotes ]"
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
-    sed -i "s|PACKAGE_NAME|$PACKAGES_LIST|g" $INSTALLER
+    sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
     sh $INSTALLER
   else
     sh $INSTALLER
