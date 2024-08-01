@@ -16,7 +16,6 @@ sleep 2
 echo
 if [ -e $PATH_SOURCE ];
   then
-    #ls /etc/apt/sources.list.d/ | grep "$CODENAME.sources"
     echo "[ Repositório ]: OK!"
     sleep 2
   else
