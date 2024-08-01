@@ -1,33 +1,18 @@
-NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
-IP=$(hostname -I | cut -d ' ' -f 1)
-
-## Prioridade IPV4 ##
-echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
-
-echo
-echo "[ Dependências ]: Instalando ..."
-apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates > /dev/null
-echo "[ Dependências ]: OK!"
-sleep 2
-
 cat > repo << 'EOF'
 #!/bin/bash
-apt install -y curl
-
 ID=openmediavault
 CODENAME=sandworm
 URIS=http://packages.openmediavault.org/public
+
 URI_KEY=$URIS/archive.key
-
 COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
-
 PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
 PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
 
 if [ ! -e $PATH_FILE_SOURCE ];
   then
   echo
-  echo "[ Repositório ]: Configurando ..."
+  echo "[ Repositório $ID ]: Configurando ..."
 
 cat > $PATH_FILE_SOURCE << EOL
 deb [signed-by=$PATH_FILE_SIGNED] $URIS $CODENAME $COMPONENTS
@@ -36,32 +21,36 @@ EOL
 wget --quiet --output-document=- $URI_KEY | gpg --dearmor --yes --output $PATH_FILE_SIGNED > /dev/null
 sleep 2
 
-  echo "[ Repositório ]: OK!"
-  echo
-  echo "[ Repositório ]: Atualizando..."
-  apt update -qq 2>&1 | grep "E:"
-  apt upgrade -qqy 2>&1 | grep "E:"
-  systemctl daemon-reload 2>&1 | grep "E:"
-  apt --fix-broken -qq install 2>&1 | grep "E:"
-  echo "[ Repositório ]: OK!"
-  echo
+  echo "[ Repositório $ID ]: OK!"
 fi
-sleep 2
 EOF
+sleep 2
 
+PACKAGES="openmediavault openvswitch-switch"
+PACKAGES_LIST="$PACKAGES"
 
+NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
+IP=$(hostname -I | cut -d ' ' -f 1)
 
-echo
-echo "[ OpenMediaVault ]: Instalando OpenMediaVault ..."
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
-apt-get --yes --auto-remove --show-upgraded \
-    --allow-downgrades --allow-change-held-packages \
-    --no-install-recommends \
-    --option DPkg::Options::="--force-confdef" \
-    --option DPkg::Options::="--force-confold" \
-    install openmediavault openvswitch-switch 2>&1 | grep "E:"
+
+apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
+INSTALLER="install.sh"
+
+echo "[ OpenMediaVault ]: Instalando ..."
+echo
+echo "[ Instalação de Pacotes ]"
+if grep PACKAGE_NAME $INSTALLER > /dev/null
+  then
+    sed -i "s|PACKAGE_NAME|$PACKAGES_LIST|g" $INSTALLER
+    sh $INSTALLER
+  else
+    sh $INSTALLER
+fi
+echo "[ Instalação de Pacotes ]: OK!"
 sleep 2
 
 echo "[ OpenMediaVault ]: Reconfigurando Conexão de Rede ..."
