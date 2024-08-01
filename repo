@@ -1,45 +1,33 @@
 #!/bin/bash
 apt install -y curl
 
-CODENAME=sandworm
-URIS=http://packages.openmediavault.org/public
-TYPES=deb
-URIS_RELEASE=$URIS/dists/$CODENAME/InRelease
-PATH_FILE_SIGNED=/usr/share/keyrings/$CODENAME.gpg
-SUITES=$(curl -fsSL $URIS/dists/$CODENAME/InRelease | grep Suite | cut -d ":" -f2)
-COMPONENTES=$(curl -fsSL $URIS/dists/$CODENAME/InRelease | grep Components | cut -d ":" -f2)
+ID=openmediavault
+URI_KEY='https://packages.openmediavault.org/public/archive.key'
+PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
 
-PATH_FILE_SOURCE=/etc/apt/sources.list.d/$CODENAME.sources
 
-curl -fsSL $URIS/dists/$CODENAME/InRelease | sudo gpg --dearmor -o $PATH_FILE_SIGNED
-
-curl https://packages.openmediavault.org/public/dists/sandworm/Release.gpg | gpg --dearmor > /usr/share/keyrings/omv-archive-keyring.gpg
-
-if [ -e $PATH_FILE_SOURCE ];
+if [ ! -e $PATH_FILE_SOURCE ];
   then
-    echo
-    echo "Repositório [$PATH_FILE_SOURCE]: OK!"
-  else
-    echo
-    echo "Repositório []: Configurando ..."
+  echo
+  echo "[ Repositório ]: Configurando ..."
+
 cat > $PATH_FILE_SOURCE << EOF
-Types: $TYPES
-URIs: $URIS
-Suites: $SUITES
-Components: $COMPONENTES
-Signed-By: $PATH_FILE_SIGNED
+deb [signed-by=$PATH_FILE_SIGNED] http://packages.openmediavault.org/public/ sandworm main
+deb [signed-by=$PATH_FILE_SIGNED] https://openmediavault.github.io/packages/ sandworm main
 EOF
-    echo "Repositório [$PATH_FILE_SOURCE]: Configurado!"
-fi
+
+wget --quiet --output-document=- $URI_KEY | gpg --dearmor --yes --output $PATH_FILE_SIGNED > /dev/null
 sleep 2
 
-echo
-echo "SISTEMA: Atualizando..."
-apt update -qq 2>&1 | grep "E:"
-apt upgrade -qqy 2>&1 | grep "E:"
-systemctl daemon-reload 2>&1 | grep "E:"
-apt --fix-broken -qq install 2>&1 | grep "E:"
-sleep 2
-echo "SISTEMA: OK!"
-echo
+  echo "[ Repositório ]: Configurado!"
+  echo
+  echo "[ Repositório ]: Atualizando..."
+  apt update -qq 2>&1 | grep "E:"
+  apt upgrade -qqy 2>&1 | grep "E:"
+  systemctl daemon-reload 2>&1 | grep "E:"
+  apt --fix-broken -qq install 2>&1 | grep "E:"
+  echo "[ Repositório ]: OK!"
+  echo
+fi
 sleep 2
