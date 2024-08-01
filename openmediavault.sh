@@ -1,7 +1,3 @@
-apt_dist=openmediavault
-keyring_gpg_path=/usr/share/keyrings/$apt_dist-archive-keyring.gpg
-key_uri='https://packages.openmediavault.org/public/archive.key'
-FILE=/etc/apt/sources.list.d/$apt_dist.list
 NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
 IP=$(hostname -I | cut -d ' ' -f 1)
 
@@ -14,30 +10,46 @@ apt-get install -y wget gnupg sudo systemd-timesyncd ca-certificates > /dev/null
 echo "[ Dependências ]: OK!"
 sleep 2
 
-echo
-echo "[ Repositórios ]: Verificando ..."
-sleep 2
-if [ -e $FILE ]
+cat > repo << 'EOF'
+#!/bin/bash
+apt install -y curl
+
+ID=openmediavault
+CODENAME=sandworm
+URIS=http://packages.openmediavault.org/public
+URI_KEY=$URIS/archive.key
+
+COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
+
+PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
+
+if [ ! -e $PATH_FILE_SOURCE ];
   then
-    echo "[ Repositórios ]: OK!"
-  else
-    echo "[ Repositórios ]: Configurando ..."
-cat > $FILE << EOF
-deb [signed-by=$keyring_gpg_path] http://packages.openmediavault.org/public/ sandworm main
-deb [signed-by=$keyring_gpg_path] https://openmediavault.github.io/packages/ sandworm main
-EOF
-wget --quiet --output-document=- $key_uri | gpg --dearmor --yes --output "$keyring_gpg_path" > /dev/null
-    echo "[ Repositórios ]: OK!"
-fi
+  echo
+  echo "[ Repositório ]: Configurando ..."
+
+cat > $PATH_FILE_SOURCE << EOL
+deb [signed-by=$PATH_FILE_SIGNED] $URIS $CODENAME $COMPONENTS
+EOL
+
+wget --quiet --output-document=- $URI_KEY | gpg --dearmor --yes --output $PATH_FILE_SIGNED > /dev/null
 sleep 2
 
-echo
-echo "[ Sistema ]: Atualizando ..."
-apt-get update > /dev/null
-apt-get upgrade -y > /dev/null
-systemctl daemon-reload
-echo "[ Sistema ]: OK!"
+  echo "[ Repositório ]: OK!"
+  echo
+  echo "[ Repositório ]: Atualizando..."
+  apt update -qq 2>&1 | grep "E:"
+  apt upgrade -qqy 2>&1 | grep "E:"
+  systemctl daemon-reload 2>&1 | grep "E:"
+  apt --fix-broken -qq install 2>&1 | grep "E:"
+  echo "[ Repositório ]: OK!"
+  echo
+fi
 sleep 2
+EOF
+
+
 
 echo
 echo "[ OpenMediaVault ]: Instalando OpenMediaVault ..."
