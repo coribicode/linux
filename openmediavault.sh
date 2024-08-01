@@ -2,6 +2,10 @@ ID=openmediavault
 CODENAME=sandworm
 URIS=http://packages.openmediavault.org/public
 PACKAGES="openmediavault openvswitch-switch"
+URI_KEY=$URIS/archive.key
+COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
+PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
 
 NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
 IP=$(hostname -I | cut -d ' ' -f 1)
@@ -14,11 +18,6 @@ apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
 
 cat > repo << EOF
 #!/bin/bash
-URI_KEY=$URIS/archive.key
-COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
-PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
-PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
-
 if [ ! -e $PATH_FILE_SOURCE ];
   then
   echo
