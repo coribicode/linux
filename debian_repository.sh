@@ -43,6 +43,15 @@ EOF
     sleep 2
 fi
 
+if [ -e repo ];
+  echo "[ Repositório ]: Verificando NOVOS repositórios ..."
+  sleep 2
+  then
+  echo "[ Repositório ]: Configurando NOVOS repositórios ..."
+  sh repo 2>1 | grep "E:"
+  echo "[ Repositório ]: NOVOS repositórios OK!"
+fi
+
 echo
 echo "[ Sistema ]: Atualizando ..."
 apt update -qq 2>&1 | grep "E:"
