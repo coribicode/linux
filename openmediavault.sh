@@ -61,6 +61,17 @@ cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
     $NIC:
       dhcp4: true
 EOF
+
+if [ -e /etc/apt/sources.list ]
+  then
+rm /etc/apt/sources.list
+fi
+if [ -e /etc/apt/sources.list.d/openmediavault.list ]
+  then
+rm /etc/apt/sources.list.d/openmediavault.list
+fi
+
+
 sudo netplan apply 2>&1
 echo "[ OpenMediaVault ]: Conexão de Rede - OK!"
 sleep 2
