@@ -26,31 +26,25 @@ URI_DOWNLOAD_WAR=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamo
 URI_DOWNLOAD_AUTH_JDBC=https://dlcdn.apache.org/guacamole/$GUAC_VERSION/binary/guacamole-auth-jdbc-$GUAC_VERSION.tar.gz
 URI_DOWNLOAD_MYSQL_CONNECTOR_JAVA=https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-j_"$MYSQL_CONNECTOR_JAVA_VERSION"-1debian"$DEBIAN_VERSION_ID"_all.deb
 
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/guac.list
 
 echo
 echo "Instalando Guacamole Server $GUAC_VERSION ..."
 echo
 
-echo
-echo "[ guac.list ]"
-FILE=/etc/apt/sources.list.d/guac.list
-if [ -e $FILE ];
+cat > repo << EOF
+#!/bin/bash
+if [ ! -e $PATH_FILE_SOURCE ];
   then
-  echo "[ ]: Atualizando repositorio Guacamole ..."
-  apt update 2>&1 | grep "E:"
-  sleep 2
-  echo "[ $FILE ]: OK!"
-else
-  echo "[ $FILE ]: Adicioando repositorio Guacamole ..."
-  echo "deb http://deb.debian.org/debian/ bullseye main" >> $FILE
-  sleep 2
-  echo "[ $FILE ]: OK!"
-  echo "[ $FILE ]: Atualizando repositorio Guacamole ..."
-  apt update 2>&1 | grep "E:"
-  sleep 2
-  echo "[ $FILE ]: OK!"
+  echo
+  echo "[ Repositório $ID ]: Configurando ..."
+
+cat > $PATH_FILE_SOURCE << EOL
+deb http://deb.debian.org/debian/ bullseye main
+EOL
+  echo "[ Repositório $ID ]: OK!"
 fi
-echo "[ guac.list ]: OK!"
+EOF
 sleep 2
 
 echo
