@@ -48,7 +48,7 @@ sleep 2
 ##       Instalação        ##
 #############################
 echo
-echo "[ OpenMediaVault ]: Instalando ..."
+echo "[ $ID ]: Instalando ..."
 echo
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
@@ -62,7 +62,7 @@ sleep 2
 #############################
 ## Ajustes pós-Instalação  ##
 #############################
-echo "[ OpenMediaVault ]: Reconfigurando Conexão de Rede ..."
+echo "[ $ID ]: Reconfigurando Conexão de Rede ..."
 sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
 sleep 2
 
@@ -83,13 +83,13 @@ fi
 
 
 sudo netplan apply 2>&1
-echo "[ OpenMediaVault ]: Conexão de Rede - OK!"
+echo "[ $ID ]: Conexão de Rede - OK!"
 sleep 2
 
 #############################
 ##        Conclusão        ##
 #############################
-echo "[ OpenMediaVault ]: Instalação Concluída!"
+echo "[ $ID ]: Instalação Concluída!"
 echo
 echo "Acesse http://$(hostname -I | cut -d ' ' -f 1)"
 echo
