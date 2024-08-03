@@ -53,7 +53,8 @@ if [ -e $pwd/repo ];
   sleep 2
   then
   echo "[ Repositório ]: Configurando NOVOS repositórios ..."
-sh $pwd/repo
+#sh $pwd/repo
+cat $pwd/repo
   echo "[ Repositório ]: NOVOS repositórios OK!"
 fi
 
