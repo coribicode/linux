@@ -2,8 +2,9 @@
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
 
-curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh 2>/dev/null | grep "E:"
-sh debian_repository.sh
+debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh
+
+curl -fsSL $debian_repository | sh
 
 package_list="PACKAGE_NAME"
 
