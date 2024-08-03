@@ -50,6 +50,7 @@ sleep 2
   else
   echo
   echo "[ Repositório ]: Não há NOVOS repositórios"
+  echo "-------------------------------------------------"
 sleep 2
 fi
 
