@@ -3,7 +3,6 @@
 # Verifica e instala pacote automaticamente
 
 debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh
-
 curl -fsSL $debian_repository | sh
 
 package_list="PACKAGE_NAME"
