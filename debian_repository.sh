@@ -49,7 +49,7 @@ sleep 2
   echo "-------------------------------------------------"
   else
   echo
-  echo "[ NOVOS Repositório ]: Não há"
+  echo "[ NOVOS Repositórios ]: Não há"
   echo "-------------------------------------------------"
 sleep 2
 fi
