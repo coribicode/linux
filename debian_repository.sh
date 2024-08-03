@@ -57,15 +57,15 @@ fi
 if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
   then
   echo
-  echo "[ IPv4 ]: Prioridade IPv4: OK!"
+  echo "[ Prioridade IPv4 ]: OK!"
   echo "-------------------------------------------------"
 sleep 2
   else
   echo
-  echo "[ IPv4 ]: Prioridade IPv4: Definindo ... "
+  echo "[ Prioridade IPv4 ]: Configurando ... "
   echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
 sleep 2
-  echo "[ IPv4 ]: Prioridade IPv4 - OK!"
+  echo "[ Prioridade IPv4 ]: OK!"
   echo "-------------------------------------------------"
 sleep 2
 fi
