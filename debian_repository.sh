@@ -47,6 +47,7 @@ sh ~/repo
   echo "[ Repositório ]: NOVOS repositórios - OK!"
   echo "-------------------------------------------------"
   else
+  echo
   echo "[ Repositório ]: Não há NOVOS repositórios"
 fi
 
