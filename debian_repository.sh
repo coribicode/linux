@@ -48,7 +48,7 @@ EOF
     sleep 2
 fi
 
-PATH_REPO=$($PWD)
+PATH_REPO=$PWD
 if [ -e $PATH_REPO/repo ];
   echo "[ Repositório ]: Verificando NOVOS repositórios ..."
   sleep 2
