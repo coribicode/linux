@@ -29,7 +29,6 @@ cat > ~/repo << EOF
 #!/bin/bash
 if [ ! -e $PATH_FILE_SOURCE ];
   then
-  echo
   echo "[ Repositório $ID ]: Configurando ..."
 
 cat > $PATH_FILE_SOURCE << EOL
