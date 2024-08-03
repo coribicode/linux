@@ -50,7 +50,6 @@ sleep 2
 echo
 echo "[ OpenMediaVault ]: Instalando ..."
 echo
-echo "[ Instalação de Pacotes ]"
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
     sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
@@ -58,7 +57,6 @@ if grep PACKAGE_NAME $INSTALLER > /dev/null
   else
     sh $INSTALLER
 fi
-echo "[ Instalação de Pacotes ]: OK!"
 sleep 2
 
 #############################
