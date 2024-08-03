@@ -48,14 +48,17 @@ EOF
     sleep 2
 fi
 
-if [ -e $PWD/repo ];
+PATH_REPO=$($PWD)
+if [ -e $PATH_REPO/repo ];
   echo "[ Repositório ]: Verificando NOVOS repositórios ..."
   sleep 2
   then
   echo "[ Repositório ]: Configurando NOVOS repositórios ..."
 #sh $pwd/repo
-cat $PWD/repo
+cat $PATH_REPO/repo
   echo "[ Repositório ]: NOVOS repositórios OK!"
+  else
+  echo "[ Repositório ]: NÃO há NOVOS repositórios"
 fi
 
 echo
