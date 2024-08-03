@@ -49,7 +49,7 @@ EOF
 fi
 
 
-if [ -e ~/repo ];
+if [ ! -e ~/repo ];
   echo "[ Repositório ]: Verificando NOVOS repositórios ..."
   sleep 2
   then
