@@ -9,21 +9,6 @@ COMPONENTES='main contrib non-free non-free-firmware'
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
-if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
-  then
-  echo
-  echo "[ Sistema ]: Prioridade IPv4: OK!"
-  echo "-------------------------------------------------"
-  else
-  echo
-  echo "[ Sistema ]: Prioridade IPv4: Definindo ... "
-  echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
-  sleep 2
-  echo "[ Sistema ]: Prioridade IPv4 - OK!"
-  echo "-------------------------------------------------"
-  sleep 2
-fi
-
 if [ -e $PATH_SOURCE ];
   then
   echo
@@ -48,7 +33,6 @@ Suites: $SUITES_SEC
 Components: $COMPONENTES
 Signed-By: $SIGNED
 EOF
-  sleep 2
   echo "[ Repositório ]: $CODENAME - OK!"
   echo "-------------------------------------------------"
   sleep 2
@@ -61,6 +45,22 @@ if [ -e ~/repo ];
 sh ~/repo
   sleep 2
   echo "[ Repositório ]: NOVOS repositórios - OK!"
+  echo "-------------------------------------------------"
+  else
+  echo "[ Repositório ]: Não há NOVOS repositórios"
+fi
+
+if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
+  then
+  echo
+  echo "[ Sistema ]: Prioridade IPv4: OK!"
+  echo "-------------------------------------------------"
+  else
+  echo
+  echo "[ Sistema ]: Prioridade IPv4: Definindo ... "
+  echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
+  sleep 2
+  echo "[ Sistema ]: Prioridade IPv4 - OK!"
   echo "-------------------------------------------------"
   sleep 2
 fi
