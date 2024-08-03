@@ -14,7 +14,7 @@ if [ -e $PATH_SOURCE ];
   echo
   echo "[ Repositório ]: $CODENAME - OK!"
   echo "-------------------------------------------------"
-  sleep 2
+sleep 2
   else
   echo
   echo "[ Repositório ]: $CODENAME - Configurando ..."
@@ -33,9 +33,10 @@ Suites: $SUITES_SEC
 Components: $COMPONENTES
 Signed-By: $SIGNED
 EOF
+sleep 2
   echo "[ Repositório ]: $CODENAME - OK!"
   echo "-------------------------------------------------"
-  sleep 2
+sleep 2
 fi
 
 if [ -e ~/repo ];
@@ -43,12 +44,13 @@ if [ -e ~/repo ];
   echo
   echo "[ Repositório ]: NOVOS repositórios - Configurando ..."
 sh ~/repo
-  sleep 2
+sleep 2
   echo "[ Repositório ]: NOVOS repositórios - OK!"
   echo "-------------------------------------------------"
   else
   echo
   echo "[ Repositório ]: Não há NOVOS repositórios"
+sleep 2
 fi
 
 if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
@@ -56,14 +58,15 @@ if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
   echo
   echo "[ Sistema ]: Prioridade IPv4: OK!"
   echo "-------------------------------------------------"
+sleep 2
   else
   echo
   echo "[ Sistema ]: Prioridade IPv4: Definindo ... "
   echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
-  sleep 2
+sleep 2
   echo "[ Sistema ]: Prioridade IPv4 - OK!"
   echo "-------------------------------------------------"
-  sleep 2
+sleep 2
 fi
 
 echo
@@ -75,4 +78,5 @@ apt-get --fix-broken -qq install | grep "E:"
 sleep 2
 echo "[ Sistema ]: OK!"
 echo "-------------------------------------------------"
+sleep 2
 echo
