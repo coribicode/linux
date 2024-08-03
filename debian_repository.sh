@@ -13,13 +13,14 @@ if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf
   then
   echo
   echo "[ Sistema ]: Prioridade IPv4: OK!"
+  echo "-------------------------------------------------"
   else
   echo
   echo "[ Sistema ]: Prioridade IPv4: Definindo ... "
-  echo "-------------------------------------------------"
   echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
   sleep 2
   echo "[ Sistema ]: Prioridade IPv4 - OK!"
+  echo "-------------------------------------------------"
   sleep 2
 fi
 
@@ -27,6 +28,7 @@ if [ -e $PATH_SOURCE ];
   then
   echo
   echo "[ Repositório ]: $CODENAME - OK!"
+  echo "-------------------------------------------------"
   sleep 2
   else
   echo
@@ -48,6 +50,7 @@ Signed-By: $SIGNED
 EOF
   sleep 2
   echo "[ Repositório ]: $CODENAME - OK!"
+  echo "-------------------------------------------------"
   sleep 2
 fi
 
@@ -58,6 +61,7 @@ if [ -e ~/repo ];
 sh ~/repo
   sleep 2
   echo "[ Repositório ]: NOVOS repositórios - OK!"
+  echo "-------------------------------------------------"
   sleep 2
 fi
 
@@ -69,4 +73,5 @@ systemctl daemon-reload 2>&1 | grep "E:"
 apt-get --fix-broken -qq install | grep "E:"
 sleep 2
 echo "[ Sistema ]: OK!"
+echo "-------------------------------------------------"
 echo
