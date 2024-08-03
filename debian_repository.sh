@@ -9,7 +9,7 @@ COMPONENTES='main contrib non-free non-free-firmware'
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
-if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf
+if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf 2>/dev/null
   then
   echo
   echo "[ Sistema ]: Prioridade IPv4: OK!"
