@@ -49,7 +49,7 @@ sleep 2
 #############################
 echo
 echo "[ $ID ]: Instalando ..."
-echo
+
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
     sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
