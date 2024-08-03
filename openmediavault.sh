@@ -89,7 +89,6 @@ sleep 2
 #############################
 ##        Conclusão        ##
 #############################
-echo
 echo "[ OpenMediaVault ]: Instalação Concluída!"
 echo
 echo "Acesse http://$(hostname -I | cut -d ' ' -f 1)"
