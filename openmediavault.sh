@@ -62,28 +62,34 @@ sleep 2
 #############################
 ## Ajustes pós-Instalação  ##
 #############################
-echo "[ $ID ]: Reconfigurando Conexão de Rede ..."
+echo "[ $ID - Conexão de Rede ]: Reconfigurando ..."
 sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
 sleep 2
 
+if grep ethernets: /etc/netplan/10-openmediavault-default.yaml
+  then
+  echo "[ $ID - Conexão de Rede ]: OK!"
+  else
+  echo "[ $ID - Conexão de Rede ]: Configurando ..."
+  sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
 cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
   ethernets:
     $(ip -br -4 a | grep UP | cut -d ' ' -f 1):
       dhcp4: true
 EOF
-
-if [ -e /etc/apt/sources.list ]
-  then
-rm /etc/apt/sources.list
-fi
-if [ -e /etc/apt/sources.list.d/openmediavault.list ]
-  then
-rm /etc/apt/sources.list.d/openmediavault.list
-fi
-
-
 sudo netplan apply 2>&1
-echo "[ $ID ]: Conexão de Rede - OK!"
+  echo "[ $ID - Conexão de Rede ]: OK!"
+fi
+
+#if [ -e /etc/apt/sources.list ]
+#  then
+#rm /etc/apt/sources.list
+#fi
+#if [ -e /etc/apt/sources.list.d/openmediavault.list ]
+#  then
+#rm /etc/apt/sources.list.d/openmediavault.list
+#fi
+
 sleep 2
 
 #############################
