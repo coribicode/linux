@@ -81,10 +81,10 @@ sudo netplan apply 2>&1
   echo "--------------------------------------------------------------------"
 fi
 
-#if [ -e /etc/apt/sources.list ]
-#  then
-#rm /etc/apt/sources.list
-#fi
+if [ -e $PATH_FILE_SOURCE ]
+  then
+rm $PATH_FILE_SOURCE
+fi
 #if [ -e /etc/apt/sources.list.d/openmediavault.list ]
 #  then
 #rm /etc/apt/sources.list.d/openmediavault.list
