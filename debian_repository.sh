@@ -42,14 +42,14 @@ fi
 if [ -e ~/repo ];
   then
   echo
-  echo "[ Repositório ]: NOVOS repositórios - Configurando ..."
+  echo "[ NOVOS Repositórios ]: Configurando ..."
 sh ~/repo
 sleep 2
-  echo "[ Repositório ]: NOVOS repositórios - OK!"
+  echo "[ NOVOS Repositórios ]: OK!"
   echo "-------------------------------------------------"
   else
   echo
-  echo "[ Repositório ]: Não há NOVOS repositórios"
+  echo "[ NOVOS Repositório ]: Não há"
   echo "-------------------------------------------------"
 sleep 2
 fi
@@ -57,15 +57,15 @@ fi
 if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
   then
   echo
-  echo "[ Sistema ]: Prioridade IPv4: OK!"
+  echo "[ IPv4 ]: Prioridade IPv4: OK!"
   echo "-------------------------------------------------"
 sleep 2
   else
   echo
-  echo "[ Sistema ]: Prioridade IPv4: Definindo ... "
+  echo "[ IPv4 ]: Prioridade IPv4: Definindo ... "
   echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
 sleep 2
-  echo "[ Sistema ]: Prioridade IPv4 - OK!"
+  echo "[ IPv4 ]: Prioridade IPv4 - OK!"
   echo "-------------------------------------------------"
 sleep 2
 fi
