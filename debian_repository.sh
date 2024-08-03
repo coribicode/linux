@@ -48,12 +48,12 @@ EOF
     sleep 2
 fi
 
-if [ -e repo ];
+if [ -e $pwd/repo ];
   echo "[ Repositório ]: Verificando NOVOS repositórios ..."
   sleep 2
   then
   echo "[ Repositório ]: Configurando NOVOS repositórios ..."
-sh repo
+sh $pwd/repo
   echo "[ Repositório ]: NOVOS repositórios OK!"
 fi
 
