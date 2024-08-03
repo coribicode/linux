@@ -1,16 +1,18 @@
-apt install -y sudo curl wget gnupg ca-certificates 2>&1 | grep "E:"
-
 ID=openmediavault
 CODENAME=sandworm
 URIS=http://packages.openmediavault.org/public
-PACKAGES='systemd-timesyncd openvswitch-switch openmediavault'
 URI_KEY=$URIS/archive.key
 COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
 PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
 PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
-
 NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
 IP=$(hostname -I | cut -d ' ' -f 1)
+
+PACKAGES='systemd-timesyncd openvswitch-switch openmediavault'
+
+apt-get install -y curl > /dev/null
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
+INSTALLER="install.sh"
 
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
@@ -34,9 +36,6 @@ sleep 2
 fi
 EOF
 sleep 2
-
-curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
-INSTALLER="install.sh"
 
 echo
 echo "[ OpenMediaVault ]: Instalando ..."
