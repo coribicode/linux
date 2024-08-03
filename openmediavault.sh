@@ -78,6 +78,7 @@ cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
 EOF
 sudo netplan apply 2>&1
   echo "[ $ID - Conexão de Rede ]: OK!"
+  echo "--------------------------------------------------------------------"
 fi
 
 #if [ -e /etc/apt/sources.list ]
@@ -94,6 +95,7 @@ sleep 2
 #############################
 ##        Conclusão        ##
 #############################
+
 echo "[ $ID ]: Instalação Concluída!"
 echo
 echo "Acesse http://$(hostname -I | cut -d ' ' -f 1)"
