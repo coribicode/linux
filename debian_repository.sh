@@ -11,6 +11,7 @@ PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
 if grep "precedence ::ffff:0:0/96  100"  /etc/gai.conf
   then
+  echo
   echo "[ Sistema ]: Prioridade IPv4: OK!"
   else
   echo
@@ -19,22 +20,18 @@ if grep "precedence ::ffff:0:0/96  100"  /etc/gai.conf
   echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
   sleep 2
   echo "[ Sistema ]: Prioridade IPv4 - OK!"
+  sleep 2
 fi
 
-echo
-echo "[ Sistema ]: Verificando ... "
-sleep 2
-
-echo
 if [ -e $PATH_SOURCE ];
   then
-    echo "[ Repositório ]: OK!"
-    sleep 2
+  echo
+  echo "[ Repositório ]: $CODENAME - OK!"
+  sleep 2
   else
-    echo "[ Repositório ]: Configurando ..."
-    sleep 2
-    mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
-    sleep 2
+  echo
+  echo "[ Repositório ]: $CODENAME - Configurando ..."
+  mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
 cat > $PATH_SOURCE << EOF
 ## $CODENAME RESPOSITORY ##
 Types: $TYPES
@@ -49,20 +46,19 @@ Suites: $SUITES_SEC
 Components: $COMPONENTES
 Signed-By: $SIGNED
 EOF
-    echo "[ Repositório ]: OK!"
-    sleep 2
+  sleep 2
+  echo "[ Repositório ]: $CODENAME - OK!"
+  sleep 2
 fi
 
-echo "[ Repositório ]: Verificando NOVOS repositórios ..."
-sleep 2
-if [ -e ~/repo.sh ];
+if [ -e ~/repo ];
   then
-  echo "[ Repositório ]: Configurando NOVOS repositórios ..."
-#sh $pwd/repo
-cat ~/repo.sh
-  echo "[ Repositório ]: NOVOS repositórios OK!"
-  else
-  echo "[ Repositório ]: NÃO há NOVOS repositórios"
+  echo
+  echo "[ Repositório ]: NOVOS repositórios - Configurando ..."
+sh ~/repo
+  sleep 2
+  echo "[ Repositório ]: NOVOS repositórios - OK!"
+  sleep 2
 fi
 
 echo
@@ -74,4 +70,3 @@ apt-get --fix-broken -qq install | grep "E:"
 sleep 2
 echo "[ Sistema ]: OK!"
 echo
-sleep 2
