@@ -25,7 +25,7 @@ export APT_LISTCHANGES_FRONTEND=none
 ##############################
 ##    NOVOS REPOSITÓRIOS    ##
 ##############################
-cat > repo << EOF
+cat > ~/repo << EOF
 #!/bin/bash
 if [ ! -e $PATH_FILE_SOURCE ];
   then
