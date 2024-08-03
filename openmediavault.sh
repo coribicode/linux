@@ -16,7 +16,7 @@ COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d
 PATH_FILE_SIGNED=/usr/share/keyrings/$ID-$CODENAME.gpg
 PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-$CODENAME.list
 
-PACKAGES='systemd-timesyncd openvswitch-switch openmediavault'
+PACKAGES='openvswitch-switch openmediavault'
 
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
