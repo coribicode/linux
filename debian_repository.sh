@@ -48,14 +48,13 @@ EOF
     sleep 2
 fi
 
-
-if [ ! -e ~/repo ];
-  echo "[ Repositório ]: Verificando NOVOS repositórios ..."
-  sleep 2
+echo "[ Repositório ]: Verificando NOVOS repositórios ..."
+sleep 2
+if [ -e ~/repo.sh ];
   then
   echo "[ Repositório ]: Configurando NOVOS repositórios ..."
 #sh $pwd/repo
-cat ~/repo
+cat ~/repo.sh
   echo "[ Repositório ]: NOVOS repositórios OK!"
   else
   echo "[ Repositório ]: NÃO há NOVOS repositórios"
