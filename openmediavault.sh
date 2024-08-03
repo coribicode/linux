@@ -1,23 +1,30 @@
-ID=openmediavault
-CODENAME=sandworm
-URIS=http://packages.openmediavault.org/public
-URI_KEY=$URIS/archive.key
-COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
-PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
-PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
-NIC=$(ip -br -4 a | grep UP | cut -d ' ' -f 1)
-IP=$(hostname -I | cut -d ' ' -f 1)
-
-PACKAGES='systemd-timesyncd openvswitch-switch openmediavault'
-
+#!/bin/bash
 apt-get install -y curl > /dev/null
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>&1 | grep "E:"
 INSTALLER="install.sh"
+
+##############################
+## Variáveis da Instalação  ##
+##############################
+ID=openmediavault
+CODENAME=sandworm
+URIS=http://packages.openmediavault.org/public
+
+URI_KEY=$URIS/archive.key
+COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
+
+PATH_FILE_SIGNED=/usr/share/keyrings/$ID-$CODENAME.gpg
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-$CODENAME.list
+
+PACKAGES='systemd-timesyncd openvswitch-switch openmediavault'
 
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 
+##############################
+##    NOVOS REPOSITÓRIOS    ##
+##############################
 cat > repo << EOF
 #!/bin/bash
 if [ ! -e $PATH_FILE_SOURCE ];
@@ -37,6 +44,9 @@ fi
 EOF
 sleep 2
 
+#############################
+##       Instalação        ##
+#############################
 echo
 echo "[ OpenMediaVault ]: Instalando ..."
 echo
@@ -51,13 +61,16 @@ fi
 echo "[ Instalação de Pacotes ]: OK!"
 sleep 2
 
+#############################
+## Ajustes pós-Instalação  ##
+#############################
 echo "[ OpenMediaVault ]: Reconfigurando Conexão de Rede ..."
 sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
 sleep 2
 
 cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
   ethernets:
-    $NIC:
+    $(ip -br -4 a | grep UP | cut -d ' ' -f 1):
       dhcp4: true
 EOF
 
@@ -75,10 +88,13 @@ sudo netplan apply 2>&1
 echo "[ OpenMediaVault ]: Conexão de Rede - OK!"
 sleep 2
 
+#############################
+##        Conclusão        ##
+#############################
 echo
 echo "[ OpenMediaVault ]: Instalação Concluída!"
 echo
-echo "Acesse http://$IP"
+echo "Acesse http://$(hostname -I | cut -d ' ' -f 1)"
 echo
 echo "Login: admin"
 echo "Senha: openmediavault"
