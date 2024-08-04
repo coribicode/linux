@@ -72,7 +72,7 @@ if grep ethernets: /etc/netplan/10-openmediavault-default.yaml
   echo "[ $ID - Conexão de Rede ]: Configurando ..."
   sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
 
-cat > /etc/netplan/10-openmediavault-default.yaml << EOF
+cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
   ethernets:
     $(ip -br -4 a | grep UP | cut -d ' ' -f 1):
       dhcp4: true
