@@ -13,8 +13,8 @@ URIS=http://packages.openmediavault.org/public
 URI_KEY=$URIS/archive.key
 COMPONENTS=$(curl -fsSL $URIS/dists/$CODENAME/Release | grep Components | cut -d ':' -f 2) 
 
-PATH_FILE_SIGNED=/usr/share/keyrings/$ID-$CODENAME.gpg
-PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-$CODENAME.list
+PATH_FILE_SIGNED=/usr/share/keyrings/$ID-archive-keyring.gpg
+PATH_FILE_SOURCE=/etc/apt/sources.list.d/$ID-sources.list
 
 PACKAGES='openvswitch-switch openmediavault'
 
