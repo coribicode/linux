@@ -71,11 +71,13 @@ if grep ethernets: /etc/netplan/10-openmediavault-default.yaml
   else
   echo "[ $ID - Conexão de Rede ]: Configurando ..."
   sudo omv-salt deploy run systemd-networkd 2>&1 | grep "Ey:"
-cat >> /etc/netplan/10-openmediavault-default.yaml << EOF
+
+cat > /etc/netplan/10-openmediavault-default.yaml << EOF
   ethernets:
     $(ip -br -4 a | grep UP | cut -d ' ' -f 1):
       dhcp4: true
 EOF
+
 sudo netplan apply 2>&1
   echo "[ $ID - Conexão de Rede ]: OK!"
   echo "--------------------------------------------------------------------"
