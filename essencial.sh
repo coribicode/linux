@@ -18,6 +18,7 @@ make \
 automake \
 autoconf \
 net-tools \
+udns-utils
 plocate \
 lzip \
 tar \
