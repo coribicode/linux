@@ -6,6 +6,7 @@ module-assistant \
 ca-certificates \
 software-properties-common \
 neofetch \
+screenfetch \
 aptitude \
 sudo \
 wget \
