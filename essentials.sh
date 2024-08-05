@@ -5,6 +5,7 @@ apt-transport-https \
 module-assistant \
 ca-certificates \
 software-properties-common \
+neofetch \
 aptitude \
 sudo \
 wget \
