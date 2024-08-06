@@ -46,11 +46,11 @@ if [ ! -e ~/repo ]
   echo "[ NOVOS Repositórios ]: Verificando ..."
 sleep 2
   then
-sh ~/repo
-    echo "[ NOVOS Repositórios ]: OK!"
+    echo "[ NOVOS Repositórios ]: Não há"
     echo "-------------------------------------------------"
   else
-    echo "[ NOVOS Repositórios ]: Não há"
+  sh ~/repo
+    echo "[ NOVOS Repositórios ]: OK!"
     echo "-------------------------------------------------"
 fi
 sleep 2
