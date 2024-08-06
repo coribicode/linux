@@ -9,15 +9,17 @@ COMPONENTES='main contrib non-free non-free-firmware'
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
-echo "-------------------------------------------------"
-if [ -e $PATH_SOURCE ];
+if [ -e $PATH_SOURCE ]
+  echo "[ Repositório ]: $CODENAME - Verificando ..."
   then
-  echo "[ Repositório ]: $CODENAME - OK!"
-  echo "-------------------------------------------------"
-sleep 2
+    echo "[ Repositório ]: $CODENAME - OK!"
+    echo "-------------------------------------------------"
+    sleep 2
   else
-  echo "[ Repositório ]: $CODENAME - Configurando ..."
-  mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
+    echo "[ Repositório ]: $CODENAME - Configurando ..."
+
+mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
+
 cat > $PATH_SOURCE << EOF
 ## $CODENAME RESPOSITORY ##
 Types: $TYPES
@@ -32,38 +34,38 @@ Suites: $SUITES_SEC
 Components: $COMPONENTES
 Signed-By: $SIGNED
 EOF
-sleep 2
-  echo "[ Repositório ]: $CODENAME - OK!"
-  echo "-------------------------------------------------"
-sleep 2
+    echo "[ Repositório ]: $CODENAME - OK!"
+    echo "-------------------------------------------------"
 fi
+sleep 2
 
 if [ -e ~/repo ];
-  then
   echo "[ NOVOS Repositórios ]: Verificando ..."
-sh ~/repo
-sleep 2
-  echo "[ NOVOS Repositórios ]: OK!"
-  echo "-------------------------------------------------"
+  sleep 2
+  then
+    sh ~/repo
+    echo "[ NOVOS Repositórios ]: OK!"
+    echo "-------------------------------------------------"
   else
-  echo "[ NOVOS Repositórios ]: Não há"
-  echo "-------------------------------------------------"
-sleep 2
+    echo "[ NOVOS Repositórios ]: Não há"
+    echo "-------------------------------------------------"
 fi
+sleep 2
 
 if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
+  echo "[ Prioridade IPv4 ]: Verificando ..."
+  sleep 2
   then
   echo "[ Prioridade IPv4 ]: OK!"
   echo "-------------------------------------------------"
-sleep 2
   else
   echo "[ Prioridade IPv4 ]: Configurando ... "
   echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
-sleep 2
+  sleep 2
   echo "[ Prioridade IPv4 ]: OK!"
   echo "-------------------------------------------------"
-sleep 2
 fi
+sleep 2
 
 echo "[ Sistema ]: Atualizando ..."
 apt-get update -qq 2>&1 | grep "E:"
