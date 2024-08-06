@@ -12,13 +12,13 @@ PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 if [ -e $PATH_SOURCE ]
   echo "-------------------------------------------------"
   echo "[ Repositório - $CODENAME ]: Verificando ..."
-  sleep 2
+sleep 2
   then
     echo "[ Repositório - $CODENAME ]: - OK!"
     echo "-------------------------------------------------"
   else
     echo "[ Repositório - $CODENAME ]: Configurando ..."
-    sleep 2
+sleep 2
     
 mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
 
@@ -42,11 +42,11 @@ EOF
 fi
 sleep 2
 
-if [ -e ~/repo ];
+if [ -e ~/repo ]
   echo "[ NOVOS Repositórios ]: Verificando ..."
-  sleep 2
+sleep 2
   then
-    sh ~/repo
+sh ~/repo
     echo "[ NOVOS Repositórios ]: OK!"
     echo "-------------------------------------------------"
   else
@@ -57,14 +57,14 @@ sleep 2
 
 if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
   echo "[ Prioridade IPv4 ]: Verificando ..."
-  sleep 2
+sleep 2
   then
   echo "[ Prioridade IPv4 ]: OK!"
   echo "-------------------------------------------------"
   else
   echo "[ Prioridade IPv4 ]: Configurando ... "
-  echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
-  sleep 2
+echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
+sleep 2
   echo "[ Prioridade IPv4 ]: OK!"
   echo "-------------------------------------------------"
 fi
@@ -72,7 +72,7 @@ sleep 2
 
 if grep ^'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' ~/.bashrc > /dev/null
   echo "[ Fix LDCONFIG ]: Verificando ..."
-  sleep 2
+sleep 2
   then
   echo "[ Fix LDCONFIG ]: OK!"
   echo "-------------------------------------------------"
