@@ -69,6 +69,7 @@ echo "[ Fix LDCONFIG ]: OK!"
 else
 echo "[ Fix LDCONFIG ]: Configurando ... "
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+sleep 5
 source /etc/profile
 echo "[ Fix LDCONFIG ]: OK!"
 fi
