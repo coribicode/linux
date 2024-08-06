@@ -10,14 +10,16 @@ SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
 if [ -e $PATH_SOURCE ]
-  echo "[ Repositório ]: $CODENAME - Verificando ..."
+  echo "-------------------------------------------------"
+  echo "[ Repositório - $CODENAME ]: Verificando ..."
+  sleep 2
   then
-    echo "[ Repositório ]: $CODENAME - OK!"
+    echo "[ Repositório - $CODENAME ]: - OK!"
     echo "-------------------------------------------------"
-    sleep 2
   else
-    echo "[ Repositório ]: $CODENAME - Configurando ..."
-
+    echo "[ Repositório - $CODENAME ]: Configurando ..."
+    sleep 2
+    
 mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1
 
 cat > $PATH_SOURCE << EOF
@@ -34,7 +36,8 @@ Suites: $SUITES_SEC
 Components: $COMPONENTES
 Signed-By: $SIGNED
 EOF
-    echo "[ Repositório ]: $CODENAME - OK!"
+
+    echo "[ Repositório - $CODENAME ]: OK!"
     echo "-------------------------------------------------"
 fi
 sleep 2
