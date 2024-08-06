@@ -40,7 +40,7 @@ fi
 
 if [ -e ~/repo ];
   then
-  echo "[ NOVOS Repositórios ]: Configurando ..."
+  echo "[ NOVOS Repositórios ]: Verificando ..."
 sh ~/repo
 sleep 2
   echo "[ NOVOS Repositórios ]: OK!"
