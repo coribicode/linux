@@ -10,6 +10,20 @@ SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
 echo "-------------------------------------------------"
+echo "[ Prioridade IPv4 ]: Verificando ..."
+sleep 2
+if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
+then
+echo "[ Prioridade IPv4 ]: OK!"
+else
+echo "[ Prioridade IPv4 ]: Configurando ... "
+echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
+sleep 2
+echo "[ Prioridade IPv4 ]: OK!"
+fi
+sleep 2
+
+echo "-------------------------------------------------"
 echo "[ Repositório - $CODENAME ]: Verificando ..."
 sleep 2
 if [ -e $PATH_SOURCE ]
@@ -35,6 +49,7 @@ Signed-By: $SIGNED
 EOF
 echo "[ Repositório - $CODENAME ]: OK!"
 fi
+sleep 2
 
 echo "-------------------------------------------------"
 echo "[ NOVOS Repositórios ]: Verificando ..."
@@ -46,19 +61,17 @@ else
 sh ~/repo
 echo "[ NOVOS Repositórios ]: OK!"
 fi
+sleep 2
 
 echo "-------------------------------------------------"
-echo "[ Prioridade IPv4 ]: Verificando ..."
+echo "[ Sistema ]: Atualizando ..."
 sleep 2
-if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
-then
-echo "[ Prioridade IPv4 ]: OK!"
-else
-echo "[ Prioridade IPv4 ]: Configurando ... "
-echo "precedence ::ffff:0:0/96  100" >> /etc/gai.conf
+apt-get update -qq 2>&1 | grep "E:"
+apt-get upgrade -qqy 2>&1 | grep "E:"
+systemctl daemon-reload 2>&1 | grep "E:"
+apt-get --fix-broken -qq install | grep "E:"
+echo "[ Sistema ]: OK!"
 sleep 2
-echo "[ Prioridade IPv4 ]: OK!"
-fi
 
 echo "-------------------------------------------------"
 echo "[ Fix LDCONFIG ]: Verificando ..."
@@ -73,14 +86,6 @@ sleep 5
 source /etc/profile
 echo "[ Fix LDCONFIG ]: OK!"
 fi
+sleep 2
 
-echo "-------------------------------------------------"
-echo "[ Sistema ]: Atualizando ..."
-sleep 2
-apt-get update -qq 2>&1 | grep "E:"
-apt-get upgrade -qqy 2>&1 | grep "E:"
-systemctl daemon-reload 2>&1 | grep "E:"
-apt-get --fix-broken -qq install | grep "E:"
-sleep 2
-echo "[ Sistema ]: OK!"
 echo "-------------------------------------------------"
