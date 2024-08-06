@@ -70,6 +70,21 @@ if grep ^'precedence ::ffff:0:0/96  100'  /etc/gai.conf > /dev/null
 fi
 sleep 2
 
+if grep ^'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' ~/.bashrc > /dev/null
+  echo "[ Fix LDCONFIG ]: Verificando ..."
+  sleep 2
+  then
+  echo "[ Fix LDCONFIG ]: OK!"
+  echo "-------------------------------------------------"
+  else
+  echo "[ Prioridade IPv4 ]: Configurando ... "
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+source /etc/profile
+  echo "[ Fix LDCONFIG ]: OK!"
+  echo "-------------------------------------------------"
+fi
+sleep 2
+
 echo "[ Sistema ]: Atualizando ..."
 apt-get update -qq 2>&1 | grep "E:"
 apt-get upgrade -qqy 2>&1 | grep "E:"
