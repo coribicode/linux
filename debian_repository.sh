@@ -9,14 +9,11 @@ COMPONENTES='main contrib non-free non-free-firmware'
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
-if [ -e $PATH_SOURCE ]
+if [ ! -e $PATH_SOURCE ]
   echo "-------------------------------------------------"
   echo "[ Repositório - $CODENAME ]: Verificando ..."
 sleep 2
   then
-    echo "[ Repositório - $CODENAME ]: - OK!"
-    echo "-------------------------------------------------"
-  else
     echo "[ Repositório - $CODENAME ]: Configurando ..."
 sleep 2
     
@@ -38,6 +35,9 @@ Signed-By: $SIGNED
 EOF
 
     echo "[ Repositório - $CODENAME ]: OK!"
+    echo "-------------------------------------------------"
+    else
+        echo "[ Repositório - $CODENAME ]: - OK!"
     echo "-------------------------------------------------"
 fi
 sleep 2
