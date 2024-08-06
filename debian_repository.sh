@@ -77,7 +77,7 @@ sleep 2
   echo "[ Fix LDCONFIG ]: OK!"
   echo "-------------------------------------------------"
   else
-  echo "[ Prioridade IPv4 ]: Configurando ... "
+  echo "[ Fix LDCONFIG ]: Configurando ... "
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 source /etc/profile
   echo "[ Fix LDCONFIG ]: OK!"
