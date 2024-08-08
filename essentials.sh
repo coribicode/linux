@@ -20,8 +20,7 @@ make \
 automake \
 autoconf \
 net-tools \
-udns-utils
-plocate \
+udns-utils \
 lzip \
 tar \
 unzip
