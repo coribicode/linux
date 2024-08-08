@@ -83,8 +83,8 @@ else
 echo "[ Fix LDCONFIG ]: Configurando ... "
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
-source ~/.bashrc
-source /etc/profile
+sudo source ~/.bashrc
+sudo source /etc/profile
 echo "[ Fix LDCONFIG ]: OK!"
 fi
 sleep 2
