@@ -28,6 +28,7 @@ for package in $package_list
       sleep 2
       echo "Pacote [ $package ]: Instalando pacote..."
       sleep 2
+      export DEBIAN_FRONTEND=noninteractive
       apt install -qq -y $package 2>&1 | grep "E:"
       check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
       sleep 2
