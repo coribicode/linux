@@ -208,6 +208,23 @@ template shell = \/bin\/bash\n\
 create mask = 0664\n\
 directory mask = 0775\n\
 \n\
+## Configuração RSAT ##\n\
+rpc_server:tcpip = no\n\
+rpc_daemon:spoolssd = embedded\n\
+rpc_server:spoolss = embedded\n\
+rpc_server:winreg = embedded\n\
+rpc_server:ntsvcs = embedded\n\
+rpc_server:eventlog = embedded\n\
+rpc_server:srvsvc = embedded\n\
+rpc_server:svcctl = embedded\n\
+rpc_server:default = external\n\
+\n\
+client min protocol = SMB2\n\
+client max protocol = SMB3\n\
+server min protocol = SMB2\n\
+server max protocol = SMB3\n\
+## Configuração RSAT ##\n\
+\n\
 logging = file\n\
 max log size = 1000\n\
 log file = \/var\/log\/samba\/log.%m\n\
