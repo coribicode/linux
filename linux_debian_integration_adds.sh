@@ -1,29 +1,16 @@
 ###########################################################################
 DOMAIN=EMPRESA.NETLAN        # NOME DO SEU DOMINIO
 DOMAIN_IP='192.168.0.119'    # IP DO SERVIDOR LDAP
-DOMAIN_PASS='Passw0rd$2'            # SENHA DO usuário 'administrator' DO DOMINIO
+DOMAIN_PASS='Passw0rd$2'     # SENHA DO usuário 'administrator' DO DOMINIO
 hostname=adm001vm            # NOME DA MAQUINA LOCAL
 ###########################################################################
-
 RESOLV_FILE='/etc/resolvconf/resolv.conf.d/head'
-#HOSTNAME_FQDN=$(cat /etc/hostname | sed -e 's/\(.*\)/\L\1/').$(echo $DOMAIN | sed -e 's/\(.*\)/\L\1/')
 HOSTNAME_FQDN=$(echo $hostname.$DOMAIN | sed -e 's/\(.*\)/\L\1/')
-
-apt install -y curl sudo wget git
-debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh
-curl -fsSL $debian_repository | sh
-
-apt install -y lxde-core xrdp 
-
-url_sh=https://raw.githubusercontent.com/davigalucio/linux/main/fix-blackscreen.sh
-curl -fsSL $url_sh | sh
-#sudo reboot
 
 sudo apt install -y resolvconf
 systemctl start resolvconf
 systemctl enable resolvconf
 #systemctl status resolvconf
-
 
 if grep "$DOMAIN" $RESOLV_FILE > /dev/null
 then
@@ -44,11 +31,27 @@ fi
 resolvconf --enable-updates
 resolvconf -u
 
-## https://medium.com/@aurelson/debian-integration-with-ad-5ffdb8be0a19
 hostnamectl set-hostname $HOSTNAME_FQDN
 hostnamectl
-apt -y install sudo realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit dnsutils
-#apt -y install realmd libnss-sss libpam-sss sssd sssd-tools adcli samba-common-bin oddjob oddjob-mkhomedir packagekit
+
+apt install -y curl 2>/dev/null | grep "E:"
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
+
+INSTALLER="install.sh"
+PACKAGES_DEPENDECES="sudo realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin oddjob oddjob-mkhomedir packagekit dnsutils"
+package_list="$PACKAGES_DEPENDECES"
+
+echo
+echo "[ Instalação de Pacotes ]"
+if grep PACKAGE_NAME $INSTALLER > /dev/null
+  then
+    sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
+    sh $INSTALLER
+  else
+    sh $INSTALLER
+fi
+echo "[ Instalação de Pacotes ]: OK!"
+
 sudo realm discover $DOMAIN
 echo $DOMAIN_PASS | realm join -U administrator $DOMAIN
 
