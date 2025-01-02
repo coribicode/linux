@@ -1,9 +1,13 @@
-DOMAIN='VIRTUALEASY.LANNET'
-DOMAIN_PASS='Passw0rd$2'
-DOMAIN_IP='192.168.0.119'
+###########################################################################
+DOMAIN=EMPRESA.NETLAN        # NOME DO SEU DOMINIO
+DOMAIN_IP='192.168.0.119'    # IP DO SERVIDOR LDAP
+DOMAIN_PASS='Passw0rd$2'            # SENHA DO usuário 'administrator' DO DOMINIO
+hostname=adm001vm            # NOME DA MAQUINA LOCAL
+###########################################################################
+
 RESOLV_FILE='/etc/resolvconf/resolv.conf.d/head'
 #HOSTNAME_FQDN=$(cat /etc/hostname | sed -e 's/\(.*\)/\L\1/').$(echo $DOMAIN | sed -e 's/\(.*\)/\L\1/')
-HOSTNAME_FQDN=vm001.$(echo $DOMAIN | sed -e 's/\(.*\)/\L\1/')
+HOSTNAME_FQDN=$(echo $hostname.$DOMAIN | sed -e 's/\(.*\)/\L\1/')
 
 apt install -y curl sudo wget git
 debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh
@@ -100,7 +104,6 @@ dc_grp_admins=grp-admins
 cat > /etc/ssh/sshd_config.d/grp-$dc_grp_admins.conf << EOL 
 AllowGroups Domain $dc_grp_admins sudo $USER administrator Administrator
 EOL
-
 
 systemctl restart sssd
 
