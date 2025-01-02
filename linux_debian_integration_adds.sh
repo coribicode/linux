@@ -24,7 +24,8 @@ if grep PACKAGE_NAME $INSTALLER > /dev/null
     sh $INSTALLER
 fi
 echo "[ Instalação de Pacotes ]: OK!"
-
+echo
+echo
 if grep "$DOMAIN" $RESOLV_FILE > /dev/null
 then
 echo "[ Dominio DNS ]: OK!"
@@ -49,11 +50,7 @@ hostnamectl
 
 realm discover $DOMAIN
 echo $DOMAIN_PASS | realm join -U administrator $DOMAIN
-
-pam-auth-update --enable mkhomedir
-mkdir -p /var/lib/sss/gpo_cache/$DOMAIN
-chown -R sssd:sssd /var/lib/sss/gpo_cache
-
+echo
 echo "-------------------------------------"
 cp /etc/pam.d/common-session /etc/pam.d/common-session.bkp
 if grep "pam_mkhomedir.so skel=/etc/skel umask=077" /etc/pam.d/common-session > /dev/null
@@ -75,16 +72,6 @@ echo "[ SSSD FQDN ]: OK!"
 else
 echo "[ SSSD FQDN  ]:  Configurando ..."
 sed -i 's/use_fully_qualified_names = True/use_fully_qualified_names = False'/g /etc/sssd/sssd.conf
-sleep 3
-echo "[ SSSD FQDN  ]:  OK!"
-fi
-echo "-------------------------------------"
-if grep "ldap_id_mapping = False" /etc/sssd/sssd.conf > /dev/null
-then
-echo "[ SSSD FQDN ]: OK!"
-else
-echo "[ SSSD FQDN  ]:  Configurando ..."
-sed -i 's/ldap_id_mapping = True/ldap_id_mapping = False'/g /etc/sssd/sssd.conf
 sleep 3
 echo "[ SSSD FQDN  ]:  OK!"
 fi
@@ -115,12 +102,27 @@ sleep 3
 echo "[ SSHD UsePAM ]: OK!"
 fi
 echo "-------------------------------------"
+#if grep "ldap_id_mapping = False" /etc/sssd/sssd.conf > /dev/null
+#then
+#echo "[ SSSD FQDN ]: OK!"
+#else
+#echo "[ SSSD FQDN  ]:  Configurando ..."
+#sed -i 's/ldap_id_mapping = True/ldap_id_mapping = False'/g /etc/sssd/sssd.conf
+#sleep 3
+#echo "[ SSSD FQDN  ]:  OK!"
+#fi
+#echo "-------------------------------------"
 
 dc_grp_admins=grp-admins
 cat > /etc/ssh/sshd_config.d/grp-$dc_grp_admins.conf << EOL 
 AllowGroups Domain $dc_grp_admins sudo $USER administrator Administrator
 EOL
 
-systemctl restart sssd
+pam-auth-update --enable mkhomedir
+mkdir -p /var/lib/sss/gpo_cache/$DOMAIN
+chown -R sssd:sssd /var/lib/sss/gpo_cache
 
+systemctl restart sssd
+echo "[ Teste GETENT ]: ..."
 getent passwd administrator
+echo "-------------------------------------"
