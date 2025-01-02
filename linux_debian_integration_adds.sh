@@ -50,6 +50,12 @@ hostnamectl
 sudo realm discover $DOMAIN
 echo $DOMAIN_PASS | realm join -U administrator $DOMAIN
 
+pam-auth-update --enable mkhomedir
+mkdir -p /var/lib/sss/gpo_cache/$DOMAIN
+chown -R sssd:sssd /var/lib/sss/gpo_cache
+
+echo "-------------------------------------"
+cp /etc/pam.d/common-session /etc/pam.d/common-session.bkp
 if grep "pam_mkhomedir.so skel=/etc/skel umask=077" /etc/pam.d/common-session > /dev/null
 then
 echo "[ PAM_MKHOMEDIR ]: OK!"
@@ -58,45 +64,57 @@ echo "[ PAM_MKHOMEDIR ]:  Configurando ..."
 cat >> /etc/pam.d/common-session << EOL
 session optional        pam_mkhomedir.so skel=/etc/skel umask=077
 EOL
+sleep 3
+echo "[ PAM_MKHOMEDIR ]:  OK!"
 fi
-
+echo "-------------------------------------"
 cp /etc/sssd/sssd.conf /etc/sssd/sssd.conf.bkp
-
 if grep "use_fully_qualified_names = False" /etc/sssd/sssd.conf > /dev/null
 then
 echo "[ SSSD FQDN ]: OK!"
 else
 echo "[ SSSD FQDN  ]:  Configurando ..."
 sed -i 's/use_fully_qualified_names = True/use_fully_qualified_names = False'/g /etc/sssd/sssd.conf
+sleep 3
+echo "[ SSSD FQDN  ]:  OK!"
 fi
-
-#if grep "ldap_id_mapping = False" /etc/sssd/sssd.conf > /dev/null
-#then
-#echo "[ SSSD FQDN ]: OK!"
-#else
-#echo "[ SSSD FQDN  ]:  Configurando ..."
-#sed -i 's/ldap_id_mapping = True/ldap_id_mapping = False'/g /etc/sssd/sssd.conf
-#fi
-
+echo "-------------------------------------"
+if grep "ldap_id_mapping = False" /etc/sssd/sssd.conf > /dev/null
+then
+echo "[ SSSD FQDN ]: OK!"
+else
+echo "[ SSSD FQDN  ]:  Configurando ..."
+sed -i 's/ldap_id_mapping = True/ldap_id_mapping = False'/g /etc/sssd/sssd.conf
+sleep 3
+echo "[ SSSD FQDN  ]:  OK!"
+fi
+echo "-------------------------------------"
 if grep "ldap_user_uid_number" /etc/sssd/sssd.conf > /dev/null
 then
 echo "[ SSSD UID ]: OK!"
 else
 echo "[ SSSD UID ]: Configurando ..."
 cat >> /etc/sssd/sssd.conf << EOL
-#ldap_user_uid_number = uidNumber
-#ldap_user_gid_number = gidNumber
+ldap_user_uid_number = uidNumber
+ldap_user_gid_number = gidNumber
 ad_gpo_ignore_unreadable = True
 ad_gpo_access_control = permissive
 EOL
+sleep 3
+echo "[ SSSD UID ]: OK!"
 fi
-
-pam-auth-update --enable mkhomedir
-mkdir -p /var/lib/sss/gpo_cache/$DOMAIN
-chown -R sssd:sssd /var/lib/sss/gpo_cache
-
+echo "-------------------------------------"
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bkp
+if grep "UsePAM no" /etc/ssh/sshd_config > /dev/null
+then
+echo "[ SSHD UsePAM ]: OK!"
+else
+echo "[ SSHD UsePAM ]: Configurando..."
 sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+sleep 3
+echo "[ SSHD UsePAM ]: OK!"
+fi
+echo "-------------------------------------"
 
 dc_grp_admins=grp-admins
 cat > /etc/ssh/sshd_config.d/grp-$dc_grp_admins.conf << EOL 
