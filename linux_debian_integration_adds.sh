@@ -41,16 +41,22 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 EOL
 fi
-
 resolvconf --enable-updates
 resolvconf -u
-
+echo "-------------------------------------"
+echo "[ HOSTNAME ]: Configurando ..."
 hostnamectl set-hostname $HOSTNAME_FQDN
+echo "[ HOSTNAME ]: OK!"
+echo "-------------------------------------"
 hostnamectl
-
+echo "-------------------------------------"
+echo "[ Dominio $DOMAIN ]: Verificando ..."
 realm discover $DOMAIN
+echo "-------------------------------------"
+echo "[ Dominio $DOMAIN ]: Integrando ..."
+echo "-------------------------------------"
 echo $DOMAIN_PASS | realm join -U administrator $DOMAIN
-echo
+echo "[ Dominio $DOMAIN ]: OK!"
 echo "-------------------------------------"
 cp /etc/pam.d/common-session /etc/pam.d/common-session.bkp
 if grep "pam_mkhomedir.so skel=/etc/skel umask=077" /etc/pam.d/common-session > /dev/null
