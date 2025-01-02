@@ -47,7 +47,7 @@ resolvconf -u
 hostnamectl set-hostname $HOSTNAME_FQDN
 hostnamectl
 
-sudo realm discover $DOMAIN
+realm discover $DOMAIN
 echo $DOMAIN_PASS | realm join -U administrator $DOMAIN
 
 pam-auth-update --enable mkhomedir
