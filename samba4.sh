@@ -9,12 +9,12 @@ pergunta(){
   read -p "Informe o nome de DOMINIO [ ex: EMPRESA.NETLAN ]: " dominio
   stty -echo
   echo "Informe a senha do administrator@$dominio"
-  read -p "Senha: " senha1
+  read -p "Senha: " senha
   echo
   read -p "Confirme a senha: " senha2
   stty echo
   echo
-  if [ "$senha1" = "$senha2" ]; then
+  if [ "$senha" = "$senha2" ]; then
    valida
   else
    echo "------------------------------"
@@ -35,11 +35,51 @@ verifica(){
      verifica;;
  esac
 }
+
+valida(){
+ echo
+ echo "-----------------------------------------------------"
+ echo "Dominio: $dominio"
+ echo "Credênciais: administrator@$dominio"
+ echo
+ echo "Nome do Servidor: $servername.$dominio"
+ echo "IP: $(hostname -I | cut -d ' ' -f 1)"
+ echo "-----------------------------------------------------"
+ echo -n "Validar informações acima e INSTALAR o SAMBA4? (s/n): "
+ read resp
+ case $resp in
+  s|S) instalar ;;
+  n|N) sair ;;
+  *) echo "Opção Inválida."
+     valida;;
+ esac
+}
+
+sair(){
+ echo
+ echo -n "Sair da instalação? (s/n): "
+ read resp1
+ case $resp1 in
+  s|S) exit 0 ;;
+  n|N) pergunta ;;
+  *) echo "Opção Inválida."
+     sair;;
+ esac
+}
+
+instalar(){
+ echo
+ sleep 3
+ echo "[INSTALAÇÃO]: Instalando o SAMBA4 agora ... "
+ sleep 5
+ instalar
+ echo
+}
 instalar(){
 ###########################################################################
-domain=$dominio        # NOME DO SEU DOMINIO
-pass=$senha            # SENHA DO usuário 'administrator' DO DOMINIO
-hostname=$servername   # NOME DO SERVIDOR LDAP
+domain='$dominio'        # NOME DO SEU DOMINIO
+pass='$senha'            # SENHA DO usuário 'administrator' DO DOMINIO
+hostname='$servername'   # NOME DO SERVIDOR LDAP
 ###########################################################################
 
 apt install -y curl 2>/dev/null | grep "E:"
@@ -511,3 +551,4 @@ echo " O usuário é administrator, e a senha é $pass"
 echo "-------------------------------------------------"
 exit 0
 }
+pergunta
