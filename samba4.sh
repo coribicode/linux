@@ -1,8 +1,45 @@
-#!/bin/bash
+#!/bin/sh
+clear
+pergunta(){
+ while true; do
+  echo
+  echo "======== Bem-vindo a Instalação do SAMBA4 ========="
+  echo
+  read -p "Informe o nome para este SERVIDOR [ex: SRVLDAP001 ]: " servername
+  read -p "Informe o nome de DOMINIO [ ex: EMPRESA.NETLAN ]: " dominio
+  stty -echo
+  echo "Informe a senha do administrator@$dominio"
+  read -p "Senha: " senha1
+  echo
+  read -p "Confirme a senha: " senha2
+  stty echo
+  echo
+  if [ "$senha1" = "$senha2" ]; then
+   valida
+  else
+   echo "------------------------------"
+   echo "As senhas não coincidem!"
+   verifica
+  fi
+ done
+}
+
+verifica(){
+ echo
+ echo -n "Deseja tentar novamente? (s/n): "
+ read resposta
+ case $resposta in
+  s|S) pergunta ;;
+  n|N) exit 0 ;;
+  *) echo "Opção Inválida."
+     verifica;;
+ esac
+}
+instalar(){
 ###########################################################################
-domain=EMPRESA.NETLAN        # NOME DO SEU DOMINIO
-pass='Passw0rd$2'            # SENHA DO usuário 'administrator' DO DOMINIO
-hostname=srvldapvm           # NOME DO SERVIDOR LDAP
+domain=$dominio        # NOME DO SEU DOMINIO
+pass=$senha            # SENHA DO usuário 'administrator' DO DOMINIO
+hostname=$servername   # NOME DO SERVIDOR LDAP
 ###########################################################################
 
 apt install -y curl 2>/dev/null | grep "E:"
@@ -472,3 +509,5 @@ echo "-------------------------------------------------"
 echo " O Dominio do sistema é $domain"
 echo " O usuário é administrator, e a senha é $pass"
 echo "-------------------------------------------------"
+exit 0
+}
