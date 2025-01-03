@@ -77,9 +77,9 @@ instalar(){
 }
 instalar(){
 ###########################################################################
-domain='$dominio'        # NOME DO SEU DOMINIO
-pass='$senha'            # SENHA DO usuário 'administrator' DO DOMINIO
-hostname='$servername'   # NOME DO SERVIDOR LDAP
+domain=$dominio        # NOME DO SEU DOMINIO
+pass=$senha            # SENHA DO usuário 'administrator' DO DOMINIO
+hostname=$servername   # NOME DO SERVIDOR LDAP
 ###########################################################################
 
 apt install -y curl 2>/dev/null | grep "E:"
