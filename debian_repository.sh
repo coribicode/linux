@@ -88,5 +88,6 @@ export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 echo "[ Fix LDCONFIG ]: OK!"
 fi
 sleep 2
-
 echo "-------------------------------------------------"
+
+sudo sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab && sudo swapoff -a && sudo rm -f -r /swapfile
