@@ -19,7 +19,7 @@ sudo modprobe vhost_net
 
 
 
-cat <<"EOF">> /etc/modules
+cat >> /etc/modules << EOL
 vhost_net
 vfio
 vfio_iommu_type1
@@ -30,8 +30,14 @@ vfio_virqfd
 ## Para adicionar o ID do PCI para passtrough, use o comando "lspci -nn" para listar os dispositivos, as ids estão entre cochetes "[]".
 ## Copie e cole em "options vfio-pci ids=XXXX:XXXX que são a numeração coletadas acima, separadas por virgula cada dispositivo.
 ## Para listar os dispositivos adicionados ao IOMMU, digite o comando: "journalctl -b 0 | grep -i iommu"
+EOL
 
-EOF
+cat >> etc/initramfs-tools/modules << EOL
+virtio_pci
+virtio_blk
+EOL
+
+update-initramfs -u
 
 # Check os drivers em uso do Kernel com o comando: "lspci -vnn"
 # Depois crie o arquivo para desativar os drvers da inicialização do kernel
