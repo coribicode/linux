@@ -5,6 +5,10 @@ sudo apt-get install -y qemu-kvm qemu-user-static qemu-utils bridge-utils dnsmas
 sudo systemctl start libvirtd
 sudo systemctl enable libvirtd
 
+sudo apt-get install network-manager -y
+sudo modprobe vhost_net
+
+
 sudo usermod -a -G libvirt $USER
 
 sudo sed -i 's|#uri_default = "qemu:///system"|uri_default = "qemu:///system"|g' /etc/libvirt/libvirt.conf
