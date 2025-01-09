@@ -11,6 +11,7 @@ aptitude \
 sudo \
 wget \
 git \
+bc \
 gnupg \
 curl \
 cmake \
