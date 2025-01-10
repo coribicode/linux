@@ -53,11 +53,11 @@ if grep $BOND_INTERFACE /etc/network/interfaces > /dev/null
 then
 echo "[ Interface $BOND_INTERFACE ]: Já existe uma configuração $BOND_INTERFACE em /etc/network/interfaces."
 else
-echo "[ Interface $BOND_INTERFACE ]: Configurando $BOND_INTERFACE em $BOND_MODE... "
+echo "[ Interface $BOND_INTERFACE ]: Configurando $BOND_MODE em $BOND_INTERFACE... "
 # Backup da configuração no arquivo /etc/network/interfaces
 cp /etc/network/interfaces /etc/network/interfaces.bkp
 
-cat >> EOF | sudo tee /etc/network/interfaces > /dev/null
+cat >> /etc/network/interfaces << EOF
 # Configuração do Bonding - $BOND_INTERFACE
 auto $BOND_INTERFACE
 iface $BOND_INTERFACE inet dhcp
