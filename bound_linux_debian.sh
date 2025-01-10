@@ -45,7 +45,7 @@ cat <<EOF | sudo tee /etc/network/interfaces > /dev/null
 # Configuração do Bonding - $BOND_INTERFACE
 auto $BOND_INTERFACE
 iface $BOND_INTERFACE inet dhcp
-    bond-mode 6
+    bond-mode balance-alb
     bond-miimon 100
     bond-updelay 200
     bond-downdelay 200
