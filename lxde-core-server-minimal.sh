@@ -1,9 +1,9 @@
 apt install -y curl 2>/dev/null | grep "E:"
 
-debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | grep "E:"
+debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh
 curl -fsSL $debian_repository | sh
 
-essentials=https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | grep "E:"
+essentials=https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh
 curl -fsSL $essentials | sh
 
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
