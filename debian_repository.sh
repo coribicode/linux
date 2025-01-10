@@ -97,13 +97,13 @@ then
 echo "[ GRUB - Interface FIX ]: OK!"
 else
 echo "[ GRUB - Interface FIX ]: Configurando ... "
-sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
-sudo update-grub > /dev/null
+sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
+update-grub > /dev/null
 sleep 2
 echo "[ GRUB - Interface FIX ]: OK!"
 fi
 sleep 2
 
-sudo sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab && sudo swapoff -a && sudo rm -f -r /swapfile
+sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab && swapoff -a && rm -f -r /swapfile
 
 
