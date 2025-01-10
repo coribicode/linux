@@ -1,5 +1,5 @@
 #!/bin/bash
-
+modprobe bonding
 # Defina as interfaces de rede a serem unificadas
 INTERFACE1="eth0"
 INTERFACE2="eth1"
