@@ -49,8 +49,9 @@ iface $BOND_INTERFACE inet dhcp
     bond-miimon 100
     bond-updelay 200
     bond-downdelay 200
+    bond-primary $INTERFACE1 $INTERFACE2    
     bond-slaves $INTERFACE1 $INTERFACE2
-
+ 
 # Configuração das interfaces físicas
 iface $INTERFACE1 inet manual
 iface $INTERFACE2 inet manual
