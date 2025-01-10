@@ -22,6 +22,7 @@ done
 
 # Defina as interfaces de rede a serem unificadas
 BOND_INTERFACE="bond0"
+BOND_MODE="balance-alb"
 
 # Instalar o pacote ifenslave (caso não esteja instalado)
 if ! dpkg -l | grep -qw ifenslave; then
@@ -45,7 +46,7 @@ cat <<EOF | sudo tee /etc/network/interfaces > /dev/null
 # Configuração do Bonding - $BOND_INTERFACE
 auto $BOND_INTERFACE
 iface $BOND_INTERFACE inet dhcp
-    bond-mode balance-alb
+    bond-mode $BOND_MODE
     bond-miimon 100
     bond-updelay 200
     bond-downdelay 200
@@ -54,7 +55,12 @@ iface $BOND_INTERFACE inet dhcp
  
 # Configuração das interfaces físicas
 iface $INTERFACE1 inet manual
+    bond-master $BOND_INTERFACE
+    bond-mode $BOND_MODE
 iface $INTERFACE2 inet manual
+    bond-master $BOND_INTERFACE
+    bond-mode $BOND_MODE
+
 EOF
 
 ifdown $INTERFACE1
