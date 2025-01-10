@@ -1,6 +1,19 @@
 #!/bin/bash
 modprobe bonding
 
+if grep ^'bonding' /etc/modules > /dev/null
+then
+echo "[ Modules BONDING ]: OK!"
+else
+echo "[ Modules BONDING ]: Configurando ... "
+echo "bonding" >> /etc/modules
+sleep 2
+echo "----------------------------------"
+lsmod | grep bonding
+echo "----------------------------------"
+echo "[ Modules BONDING ]: OK!"
+fi
+
 # Inicializa um contador para as variáveis
 count=0
 # Identifica as interfaces de rede que estão UP e as configura como variáveis INTERFACE0, INTERFACE1, etc.
@@ -8,7 +21,7 @@ for iface in $(ip link show | awk '/state UP/ {print $2}' | sed 's/:$//'); do
     # Incrementa o contador
     count=$((count + 1))
     
-    # Cria a variável dinamicamente com o nome ethX e atribui o nome da interface
+    # Cria a variável dinamicamente com o nome INTERFACEX e atribui o nome da interface
     eval "INTERFACE$count='$iface'"
 done
 
@@ -36,13 +49,15 @@ if ! dpkg -l | grep -qw ethtool; then
     sudo apt install -y ethtool
 fi
 
+if grep $BOND_INTERFACE /etc/network/interfaces > /dev/null
+then
+echo "[ Interface $BOND_INTERFACE ]: Já existe uma configuração $BOND_INTERFACE em /etc/network/interfaces."
+else
+echo "[ Interface $BOND_INTERFACE ]: Configurando $BOND_INTERFACE em $BOND_MODE... "
 # Backup da configuração no arquivo /etc/network/interfaces
 cp /etc/network/interfaces /etc/network/interfaces.bkp
 
-# Criando a configuração no arquivo /etc/network/interfaces
-echo "Configurando /etc/network/interfaces para bonding no modo RLB (Balance-ALB)..."
-
-cat <<EOF | sudo tee /etc/network/interfaces > /dev/null
+cat >> EOF | sudo tee /etc/network/interfaces > /dev/null
 # Configuração do Bonding - $BOND_INTERFACE
 auto $BOND_INTERFACE
 iface $BOND_INTERFACE inet dhcp
@@ -60,7 +75,6 @@ iface $INTERFACE1 inet manual
 iface $INTERFACE2 inet manual
     bond-master $BOND_INTERFACE
     bond-mode $BOND_MODE
-
 EOF
 
 ifdown $INTERFACE1
@@ -70,6 +84,10 @@ ifup $BOND_INTERFACE
 # Reiniciar o serviço de rede para aplicar as configurações
 echo "Reiniciando a rede..."
 sudo systemctl restart networking
+sleep 2
+echo "[ Interface $BOND_INTERFACE ]: OK!"
+fi
+sleep 2
 
 # Verificando o estado do bonding
 echo "Verificando o estado do bonding..."
