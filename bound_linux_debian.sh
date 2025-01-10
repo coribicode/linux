@@ -9,7 +9,7 @@ echo "[ Modules BONDING ]: Configurando ... "
 echo "bonding" >> /etc/modules
 sleep 2
 echo "----------------------------------"
-lsmod | grep bonding
+lsmod | grep bond
 echo "----------------------------------"
 echo "[ Modules BONDING ]: OK!"
 fi
@@ -88,13 +88,15 @@ sleep 2
 echo "[ Interface $BOND_INTERFACE ]: OK!"
 fi
 sleep 2
-
+echo
 # Verificando o estado do bonding
 echo "Verificando o estado do bonding..."
+echo "----------------------------------"
 cat /proc/net/bonding/$BOND_INTERFACE
-
-lsmod | grep bond
+echo "----------------------------------"
 ethtool $BOND_INTERFACE
+echo "----------------------------------"
+lsmod | grep bond
 
 ## ChatGPT "codigo unico para unificar duas placas de rede no linux debian  em RLB"
 ## https://www.server-world.info/en/note?os=Debian_12&p=bonding&f=1
