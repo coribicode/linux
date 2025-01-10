@@ -1,8 +1,26 @@
 #!/bin/bash
 modprobe bonding
+
+# Inicializa um contador para as variáveis
+count=0
+# Identifica as interfaces de rede que estão UP e as configura como variáveis INTERFACE0, INTERFACE1, etc.
+for iface in $(ip link show | awk '/state UP/ {print $2}' | sed 's/:$//'); do
+    # Incrementa o contador
+    count=$((count + 1))
+    
+    # Cria a variável dinamicamente com o nome ethX e atribui o nome da interface
+    eval "INTERFACE$count='$iface'"
+done
+
+# Exibe as variáveis configuradas
+echo "Interfaces UP configuradas em variáveis:"
+for i in $(seq 1 $count); do
+    eval "echo INTERFACE$i=\${INTERFACE$i}"
+done
+
+## ChatGPT "codigo unico para identificar as placas de rede que estao UP no linux debian e configurar em variaveis eth0, eth1... assim por diante"
+
 # Defina as interfaces de rede a serem unificadas
-INTERFACE1="eth0"
-INTERFACE2="eth1"
 BOND_INTERFACE="bond0"
 
 # Instalar o pacote ifenslave (caso não esteja instalado)
