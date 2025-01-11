@@ -31,7 +31,7 @@ vfio_virqfd
 ## Para listar os dispositivos adicionados ao IOMMU, digite o comando: "journalctl -b 0 | grep -i iommu"
 EOL
 
-cat >> etc/initramfs-tools/modules << EOL
+cat >> /etc/initramfs-tools/modules << EOL
 virtio_pci
 virtio_blk
 EOL
