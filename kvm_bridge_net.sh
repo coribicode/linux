@@ -32,7 +32,7 @@ iface $BRIDGE_NAME inet dhcp
     bridge_fd 0
     bridge_maxwait 0
 EOF
-cat > /etc/network/interfaces 
+cat /etc/network/interfaces 
 echo "-------------------------------------------------"
 echo "Reiniciar a rede para aplicar as configurações."
 systemctl restart networking
