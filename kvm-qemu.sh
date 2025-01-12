@@ -34,6 +34,7 @@ EOL
 cat >> /etc/initramfs-tools/modules << EOL
 virtio_pci
 virtio_blk
+virtio_net
 EOL
 
 update-initramfs -u
