@@ -1,25 +1,20 @@
 #!/bin/bash
-# Variáveis
-BRIDGE_NAME=br0
-PHYSICAL_INTERFACE=$(ip -4 a | grep $(hostname -I | cut -d ' ' -f 1) | grep -o '[^ ]*$')   # Nome da interface de rede física, ajuste conforme sua configuração
-
 # Verificar se o script está rodando como root
 if [ "$(id -u)" -ne 0 ]; then
     echo "Este script precisa ser executado como root."
     exit 1
 fi
+# Variáveis
+BRIDGE_NAME=br0
+PHYSICAL_INTERFACE=$(ip -4 a | grep $(hostname -I | cut -d ' ' -f 1) | grep -o '[^ ]*$')   # Nome da interface de rede física, ajuste conforme sua configuração
 
-# Instalar pacotes necessários
-apt update
-apt install -y bridge-utils ifupdown
-
+echo "Instalando pacotes necessários .."
+apt install -y bridge-utils ifupdown > /dev/null
+echo
+echo "Configuração do bridge $BRIDGE_NAME no arquivo /etc/network/interfaces"
 # Criar backup do arquivo de configuração de rede
 cp /etc/network/interfaces /etc/network/interfaces.bak
-
-# Configuração do bridge no arquivo /etc/network/interfaces
-echo "Configurando o bridge $BRIDGE_NAME..."
-
-cat <<EOF > /etc/network/interfaces
+cat >> /etc/network/interfaces << EOF
 # Interface loopback
 auto lo
 iface lo inet loopback
@@ -37,17 +32,18 @@ iface $BRIDGE_NAME inet dhcp
     bridge_fd 0
     bridge_maxwait 0
 EOF
-
-# Reiniciar a rede para aplicar as configurações
-echo "Reiniciando a rede..."
+cat > /etc/network/interfaces 
+echo "-------------------------------------------------"
+echo "Reiniciar a rede para aplicar as configurações."
 systemctl restart networking
-
-# Verificar se o bridge foi criado com sucesso
+echo "-------------------------------------------------"
+echo "Verificar se o bridge $BRIDGE_NAME foi criado com sucesso"
 brctl show
-
-echo "Bridge $BRIDGE_NAME configurado com sucesso!"
-
-wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win.iso
-
-echo "Foi realizado o download dos drives do VirtIO para Windows na pasta $USER"
-echo "Anexe na unidade de CD-ROM e instale os drivers de rede no Windows"
+echo "-------------------------------------------------"
+echo "Download dos drives do VirtIO para Windows na pasta /opt/ISO"
+mkdir /opt/ISO
+wget -P /opt/ISO https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win.iso
+echo
+ls /opt/ISO
+echo "-------------------------------------------------"
+echo "Para dispositivos VIRTIO, insira esta ISO na unidade de CD-ROM e instale os drivers nas VMs Windows (Se necessário)"
