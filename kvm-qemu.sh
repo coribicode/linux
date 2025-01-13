@@ -78,7 +78,7 @@ echo "Anexe na unidade de CD-ROM e instale os drivers de rede no nas VMS Windows
 # Depois, pré-check os drivers em uso do Kernel com o comando: "lspci -vnn" e verifique se "vfio-pci" aparece em uso para os dispostivos selecionados.
 # Fonte: https://gist.github.com/nephest/c2d2c31417be545c3c6eef2cec0e796e
 # https://comandoslinux.tech.blog/2020/09/12/executando-o-windows-10-no-linux-usando-kvm-com-vga-passthrough/
-
+# https://linuxuniverse.com.br/linux/qemu
 # Fonte: https://github.com/small-hack/smol-gpu-passthrough
 
 ###################################################################################
