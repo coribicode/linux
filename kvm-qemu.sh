@@ -28,6 +28,7 @@ group = "root"
 EOF
 echo "[ QEMU Permissions ]: OK!"
 fi
+systemctl restart libvirtd
 
 sudo modprobe vhost_net
 
