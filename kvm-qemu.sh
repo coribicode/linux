@@ -16,6 +16,19 @@ sudo sed -i 's|#uri_default = "qemu:///system"|uri_default = "qemu:///system"|g'
 
 virsh --connect=qemu:///system net-autostart default
 
+if grep 'security_driver = "none"' /etc/libvirt/qemu.conf > /dev/null
+then
+echo "[ QEMU Permissions ]: OK!"
+else
+echo "[ QEMU Permissions ]: Configurando..."
+cat >> /etc/libvirt/qemu.conf << EOF
+security_driver = "none"
+user = "root"
+group = "root"
+EOF
+echo "[ QEMU Permissions ]: OK!"
+fi
+
 sudo modprobe vhost_net
 
 cat >> /etc/modules << EOL
