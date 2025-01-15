@@ -13,6 +13,8 @@ sudo usermod -aG libvirt $USER
 sudo usermod -aG libvirt root
 sudo usermod -aG libvirt-qemu $USER
 sudo usermod -aG libvirt-qemu root
+sudo adduser $USER kvm
+sudo adduser root kvm
 
 sudo sed -i 's|#uri_default = "qemu:///system"|uri_default = "qemu:///system"|g' /etc/libvirt/libvirt.conf
 
