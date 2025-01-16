@@ -9,7 +9,7 @@ sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/
 sudo apt update
 
 sudo dpkg --add-architecture i386 
-sudo apt install --install-recommends winehq-stable winetricks -y
+sudo apt install --install-recommends winehq-stable winetricks mono-complete -y
 
 apt-get install apt-transport-https software-properties-common unzip make cmake gcc dirmngr gnupg gnupg2 gnupg1 build-essential -y
 apt-get --no-install-recommends install xorg lightdm lxde-core xrdp -y
