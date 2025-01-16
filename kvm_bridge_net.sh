@@ -36,6 +36,8 @@ cat /etc/network/interfaces
 echo "-------------------------------------------------"
 echo "Reiniciar a rede para aplicar as configurações."
 systemctl restart networking
+systemctl restart NetworkManager
+systemctl restart network-online.target
 echo "-------------------------------------------------"
 echo "Verificar se o bridge $BRIDGE_NAME foi criado com sucesso"
 brctl show
