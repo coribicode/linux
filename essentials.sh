@@ -13,6 +13,8 @@ wget \
 git \
 bc \
 gnupg \
+gnupg1 \
+gnupg2 \
 curl \
 cmake \
 g++ \
