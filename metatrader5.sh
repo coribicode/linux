@@ -16,6 +16,9 @@ echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select tr
 apt-get install apt-transport-https software-properties-common unzip make cmake gcc dirmngr gnupg gnupg2 gnupg1 build-essential -y
 apt-get --no-install-recommends install xorg lightdm lxde-core xrdp -y
 
+wget https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+
+
 wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5debian.sh
 chmod +x /opt/mt5debian.sh
 
