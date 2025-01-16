@@ -9,10 +9,12 @@ sudo systemctl enable libvirtd
 sudo apt-get install network-manager -y
 sudo modprobe vhost_net
 
-sudo usermod -aG libvirt $USER
-sudo usermod -aG libvirt root
-sudo usermod -aG libvirt-qemu $USER
 sudo usermod -aG libvirt-qemu root
+sudo usermod -aG libvirt-qemu $USER
+
+sudo usermod -aG libvirt root
+sudo usermod -aG libvirt $USER
+
 sudo adduser $USER kvm
 sudo adduser root kvm
 
