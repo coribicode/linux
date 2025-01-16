@@ -4,7 +4,7 @@ apt install sudo wget -y
 
 sudo mkdir -pm755 /etc/apt/keyrings
 sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/$DEBIAN_VERSION_CODENAME/winehq-$DEBIAN_VERSION_CODENAME.sources
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2)/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources
 
 sudo apt update
 
