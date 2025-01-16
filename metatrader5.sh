@@ -9,13 +9,28 @@ sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/
 sudo apt update
 
 sudo dpkg --add-architecture i386 
-sudo apt install --install-recommends winehq-stable winetricks mono-complete -y
+apt install -y --install-recommends winehq-stable winetricks mono-complete winbind ttf-mscorefonts-installer
+apt install -y --install-recommends libc6:i386 zlib1g:i386 libx11-6:i386 libxft2:i386 libcairo2:i386 libvulkan1:{amd64,i386}
+echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
 apt-get install apt-transport-https software-properties-common unzip make cmake gcc dirmngr gnupg gnupg2 gnupg1 build-essential -y
 apt-get --no-install-recommends install xorg lightdm lxde-core xrdp -y
 
 wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5debian.sh
 chmod +x /opt/mt5debian.sh
+
+# WINEPREFIX=~/.mt5 winecfg -v=win10
+# WINEPREFIX="$HOME/.wine" WINEARCH=win32 wine wineboot
+
+# mkdir /opt/wineprofile/
+# mkdir /opt/wineprofile/$USER
+# WINEPREFIX="/opt/wineprofile/$USER/.wine" WINEARCH=win32 wine winecfg -v=win10 wineboot -u -f -r
+
+#WINEPREFIX="/opt/wineprofile/$USER/.wine" WINEARCH=win32 wine wineboot winecfg -v=win10
+# WINEPREFIX=~"/opt/wineprofile/$USER/.wine" winecfg -v=win10
+
+# winetricks dxvk d3dx9 
+
 
 mv /etc/xdg/lxsession/LXDE/autostart /etc/xdg/lxsession/LXDE/autostart.bkp
 
