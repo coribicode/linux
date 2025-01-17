@@ -11,6 +11,8 @@ aptitude \
 sudo \
 wget \
 git \
+flex \
+bison \
 bc \
 gdb \
 gnupg \
