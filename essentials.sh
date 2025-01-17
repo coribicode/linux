@@ -12,6 +12,7 @@ sudo \
 wget \
 git \
 bc \
+gdb \
 gnupg \
 gnupg1 \
 gnupg2 \
