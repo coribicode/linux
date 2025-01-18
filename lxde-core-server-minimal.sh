@@ -21,7 +21,9 @@ echo
 if grep ^'managed=false' /etc/NetworkManager/NetworkManager.conf > /dev/null
 then
 echo "[ Network Manager ]: Configurando..."
+cp /etc/NetworkManager/NetworkManager.conf /etc/NetworkManager/NetworkManager.conf.bkp
 sed -i 's|managed=false|managed=true|g' /etc/NetworkManager/NetworkManager.conf
+sed -i 's|plugins=ifupdown,keyfile|plugins=keyfile|g' /etc/NetworkManager/NetworkManager.conf
 service NetworkManager restart
 sleep 2
 echo "[ Network Manager ]: OK!"
