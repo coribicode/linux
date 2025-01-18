@@ -2,10 +2,9 @@
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
 
-apt-get install -y sudo wget gnupg ca-certificates > /dev/null
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
 
-debian_repository=https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh
-curl -fsSL $debian_repository | sh
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
 
 package_list="PACKAGE_NAME"
 
