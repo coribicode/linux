@@ -29,4 +29,5 @@ net-tools \
 udns-utils \
 lzip \
 tar \
+rfkill \
 unzip
