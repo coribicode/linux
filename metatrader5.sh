@@ -4,36 +4,46 @@ apt install sudo wget -y
 
 sudo mkdir -pm755 /etc/apt/keyrings
 sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2)/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/stable/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources
 
 sudo apt update
 
 sudo dpkg --add-architecture i386 
 apt install -y --install-recommends winehq-stable winetricks mono-complete winbind ttf-mscorefonts-installer
-apt install -y --install-recommends libc6:i386 zlib1g:i386 libx11-6:i386 libxft2:i386 libcairo2:i386 libvulkan1:{amd64,i386}
+apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
-apt-get install apt-transport-https software-properties-common unzip make cmake gcc dirmngr gnupg gnupg2 gnupg1 build-essential -y
-apt-get --no-install-recommends install xorg lightdm lxde-core xrdp -y
+mkdir /opt/wine/
+mkdir /opt/wine/downloads
 
-wget https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+mkdir /opt/wine/wineprofile/
+mkdir /opt/wine/wineprofile/$USER
+
+WINEPREFIX="/opt/wine/wineprofile/$USER/" W_DRIVE_C=/opt/wine/driver_c wine winecfg -v=win10 wineboot -u -f -r
+
+wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
+WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
+
+wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
+WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
+
+chown -R $USER:$USER /opt/wine/wineprofile/$USER
+chown -R $USER:$USER /opt/wine/driver_c
+
+winetricks dxvk d3dx9 dotnet481 mfc40 vcrun6 vcrun2012 vcrun2015
+
+wget -P /opt/wine/downloads https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+
+WINEPREFIX="/opt/wine/wineprofile/$USER/" W_DRIVE_C="/opt/wine/driver_c"  wine msiexec /i /opt/wine/downloads/mt5setup.exe
 
 
-wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5debian.sh
-chmod +x /opt/mt5debian.sh
-
-# WINEPREFIX=~/.mt5 winecfg -v=win10
-# WINEPREFIX="$HOME/.wine" WINEARCH=win32 wine wineboot
-
-# mkdir /opt/wineprofile/
-# mkdir /opt/wineprofile/$USER
-# WINEPREFIX="/opt/wineprofile/$USER/.wine" WINEARCH=win32 wine winecfg -v=win10 wineboot -u -f -r
-
-#WINEPREFIX="/opt/wineprofile/$USER/.wine" WINEARCH=win32 wine wineboot winecfg -v=win10
+# WINEARCH=win32 WINEPREFIX="/opt/wineprofile/$USER/.wine" WINEARCH=win32 wine wineboot winecfg -v=win10
 # WINEPREFIX=~"/opt/wineprofile/$USER/.wine" winecfg -v=win10
 
-# winetricks dxvk d3dx9 
+# wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5debian.sh
+# chmod +x /opt/mt5debian.sh
 
+#  
 
 mv /etc/xdg/lxsession/LXDE/autostart /etc/xdg/lxsession/LXDE/autostart.bkp
 
