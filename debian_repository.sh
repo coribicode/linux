@@ -82,6 +82,7 @@ echo "[ Fix LDCONFIG ]: OK!"
 else
 echo "[ Fix LDCONFIG ]: Configurando ... "
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 source ~/.bashrc
 source /etc/profile
@@ -89,22 +90,20 @@ echo "[ Fix LDCONFIG ]: OK!"
 fi
 sleep 2
 
-echo "-------------------------------------------------"
-echo "[ GRUB - Interface FIX ]: Verificando ..."
-sleep 2
-if grep "net.ifnames=0 biosdevname=0"  /etc/default/grub > /dev/null
-then
-echo "[ GRUB - Interface FIX ]: OK!"
-else
-echo "[ GRUB - Interface FIX ]: Configurando ... "
-sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
+#echo "-------------------------------------------------"
+#echo "[ GRUB - Interface FIX ]: Verificando ..."
+#sleep 2
+#if grep "net.ifnames=0 biosdevname=0"  /etc/default/grub > /dev/null
+#then
+#echo "[ GRUB - Interface FIX ]: OK!"
+#else
+#echo "[ GRUB - Interface FIX ]: Configurando ... "
+#sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
 # sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
-update-grub
-sleep 2
-echo "[ GRUB - Interface FIX ]: OK!"
-fi
-sleep 2
+#update-grub
+#sleep 2
+#echo "[ GRUB - Interface FIX ]: OK!"
+#fi
+#sleep 2
 
 sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab && swapoff -a && rm -f -r /swapfile
-
-
