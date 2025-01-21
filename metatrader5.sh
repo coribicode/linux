@@ -36,6 +36,13 @@ chown -R $USER:$USER /opt/wine/driver_c
 winetricks dxvk d3dx9 dotnet481 mfc40 vcrun6 vcrun2012 vcrun2015
 sudo -u user WINEPREFIX="/home/$USER/prefix32" WINEARCH=win32 winetricks d3dx9
 
+sudo -u user winetricks dxvk d3dx9 directx9 dotnet48 vcrun2012 vcrun2015 corefonts xinput wine-mono windowscodecs msxml3 msxml6
+sudo -u $USER WINEPREFIX="$PWD/prefix32" WINEARCH=win32 winetricks dxvk d3dx9 directx9 dotnet45 dotnet48 vcrun2012 vcrun2015 corefonts xinput windowscodecs msxml3 msxml6 
+
+
+
+
+
 wget -P /opt/wine/downloads https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 
 WINEPREFIX="/opt/wine/wineprofile/$USER/" W_DRIVE_C="/opt/wine/driver_c"  wine msiexec /i /opt/wine/downloads/mt5setup.exe
