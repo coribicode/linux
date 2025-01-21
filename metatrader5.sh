@@ -23,10 +23,12 @@ WINEPREFIX="/opt/wine/wineprofile/$USER/" W_DRIVE_C=/opt/wine/driver_c wine wine
 sudo -u $USER WINEPREFIX="/home/$USER/prefix32" WINEARCH=win32 wine winecfg -v=win10 wineboot -u -f -r
 
 wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
-WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
+#WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
+sudo -u user wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
 
 wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
-WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
+#WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
+sudo -u user wine msiexec /i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
 
 chown -R $USER:$USER /opt/wine/wineprofile/$USER
 chown -R $USER:$USER /opt/wine/driver_c
