@@ -39,6 +39,7 @@ WINEPREFIX="/opt/wine/wineprofile/$USER/" W_DRIVE_C="/opt/wine/driver_c"  wine m
 
 # WINEARCH=win32 WINEPREFIX="/opt/wineprofile/$USER/.wine" WINEARCH=win32 wine wineboot winecfg -v=win10
 # WINEPREFIX=~"/opt/wineprofile/$USER/.wine" winecfg -v=win10
+WINEPREFIX="$HOME/prefix32" WINEARCH=win32 wine wineboot -u -f -r
 
 # wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5debian.sh
 # chmod +x /opt/mt5debian.sh
