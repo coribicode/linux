@@ -8,10 +8,8 @@ dpkg --add-architecture i386
 apt update && apt upgrade -y && systemctl daemon-reload
 
 apt install -y --install-recommends winehq-stable winetricks mono-complete winbind ttf-mscorefonts-installer winbind
-apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libvulkan1:i386
+apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libvulkan1:i386 libwine fonts-wine libvkd3d1 libz-mingw-w64 libwine wine-binfmt binfmt-support wine64-preloader wine64-tools
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
-
-apt install libwine fonts-wine libvkd3d1 libz-mingw-w64 libwine wine-binfmt binfmt-support wine64-preloader wine64-tools
 
 sudo -u $USER winetricks forcemono
 
