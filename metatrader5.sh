@@ -9,7 +9,7 @@ sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/
 sudo apt update
 
 sudo dpkg --add-architecture i386 
-apt install -y --install-recommends winehq-stable winetricks mono-complete winbind ttf-mscorefonts-installer
+apt install -y --install-recommends winehq-stable winetricks mono-complete winbind ttf-mscorefonts-installer winbind
 apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
