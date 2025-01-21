@@ -20,6 +20,7 @@ mkdir /opt/wine/wineprofile/
 mkdir /opt/wine/wineprofile/$USER
 
 WINEPREFIX="/opt/wine/wineprofile/$USER/" W_DRIVE_C=/opt/wine/driver_c wine winecfg -v=win10 wineboot -u -f -r
+sudo -u $USER WINEPREFIX="/home/$USER/prefix32" WINEARCH=win32 wine winecfg -v=win10 wineboot -u -f -r
 
 wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 WINEPREFIX="/opt/wine/wineprofile/$USER/" wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
