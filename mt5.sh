@@ -11,6 +11,8 @@ apt install -y --install-recommends winehq-stable winetricks mono-complete winbi
 apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libvulkan1:i386
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
+sudo -u $USER winetricks forcemono
+
 mkdir /opt/wine/
 mkdir /opt/wine/downloads
 
