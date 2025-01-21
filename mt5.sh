@@ -22,7 +22,7 @@ sudo -u $USER echo "i" | wine msiexec -i /opt/wine/downloads/wine-mono-9.4.0-x86
 wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER echo "i" | wine msiexec -i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER echo "i" | winetricks dxvk d3dx9 directx9 corefonts xinput windowscodecs msxml3 msxml6 mfc140 directplay dsound mimeassoc=on
+sudo -u $USER echo "i" | winetricks dxvk d3dx9 directx9 corefonts xinput windowscodecs allcodecs msxml3 msxml6 mfc140 directplay dsound mimeassoc=on
 
 sudo -u $USER wine winecfg -v=win10 wineboot -u -f -r
 
