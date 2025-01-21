@@ -24,9 +24,9 @@ sudo -u $USER wine msiexec -i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
 wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER wine msiexec -i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER winetricks dxvk d3dx9 directx9 corefonts xinput windowscodecs msxml3 msxml6 mfc140 directplay dsound
+sudo -u $USER winetricks dxvk d3dx9 directx9 corefonts xinput windowscodecs msxml3 msxml6 mfc140 directplay dsound mimeassoc=on
 
-sudo -u $USER wine winecfg -v=win11 wineboot -u -f -r
+sudo -u $USER wine winecfg -v=win10 wineboot -u -f -r
 
 wget -P /opt/wine/downloads https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine /opt/wine/downloads/mt5setup.exe /auto
