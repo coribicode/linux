@@ -14,11 +14,11 @@ echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select tr
 mkdir /opt/wine/
 mkdir /opt/wine/downloads
 
-wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
-sudo -u $USER wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
-
 wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
 sudo -u $USER wine msiexec /i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
+
+wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
+sudo -u $USER wine msiexec /i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
 
 sudo -u $USER winetricks dxvk d3dx9 directx9 corefonts xinput windowscodecs msxml3 msxml6 mfc140
 
