@@ -18,6 +18,9 @@ gdb \
 gnupg \
 gnupg1 \
 gnupg2 \
+gnutls-dev \
+gnutls-bin \
+libjwt-gnutls-dev \
 curl \
 cmake \
 g++ \
