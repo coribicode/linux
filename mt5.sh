@@ -11,24 +11,23 @@ apt install -y --install-recommends winehq-stable winetricks mono-complete winbi
 apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libwine fonts-wine libvkd3d1 libz-mingw-w64 libwine wine-binfmt binfmt-support wine64-preloader wine64-tools
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
-sudo -u $USER echo "i" | winetricks forcemono
+mkdir $PWD/.cache/
+mkdir $PWD/.cache/wine
 
-mkdir /opt/wine/
-mkdir /opt/wine/downloads
+wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
+sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 
-wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
-sudo -u $USER wine msiexec /i /opt/wine/downloads/wine-mono-9.4.0-x86.msi
+wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
+sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-wget -P /opt/wine/downloads https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
-sudo -u $USER wine msiexec -i /opt/wine/downloads/wine-gecko-2.47.4-x86_64.msi
+sudo -u $USER winetricks forcemono
 
 sudo -u $USER winetricks dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
 
 sudo -u $USER wine winecfg -v win11 wineboot -u -f -r
 
-wget -P /opt/wine/downloads https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
-sudo -u $USER wine /opt/wine/downloads/mt5setup.exe /auto
+wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
 sudo -u $USER wine cmd.exe /c "$(find / | grep terminal64.exe)"
 
-#sudo -u $USER winetricks dxvk d3dx9 directx9 dotnet48 vcrun2012 vcrun2015 corefonts xinput windowscodecs msxml3 msxml6 mfc140
