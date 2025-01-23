@@ -13,7 +13,7 @@ apt install -y bridge-utils ifupdown > /dev/null
 echo
 echo "Configuração do bridge $BRIDGE_NAME no arquivo /etc/network/interfaces"
 # Criar backup do arquivo de configuração de rede
-cp /etc/network/interfaces /etc/network/interfaces.bak
+cp /etc/network/interfaces /etc/network/interfaces.$PHYSICAL_INTERFACE.bkp
 cat >> /etc/network/interfaces << EOF
 
 # Configuração da interface física para o bridge $BRIDGE_NAME
