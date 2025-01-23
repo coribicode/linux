@@ -33,7 +33,9 @@ sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
 # sudo -u $USER wine cmd.exe /c "$(find / | grep terminal64.exe)"
 
-apt install yad at-spi2-core -y
+## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
+
+apt install yad at-spi2-core chromium -y
 
 cat >> /opt/painel << EOF
 #!/bin/bash
@@ -41,7 +43,6 @@ cat >> /opt/painel << EOF
 yad --title "Painel com Botões" \
     --width 300 --height 150 \
     --button="Chromium:chromium --no-sandbox" \
-    ## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
     --button="XMT5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe" \
     --center \
     --fixed \
