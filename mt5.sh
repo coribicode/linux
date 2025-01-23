@@ -35,7 +35,7 @@ sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
 ## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
 
-apt install yad at-spi2-core chromium -y
+apt install yad at-spi2-core chromium lxtask -y
 
 cat >> /opt/painel << EOF
 #!/bin/bash
