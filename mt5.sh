@@ -30,5 +30,20 @@ sudo -u $USER wine winecfg -v win11 wineboot -u -f -r
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
-sudo -u $USER wine cmd.exe /c "$(find / | grep terminal64.exe)"
+# sudo -u $USER wine cmd.exe /c "$(find / | grep terminal64.exe)"
 
+apt install yad at-spi2-core -y
+
+cat >> /opt/painel << EOF
+#!/bin/bash
+# Criação do painel com três botões
+yad --title "Painel com Botões" \
+    --width 300 --height 150 \
+    --button="Chromium:chromium --no-sandbox" \
+    ## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
+    --button="XMT5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe" \
+    --center \
+    --fixed \
+    --text="Escolha uma opção:" \
+    --buttons-layout=center
+EOF
