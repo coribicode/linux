@@ -10,7 +10,7 @@ apt update && apt upgrade -y && systemctl daemon-reload
 apt install -y --install-recommends winehq-stable winetricks mono-complete wine64-preloader wine64-tools fonts-wine wine-binfmt
 apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev
 # libei-dev
-apt install -y --install-recommends winbind ttf-mscorefonts-installer xvfb binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick x11-apps clang synaptic
+apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick x11-apps clang synaptic
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
 mkdir $PWD/.cache/
