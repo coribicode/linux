@@ -7,8 +7,9 @@ wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists
 dpkg --add-architecture i386
 apt update && apt upgrade -y && systemctl daemon-reload
 
-apt install -y --install-recommends winehq-stable winetricks mono-complete winbind ttf-mscorefonts-installer
-apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libwine fonts-wine libvkd3d1 libz-mingw-w64 libwine wine-binfmt binfmt-support wine64-preloader wine64-tools
+apt install -y --install-recommends winehq-stable winetricks mono-complete wine64-preloader wine64-tools fonts-wine wine-binfmt
+apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev
+apt install -y --install-recommends winbind ttf-mscorefonts-installer xvfb binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick x11-apps
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
 mkdir $PWD/.cache/
