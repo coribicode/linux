@@ -40,12 +40,13 @@ apt install yad at-spi2-core chromium -y
 cat >> /opt/painel << EOF
 #!/bin/bash
 # Criação do painel com três botões
-yad --title "Painel com Botões" \
-    --width 300 --height 150 \
-    --button="Chromium:chromium --no-sandbox" \
-    --button="XMT5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe" \
-    --center \
-    --fixed \
-    --text="Escolha uma opção:" \
+yad --title "Painel com Botões"
+    --width 450 --height 150
+    --button="Chromium:chromium --no-sandbox"
+    --button="MT5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe"
+    --button="Gerenciador de Tarefas:lxtask"
+    --center
+    --fixed
+    --text="Escolha uma opção:"
     --buttons-layout=center
 EOF
