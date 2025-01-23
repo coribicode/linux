@@ -15,22 +15,19 @@ echo "Configuração do bridge $BRIDGE_NAME no arquivo /etc/network/interfaces"
 # Criar backup do arquivo de configuração de rede
 cp /etc/network/interfaces /etc/network/interfaces.bak
 cat >> /etc/network/interfaces << EOF
-# Interface loopback
-auto lo
-iface lo inet loopback
 
-# Configuração da interface física para o bridge
+# Configuração da interface física para o bridge $BRIDGE_NAME
 auto $PHYSICAL_INTERFACE
 iface $PHYSICAL_INTERFACE inet manual
-    up ip link set dev $PHYSICAL_INTERFACE up
-    down ip link set dev $PHYSICAL_INTERFACE down
-
-# Configuração do bridge
+up ip link set dev $PHYSICAL_INTERFACE up
+down ip link set dev $PHYSICAL_INTERFACE down
+# -----------------------------------------------------
 auto $BRIDGE_NAME
 iface $BRIDGE_NAME inet dhcp
-    bridge_ports $PHYSICAL_INTERFACE
-    bridge_fd 0
-    bridge_maxwait 0
+bridge_ports $PHYSICAL_INTERFACE
+bridge_fd 0
+bridge_maxwait 0
+bridge_stp on
 EOF
 cat /etc/network/interfaces 
 echo "-------------------------------------------------"
