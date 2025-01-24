@@ -8,9 +8,8 @@ dpkg --add-architecture i386
 apt update && apt upgrade -y && systemctl daemon-reload
 
 apt install -y --install-recommends winehq-stable winetricks mono-complete wine64-preloader wine64-tools fonts-wine wine-binfmt
-apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev dbus-x11 libvulkan1:i386 libmpg123-dev libx11-dev libinput-dev xauth libwine librust-x11+xinput-dev  librust-x11rb+xinput-dev libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev  libpng-dev libeio1 libeinfo1 
-# libei-dev
-apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick x11-apps x11-xfs-utils s3dx11gate libx11-freedesktop-desktopentry-perl clang synaptic
+apt install -y --install-recommends libc6-i386 zlib1g libxft2 libcairo2 libvulkan1 libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libinput-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev libpng-dev libeio1 libeinfo1
+apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
 mkdir $PWD/.cache/
@@ -39,7 +38,8 @@ apt install yad at-spi2-core chromium lxtask -y
 
 # -- Configurações para passagem de som via X11 Forwarding ------------------------------------
 
-apt install -y alsa-utils pulseaudio firmware-linux
+apt install -y alsa-utils pulseaudio firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate
+apt install -y libx11-freedesktop-desktopentry-perl librust-x11+xinput-dev  librust-x11rb+xinput-dev libx11-6 libx11-dev clang
 sudo -u $USER pulseaudio --start
 sed -i 's|#load-module module-native-protocol-tcp|load-module module-native-protocol-tcp auth-anonymous=1|g' /etc/pulse/default.pa
 sudo usermod -aG audio $USER
