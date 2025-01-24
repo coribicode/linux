@@ -48,6 +48,6 @@ yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
     --center \
     --fixed \
     --text="Escolha uma opção:" \
-    --buttons-layout=center \
+    --buttons-layout=center
 EOF
 chmod -x /opt/painel
