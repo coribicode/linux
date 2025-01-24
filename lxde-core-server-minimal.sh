@@ -40,7 +40,7 @@ count=$((count + 1))
 eval "INTERFACE$count='$iface'"
 ip link set $iface up
     
-if grep $iface /etc/network/interfaces.d/$iface > /dev/null
+if [ -e /etc/network/interfaces.d/$iface ] > /dev/null
 then
 echo "----------------------------"
 echo "[ $iface ]: OK"
