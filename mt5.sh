@@ -62,6 +62,7 @@ sudo -u $USER pulseaudio -k
 sudo -u $USER pulseaudio --start
 
 systemctl restart sshd
+systemctl daemon-reload
 
 " ---------------------------------------------------------------------------------------------
 
