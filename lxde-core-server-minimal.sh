@@ -40,7 +40,7 @@ count=$((count + 1))
 eval "INTERFACE$count='$iface'"
 ip link set $iface up
     
-if grep $iface /etc/network/interfaces > /dev/null
+if grep $iface /etc/network/interfaces.d/$iface > /dev/null
 then
 echo "----------------------------"
 echo "[ $iface ]: OK"
@@ -48,7 +48,7 @@ else
 echo "----------------------------"
 echo "[ $iface ]: Configurando ..."
 sleep 2
-cat >> /etc/network/interfaces << EOL
+cat >> /etc/network/interfaces.d/$iface << EOL
 
 #Configuração $iface
 auto $iface
@@ -60,6 +60,8 @@ echo "[ $iface ]: OK."
 fi
 done
 echo "----------------------------"
+
+mv /etc/network/interfaces /etc/network/interfaces.bkp
 
 # https://askubuntu.com/questions/98702/how-to-unblock-something-listed-in-rfkill
 # https://superuser.com/questions/819547/how-do-i-stop-rfkill-module-from-hardblocking-my-wifi-without-rfkill-command
