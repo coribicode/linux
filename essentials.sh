@@ -1,5 +1,6 @@
 apt-get install -y \
 build-essential \
+firmware-linux \
 lsb-release \
 apt-transport-https \
 module-assistant \
