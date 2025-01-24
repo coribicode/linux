@@ -41,7 +41,7 @@ apt install yad at-spi2-core chromium lxtask -y
 
 apt install -y alsa-utils pulseaudio firmware-linux
 sudo -u $USER pulseaudio --start
-sed -i 's|#load-module module-native-protocol-tcp|load-module module-native-protocol-tcp auth-anonymous=1|g' 
+sed -i 's|#load-module module-native-protocol-tcp|load-module module-native-protocol-tcp auth-anonymous=1|g' /etc/pulseaudio/default.pa
 sudo usermod -aG audio $USER
 
 cat << EOF > /etc/pulse/daemon.conf
