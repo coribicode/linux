@@ -38,7 +38,7 @@ apt install yad at-spi2-core chromium lxtask -y
 
 # -- Configurações para passagem de som via X11 Forwarding ------------------------------------
 
-apt install -y alsa-utils pulseaudio firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate
+apt install -y alsa-utils pulseaudio pulseaudio-module-zeroconf firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate
 apt install -y libx11-freedesktop-desktopentry-perl librust-x11+xinput-dev  librust-x11rb+xinput-dev libx11-6 libx11-dev clang
 sudo -u $USER pulseaudio --start
 sed -i 's|#load-module module-native-protocol-tcp|load-module module-native-protocol-tcp auth-anonymous=1|g' /etc/pulse/default.pa
