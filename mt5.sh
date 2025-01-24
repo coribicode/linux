@@ -44,7 +44,7 @@ sudo -u $USER pulseaudio --start
 sed -i 's|#load-module module-native-protocol-tcp|load-module module-native-protocol-tcp auth-anonymous=1|g' /etc/pulse/default.pa
 sudo usermod -aG audio $USER
 
-cat << EOF > /etc/pulse/daemon.conf
+cat << EOF >> /etc/pulse/daemon.conf
 realtime-scheduling = yes
 default-fragments = 4
 default-fragment-size-msec = 25
