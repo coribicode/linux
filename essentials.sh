@@ -36,5 +36,6 @@ tar \
 rfkill \
 unzip \
 xorg \
+xvfb \
 alsa-utils \
 pulseaudio
