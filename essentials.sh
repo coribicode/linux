@@ -33,4 +33,6 @@ udns-utils \
 lzip \
 tar \
 rfkill \
-unzip
+unzip \
+alsa-utils \
+pulseaudio
