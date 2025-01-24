@@ -8,7 +8,7 @@ dpkg --add-architecture i386
 apt update && apt upgrade -y && systemctl daemon-reload
 
 apt install -y --install-recommends winehq-stable winetricks mono-complete wine64-preloader wine64-tools fonts-wine wine-binfmt
-apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libx11-dev libinput-dev xauth libwine librust-x11+xinput-dev  librust-x11rb+xinput-dev libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev  libpng-dev libeio1 libeinfo1 
+apt install -y --install-recommends libc6-i386 zlib1g libx11-6 libxft2 libcairo2 libvulkan1 vulkan-tools libpcl1 libpcl1-dev dbus-x11 libvulkan1:i386 libmpg123-dev libx11-dev libinput-dev xauth libwine librust-x11+xinput-dev  librust-x11rb+xinput-dev libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev  libpng-dev libeio1 libeinfo1 
 # libei-dev
 apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick x11-apps x11-xfs-utils s3dx11gate libx11-freedesktop-desktopentry-perl clang synaptic
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
@@ -57,6 +57,11 @@ sed -i 's|#X11UseLocalhost yes|X11UseLocalhost yes|g' /etc/ssh/sshd_config
 
 export LIBGL_ALWAYS_SOFTWARE=1
 export MOZ_WEBGL_DISABLE_UNSAFE=1
+
+sudo -u $USER pulseaudio -k
+sudo -u $USER pulseaudio --start
+
+systemctl restart sshd
 
 " ---------------------------------------------------------------------------------------------
 
