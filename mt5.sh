@@ -45,9 +45,6 @@ yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
     --field 'Meta Trader 5:BTN' 'wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe' \
     --field 'Chromium:BTN' 'chromium --no-sandbox' \
     --field 'Gerenciador de Tarefas:BTN' 'lxtask' \
-    #--button="Chromium:chromium --no-sandbox" \
-    #--button="Meta Trader 5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe" \
-    #--button="Gerenciador de Tarefas:lxtask" \
     --center \
     --fixed \
     --text="Escolha uma opção:" \
