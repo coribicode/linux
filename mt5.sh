@@ -37,16 +37,16 @@ sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
 apt install yad at-spi2-core chromium lxtask -y
 
-cat >> /opt/painel << EOF
+cat << EOF > /opt/painel
 #!/bin/bash
 # Criação do painel com três botões
-yad --title "Painel com Botões"
-    --width 450 --height 150
-    --button="Chromium:chromium --no-sandbox"
-    --button="MT5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe"
-    --button="Gerenciador de Tarefas:lxtask"
-    --center
-    --fixed
-    --text="Escolha uma opção:"
-    --buttons-layout=center
+yad --title "Painel com Botões" \
+    --width 450 --height 150 \
+    --button="Chromium:chromium --no-sandbox" \
+    --button="MT5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe" \
+    --button="Gerenciador de Tarefas:lxtask" \
+    --center \
+    --fixed \
+    --text="Escolha uma opção:" \
+    --buttons-layout=center \
 EOF
