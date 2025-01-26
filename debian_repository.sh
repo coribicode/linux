@@ -81,13 +81,13 @@ then
 echo "[ Fix LDCONFIG ]: OK!"
 else
 echo "[ Fix LDCONFIG ]: Configurando ... "
-echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
-source ~/.bashrc
+ldconfig
 source /etc/profile
 echo "[ Fix LDCONFIG ]: OK!"
 fi
+echo "-------------------------------------------------"
 sleep 2
 
 #echo "-------------------------------------------------"
