@@ -49,10 +49,3 @@ echo "-------------------------------------------------"
 echo "Verificar se o bridge $BRIDGE_NAME foi criado com sucesso"
 brctl show
 echo "-------------------------------------------------"
-echo "Download dos drives do VirtIO para Windows na pasta /opt/ISO"
-mkdir /opt/ISO
-wget -P /opt/ISO https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win.iso
-echo
-ls /opt/ISO
-echo "-------------------------------------------------"
-echo "Para dispositivos VIRTIO, insira esta ISO na unidade de CD-ROM e instale os drivers nas VMs Windows (Se necessário)"
