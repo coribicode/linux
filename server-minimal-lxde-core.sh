@@ -96,7 +96,6 @@ iface lo inet loopback
 EOL
 echo "[ $iface ]: OK."
 fi
-done
 echo "----------------------------"
 
 cp /etc/network/interfaces /etc/network/interfaces.bkp
