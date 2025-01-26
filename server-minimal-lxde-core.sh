@@ -85,7 +85,7 @@ else
 echo "----------------------------"
 echo "[ lo ]: Configurando ..."
 sleep 2
-cat >> /etc/network/interfaces.d/$iface << EOL
+cat >> /etc/network/interfaces.d/lo << EOL
 #Configuração lo
 auto lo
 iface lo inet loopback
