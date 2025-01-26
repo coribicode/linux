@@ -103,7 +103,7 @@ sudo rfkill list all
 
 systemctl daemon-reload
 systemctl restart networking
-service NetworkManager restart
+systemctl restart NetworkManager
 
 # https://askubuntu.com/questions/98702/how-to-unblock-something-listed-in-rfkill
 # https://superuser.com/questions/819547/how-do-i-stop-rfkill-module-from-hardblocking-my-wifi-without-rfkill-command
