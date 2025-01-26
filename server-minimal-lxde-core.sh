@@ -94,7 +94,7 @@ cat >> /etc/network/interfaces.d/$iface << EOL
 auto lo
 iface lo inet loopback
 EOL
-echo "[ $iface ]: OK."
+echo "[ lo ]: OK."
 fi
 echo "----------------------------"
 
