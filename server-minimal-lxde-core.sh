@@ -1,36 +1,31 @@
 #!/bin/bash
 # Pacotes a serem instalados
 
+echo "[ Sistema ]: Verificando..."
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
+echo "[ Sistema ]: OK!"
+echo "--------------------------------------------------------------------"
+echo "[ Essentials ]: Verificando..."
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
+echo "[ Essentials ]: OK!"
+echo "--------------------------------------------------------------------"
+
 PACKAGES="lxde-core xrdp chromium network-manager-gnome"
 
 echo
 echo "Instalação do Server minimal LXDE-CORE"
 sleep 2
-echo "Pacostes a serem instalados: $PACPACKAGES"
+echo "Pacostes a serem instalados: $PACKAGES"
 sleep 3
 echo "Instalando..."
 sleep 3
 echo
 
-package='curl'
-if [ -n "$(dpkg --get-selections | grep ^$package | grep -w install)" ] ;
-then
-echo "Pacote [ $package ]: OK!"
-echo "--------------------------------------------------------------------"
-else
-echo "Pacote [ $package ]: Instalando...!"
-apt-get install -y $package > /dev/null
-echo "Pacote [ $package ]: OK!"
-fi
-
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
-
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
 INSTALLER="install.sh"
 
 echo
-echo "[ Instalação de Pacotes ]"
+echo "[ Instalação ]: Inicio"
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
     sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
@@ -38,7 +33,8 @@ if grep PACKAGE_NAME $INSTALLER > /dev/null
   else
     sh $INSTALLER
 fi
-echo "[ Instalação de Pacotes ]: OK!"
+echo "[ Instalação ]: Fim."
+echo
 sleep 2
 
 echo
@@ -106,7 +102,20 @@ systemctl daemon-reload
 systemctl restart networking
 service NetworkManager restart
 
+sudo rfkill unblock all
+sudo rfkill list all
+
 # https://askubuntu.com/questions/98702/how-to-unblock-something-listed-in-rfkill
 # https://superuser.com/questions/819547/how-do-i-stop-rfkill-module-from-hardblocking-my-wifi-without-rfkill-command
-# sudo rfkill unblock all
-# sudo rfkill list all
+
+#package='curl'
+#echo "--------------------------------------------------------------------"
+#if [ -n "$(dpkg --get-selections | grep ^$package | grep -w install)" ] ;
+#then
+#echo "Pacote [ $package ]: OK!"
+#echo "--------------------------------------------------------------------"
+#else
+#echo "Pacote [ $package ]: Instalando...!"
+#apt-get install -y $package > /dev/null
+#echo "Pacote [ $package ]: OK!"
+#fi
