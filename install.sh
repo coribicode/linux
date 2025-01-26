@@ -2,10 +2,6 @@
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
 
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
-
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
-
 package_list="PACKAGE_NAME"
 
 for package in $package_list
