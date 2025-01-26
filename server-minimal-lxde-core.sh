@@ -98,12 +98,12 @@ cp /etc/network/interfaces /etc/network/interfaces.bkp
 sed -i 's/^/# /' /etc/network/interfaces
 sed -i 's/# source/source/g' /etc/network/interfaces
 
+sudo rfkill unblock all
+sudo rfkill list all
+
 systemctl daemon-reload
 systemctl restart networking
 service NetworkManager restart
-
-sudo rfkill unblock all
-sudo rfkill list all
 
 # https://askubuntu.com/questions/98702/how-to-unblock-something-listed-in-rfkill
 # https://superuser.com/questions/819547/how-do-i-stop-rfkill-module-from-hardblocking-my-wifi-without-rfkill-command
