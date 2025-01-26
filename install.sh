@@ -3,7 +3,7 @@
 # Verifica e instala pacote automaticamente
 
 package_list="PACKAGE_NAME"
-
+echo "--------------------------------------------------------------------"
 for package in $package_list
   do
   package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
