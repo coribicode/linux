@@ -1,13 +1,11 @@
 #!/bin/bash
-# Pacotes a serem instalados
-
-echo "[ Sistema ]: Verificando..."
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
-echo "[ Sistema ]: OK!"
-echo "--------------------------------------------------------------------"
 echo "[ Essentials ]: Verificando..."
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
 echo "[ Essentials ]: OK!"
+echo "--------------------------------------------------------------------"
+echo "[ Sistema ]: Verificando..."
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
+echo "[ Sistema ]: OK!"
 echo "--------------------------------------------------------------------"
 
 PACKAGES="lxde-core xrdp chromium network-manager-gnome"
@@ -43,7 +41,7 @@ then
 echo "[ Network Manager ]: Configurando..."
 cp /etc/NetworkManager/NetworkManager.conf /etc/NetworkManager/NetworkManager.conf.bkp
 sed -i 's|managed=false|managed=true|g' /etc/NetworkManager/NetworkManager.conf
-# sed -i 's|plugins=ifupdown,keyfile|plugins=keyfile|g' /etc/NetworkManager/NetworkManager.conf
+sed -i 's|plugins=ifupdown,keyfile|plugins=keyfile|g' /etc/NetworkManager/NetworkManager.conf
 sleep 2
 echo "[ Network Manager ]: OK!"
 else
