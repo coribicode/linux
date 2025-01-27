@@ -47,5 +47,5 @@ systemctl restart networking
 systemctl restart NetworkManager
 echo "-------------------------------------------------"
 echo "Verificar se o bridge $BRIDGE_NAME foi criado com sucesso"
-brctl show
+sudo brctl show
 echo "-------------------------------------------------"
