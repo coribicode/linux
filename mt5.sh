@@ -15,6 +15,8 @@ echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select tr
 mkdir $PWD/.cache/
 mkdir $PWD/.cache/wine
 
+chown -R $USER:$USER $PWD
+
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
 sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 
