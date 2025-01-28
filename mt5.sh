@@ -24,14 +24,14 @@ sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER wine winecfg -v win10 wineboot -u -f -r
+sudo -u $USER wine winecfg /v win10 wineboot -u -f -r
 
 sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
 sudo -u $USER winetricks -q dotnet452 dotnet462 dotnet472 dotnet48 
 sudo -u $USER winetricks -q vcrun2017 vcrun2019 vcrun2022
 sudo -u $USER winetricks -q mfc110 mfc120 mfc140
 sudo -u $USER winetricks -q directx9 directplay dxvk2010
-
+sudo -u $USER winetricks -q xact dinput8
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
@@ -40,6 +40,15 @@ sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 ## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
 
 apt install yad at-spi2-core chromium lxtask -y
+
+displaydesktop=$(sudo -u $USER xrandr | grep primary | cut -d ' ' -f 4 | cut -d '+' -f 1)
+
+cat << EOF > $PWD/.wine/desktop.reg
+[Software\\Wine\\X11 Driver]
+"Desktop"="$displaydesktop"
+"UseTakeFocus"="N"
+"FullScreen"="Y"
+EOF
 
 cat << EOF > /opt/painel
 #!/bin/bash
