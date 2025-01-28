@@ -42,13 +42,7 @@ sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 apt install yad at-spi2-core chromium lxtask -y
 
 displaydesktop=$(sudo -u $USER xrandr | grep primary | cut -d ' ' -f 4 | cut -d '+' -f 1)
-
-cat << EOF > $PWD/.wine/desktop.reg
-[Software\\Wine\\X11 Driver]
-"Desktop"="$displaydesktop"
-"UseTakeFocus"="N"
-"FullScreen"="Y"
-EOF
+sudo -u $USER winetricks vd=$displaydesktop
 
 cat << EOF > /opt/painel
 #!/bin/bash
