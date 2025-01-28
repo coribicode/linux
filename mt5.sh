@@ -27,10 +27,10 @@ sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER wine winecfg -v win10 wineboot -u -f -r
 
 sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
-
 sudo -u $USER winetricks -q dotnet452 dotnet462 dotnet472 dotnet48 
 sudo -u $USER winetricks -q vcrun2017 vcrun2019 vcrun2022
 sudo -u $USER winetricks -q mfc110 mfc120 mfc140
+sudo -u $USER winetricks -q directx9 directplay dxvk2010
 
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
