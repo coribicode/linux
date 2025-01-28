@@ -7,7 +7,8 @@ wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists
 dpkg --add-architecture i386
 apt update && apt upgrade -y && systemctl daemon-reload
 
-apt install -y --install-recommends winehq-stable winetricks mono-complete wine64-preloader wine64-tools fonts-wine wine-binfmt
+# wine64-preloader wine64-tools 
+apt install -y --install-recommends winehq-stable winetricks mono-complete fonts-wine wine-binfmt
 apt install -y --install-recommends libc6-i386 zlib1g libxft2 libcairo2 libvulkan1 libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libinput-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev libpng-dev libeio1 libeinfo1
 apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
@@ -23,11 +24,9 @@ sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER winetricks forcemono
+sudo -u $USER wine winecfg -v win10 wineboot -u -f -r
 
-sudo -u $USER winetricks dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
-
-sudo -u $USER wine winecfg -v win11 wineboot -u -f -r
+sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
 
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
