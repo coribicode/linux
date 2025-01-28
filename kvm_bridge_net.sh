@@ -24,13 +24,10 @@ sed -i 's/^/#/' /etc/network/interfaces.d/$PHYSICAL_INTERFACE
 cat >> /etc/network/interfaces.d/$PHYSICAL_INTERFACE << EOF
 auto $PHYSICAL_INTERFACE
 iface $PHYSICAL_INTERFACE inet manual
+    ip link set dev $PHYSICAL_INTERFACE down
+    ip link set dev $PHYSICAL_INTERFACE up
 EOF
 
-# Configuração da interface física para o bridge $BRIDGE_NAME
-#auto $PHYSICAL_INTERFACE
-#iface $PHYSICAL_INTERFACE inet manual
-#up ip link set dev $PHYSICAL_INTERFACE up
-#down ip link set dev $PHYSICAL_INTERFACE down
 # -----------------------------------------------------
 cat >> /etc/network/interfaces.d/$BRIDGE_NAME << EOF
 auto $BRIDGE_NAME
@@ -49,3 +46,10 @@ echo "-------------------------------------------------"
 echo "Verificar se o bridge $BRIDGE_NAME foi criado com sucesso"
 sudo brctl show
 echo "-------------------------------------------------"
+
+##Configuração da interface física para o bridge $BRIDGE_NAME
+#auto $PHYSICAL_INTERFACE
+#iface $PHYSICAL_INTERFACE inet manual
+#up ip link set dev $PHYSICAL_INTERFACE up
+#down ip link set dev $PHYSICAL_INTERFACE down
+
