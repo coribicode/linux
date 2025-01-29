@@ -9,7 +9,7 @@ dpkg --add-architecture i386
 apt update && apt upgrade -y && systemctl daemon-reload
 
 # wine64-preloader wine64-tools 
-apt install -y --install-recommends winehq-stable winetricks mono-complete fonts-wine wine-binfmt
+apt install -y --install-recommends winehq-stable winetricks mono-complete fonts-wine wine-binfmt wine64 wine64-tools wine-devel
 apt install -y --install-recommends libc6-i386 zlib1g libxft2 libcairo2 libvulkan1 libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libinput-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev libpng-dev libeio1 libeinfo1
 apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
@@ -29,8 +29,8 @@ sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 ds
 sudo -u $USER winetricks -q dotnet48 
 sudo -u $USER winetricks -q vcrun2010
 sudo -u $USER winetricks -q mfc110 mfc120 mfc140 
-sudo -u $USER winetricks -q directx9 directplay dxvk2010 dsound d3dx9_43 d3dx11_43 d3dcompiler_47
-sudo -u $USER winetricks -q xact dinput8 vkd3d wininet winhttp richtx32 allfonts
+sudo -u $USER winetricks -q directx9 directplay d3dx9_43 d3dcompiler_47 d3dx11_43
+sudo -u $USER winetricks -q xact dinput8 vkd3d dxvk2010 richtx32 allfonts
 
 sudo -u $USER wine winecfg -v win11
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
