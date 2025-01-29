@@ -38,12 +38,7 @@ sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
 # sudo -u $USER wine cmd.exe /c "$(find / | grep terminal64.exe)"
 
-## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
-
 apt install yad at-spi2-core chromium lxtask -y
-
-displaydesktop=$(sudo -u $USER xrandr | grep primary | cut -d ' ' -f 4 | cut -d '+' -f 1)
-sudo -u $USER winetricks vd=$displaydesktop
 
 cat << EOF > /opt/painel
 #!/bin/bash
@@ -52,7 +47,7 @@ yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
     --title "PainelX11" \
     --form --borders=100 --center --columns=1 --height=450 --width=550 --no-buttons \
     --field 'Meta Trader 5:BTN' 'wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe' \
-    --field 'Chromium:BTN!/usr/share/icons/hicolor/32x32/apps/chromium.png' 'chromium --no-sandbox' \
+    --field 'Chromium:BTN' 'chromium --no-sandbox' \
     --field 'Gerenciador de Tarefas:BTN' 'lxtask' \
     --center \
     --fixed \
@@ -60,3 +55,7 @@ yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
     --buttons-layout=center
 EOF
 chmod -x /opt/painel
+
+## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
+# displaydesktop=$(sudo -u $USER xrandr | grep primary | cut -d ' ' -f 4 | cut -d '+' -f 1)
+# sudo -u $USER winetricks vd=$displaydesktop
