@@ -30,33 +30,11 @@ sudo -u $USER winetricks -q vcrun2017 vcrun2019 vcrun2022
 sudo -u $USER winetricks -q mfc110 mfc120 mfc140
 sudo -u $USER winetricks -q directx9 directplay dxvk2010
 sudo -u $USER winetricks -q xact dinput8
-wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
-sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
 sudo -u $USER wine winecfg -v win11
 sudo -u $USER wine wineboot -u -f -r
 
-# sudo -u $USER wine cmd.exe /c "$(find / | grep terminal64.exe)"
+wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
-apt install yad at-spi2-core chromium lxtask -y
-
-cat << EOF > /opt/painel
-#!/bin/bash
-# Criação do painel com três botões
-yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
-#    --undecorated \
-    --title "PainelX11" \
-    --form --borders=100 --center --columns=1 --height=450 --width=550 --no-buttons \
-    --button="Meta Trader 5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe"
-    --button="Gerenciador de Tarefas:lxtask"
-    --button="Chromium!/usr/share/icons/hicolor/32x32/apps/chromium.png:chromium"
-    --center \
-    --fixed \
-    --text="Escolha uma opção:" \
-    --buttons-layout=center
-EOF
-chmod -x /opt/painel
-
-## --button="Chromium:chromium --disable-gpu --no-sandbox --disable-gpu-rasterization --disable-software-rasterizer" \
-# displaydesktop=$(sudo -u $USER xrandr | grep primary | cut -d ' ' -f 4 | cut -d '+' -f 1)
-# sudo -u $USER winetricks vd=$displaydesktop
+find / | grep terminal64.exe
