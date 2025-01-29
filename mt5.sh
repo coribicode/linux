@@ -35,7 +35,7 @@ sudo -u $USER winetricks -q directx9 directplay dxvk2010
 sudo -u $USER winetricks -q xact dinput8
 
 # sudo -u $USER wine wineboot -u -f -r
-
+sudo -u $USER wine winecfg -v win11
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
 
