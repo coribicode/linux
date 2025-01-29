@@ -24,7 +24,8 @@ sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER wine winecfg /v win10 wineboot -u -f -r
+sudo -u $USER wine winecfg -v win11
+sudo -u $USER wine wineboot -u -f -r
 
 sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
 sudo -u $USER winetricks -q dotnet452 dotnet462 dotnet472 dotnet48 
@@ -51,7 +52,7 @@ yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
     --title "PainelX11" \
     --form --borders=100 --center --columns=1 --height=450 --width=550 --no-buttons \
     --field 'Meta Trader 5:BTN' 'wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe' \
-    --field 'Chromium:BTN' 'chromium --no-sandbox' \
+    --field 'Chromium:BTN!/usr/share/icons/hicolor/32x32/apps/chromium.png' 'chromium --no-sandbox' \
     --field 'Gerenciador de Tarefas:BTN' 'lxtask' \
     --center \
     --fixed \
