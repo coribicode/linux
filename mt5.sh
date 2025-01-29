@@ -1,3 +1,4 @@
+#!/bin/sh
 DEBIAN_VERSION_CODENAME=$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2)
 
 mkdir -pm755 /etc/apt/keyrings
