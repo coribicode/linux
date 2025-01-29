@@ -30,7 +30,7 @@ sudo -u $USER winetricks -q dotnet48
 sudo -u $USER winetricks -q vcrun2010
 sudo -u $USER winetricks -q mfc110 mfc120 mfc140 
 sudo -u $USER winetricks -q directx9 directplay d3dx9_43 d3dcompiler_47 d3dx11_43
-sudo -u $USER winetricks -q xact dinput8 vkd3d dxvk2010 richtx32 allfonts
+sudo -u $USER winetricks -q xact dinput8 vkd3d dxvk2010 richtx32 allfonts devenum
 
 sudo -u $USER wine winecfg -v win11
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
