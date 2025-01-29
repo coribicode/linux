@@ -26,7 +26,7 @@ wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko
 sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
 sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
-sudo -u $USER winetricks -q dotnet452 dotnet462 dotnet472 dotnet48 
+sudo -u $USER winetricks -q dotnet48 
 sudo -u $USER winetricks -q vcrun2010
 sudo -u $USER winetricks -q mfc110 mfc120 mfc140
 sudo -u $USER winetricks -q directx9 directplay dxvk2010
