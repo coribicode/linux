@@ -44,11 +44,12 @@ cat << EOF > /opt/painel
 #!/bin/bash
 # Criação do painel com três botões
 yad --window-icon="gtk-execute" --image="debian-logo" --item-separator="," \
+#    --undecorated \
     --title "PainelX11" \
     --form --borders=100 --center --columns=1 --height=450 --width=550 --no-buttons \
-    --field 'Meta Trader 5:BTN' 'wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe' \
-    --field 'Chromium:BTN' 'chromium --no-sandbox' \
-    --field 'Gerenciador de Tarefas:BTN' 'lxtask' \
+    --button="Meta Trader 5:wine /home/user/.wine/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe"
+    --button="Gerenciador de Tarefas:lxtask"
+    --button="Chromium!/usr/share/icons/hicolor/32x32/apps/chromium.png:chromium"
     --center \
     --fixed \
     --text="Escolha uma opção:" \
