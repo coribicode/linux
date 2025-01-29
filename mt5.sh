@@ -25,18 +25,22 @@ sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER winetricks forcemono dxvk corefonts xinput msxml3 msxml6 mfc140 dsound mimeassoc=on windowscodecs
-sudo -u $USER winetricks -q dotnet48 
-sudo -u $USER winetricks -q vcrun2010
-sudo -u $USER winetricks -q mfc110 mfc120 mfc140 
-sudo -u $USER winetricks -q directx9 directplay d3dx9_43 d3dcompiler_47 d3dx11_43
-sudo -u $USER winetricks -q xact dinput8 vkd3d dxvk2010 richtx32 allfonts devenum
+sudo -u $USER winetricks \
+forcemono \
+directplay d3dx9_43 d3dcompiler_47 d3dx11_43 \
+dxvk vkd3d dxvk2010 \
+msxml3 msxml6 mfc140 \
+dotnet472 dotnet48 \
+mfc110 mfc120 mfc140 \
+vcrun2010 vcrun2015 \
+xact devenum \
+dsound windowscodecs dinput8 xinput \
+mimeassoc=on \
+richtx32 corefonts allfonts
 
-sudo -u $USER wine winecfg -v win11
+sudo -u $USER wine winecfg -v win81
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
-sudo -u $USER wine wineboot -u
-
-# sudo -u $USER wine wineboot -u -f -r
+sudo -u $USER wine wineboot -u -f -r
 
 find / | grep terminal64.exe
