@@ -93,6 +93,7 @@ dsound windowscodecs dinput8 xinput \
 mimeassoc=on \
 richtx32 corefonts allfonts
 
+sudo -u $USER wineserver -k
 sudo -u $USER wine winecfg -v win81
 wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
