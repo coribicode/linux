@@ -99,8 +99,10 @@ mfc140 \
 dsound windowscodecs dinput8 xinput \
 mimeassoc=on \
 xact devenum \
-richtx32 corefonts \
-dxvk dxvk2010 vkd3d \
+richtx32 corefonts
+
+sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
+dxvk dxvk2010 vkd3d
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
 sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
