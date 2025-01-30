@@ -32,7 +32,7 @@ dxvk vkd3d dxvk2010 \
 msxml3 msxml6 mfc140 \
 dotnet472 dotnet48 \
 mfc110 mfc120 mfc140 \
-vcrun2010 vcrun2015 \
+vcrun2019 vcrun2010 vcrun2015 \
 xact devenum \
 dsound windowscodecs dinput8 xinput \
 mimeassoc=on \
