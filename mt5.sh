@@ -10,9 +10,9 @@ apt update && apt upgrade -y && systemctl daemon-reload
 
 # wine64-preloader wine64-tools 
 apt install -y --install-recommends winehq-stable winetricks mono-complete fonts-wine wine-binfmt wine64 wine64-tools wine-devel
-apt install -y --install-recommends libc6-i386 zlib1g libxft2 libcairo2 libvulkan1 libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libinput-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev libpng-dev libeio1 libeinfo1
-apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+apt install -y --install-recommends winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools
+apt install -y --install-recommends libc6-i386 zlib1g libxft2 libcairo2 libvulkan1 libpcl1 libpcl1-dev libvulkan1:i386 libmpg123-dev libinput-dev libwine libvkd3d1 libz-mingw-w64 libwine libgtk-3-dev libpng-dev libeio1 libeinfo1
 
 mkdir $PWD/.cache/
 mkdir $PWD/.cache/wine
