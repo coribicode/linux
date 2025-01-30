@@ -11,6 +11,9 @@ apt update && apt upgrade -y && systemctl daemon-reload
 apt install -y --install-recommends \
 winehq-stable \
 winetricks \
+winehq-devel \
+wine-devel \
+wine-devel-dev \
 mono-complete \
 fonts-wine \
 wine-binfmt
@@ -65,7 +68,9 @@ libv4l-dev \
 libsdl2-dev \
 libgphoto2-dev \
 libodbc1 \
-libgnutls28-dev
+libgnutls28-dev \
+libwine-dev \
+libkwineffects14 
 
 mkdir /opt/wine-stable/win64apps
 winedir=/opt/wine-stable/win64apps
