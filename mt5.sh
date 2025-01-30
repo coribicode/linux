@@ -13,9 +13,7 @@ winehq-stable \
 winetricks \
 mono-complete \
 fonts-wine \
-wine-binfmt \
-wine64 \
-wine64-tools
+wine-binfmt
 
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
