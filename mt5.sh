@@ -70,10 +70,10 @@ libgnutls28-dev
 mkdir /opt/wine-stable/win64apps
 winedir=/opt/wine-stable/win64apps
 chown -R $USER:$USER $winedir
-chown -R $USER:$USER $PWD
 
 mkdir $PWD/.cache
 mkdir $PWD/.cache/wine
+chown -R $USER:$USER $PWD
 
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
