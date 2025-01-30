@@ -84,7 +84,7 @@ sudo -u $USER WINEPREFIX="$PWD/.wine" WINEARCH=win64 wine wineboot -u -f -r
 sudo -u $USER WINEPREFIX="$PWD/.wine" wineserver -k
 sudo -u $USER WINEPREFIX="$PWD/.wine" wine winecfg -v win10
 
-sudo -u $USER winetricks -q\
+sudo -u $USER winetricks -q \
 vcrun2010 vcrun2015 \
 dotnet48 \
 msxml3 msxml6 \
