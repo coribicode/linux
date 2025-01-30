@@ -87,23 +87,24 @@ sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec /i $PWD/.cache/wine/wine-
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
-sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
-sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10
-
 # sudo -u $USER winetricks -q \
+# directplay d3dx9_43 d3dcompiler_47 d3dx11_43 allfonts \
+
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
 forcemono \
 vcrun2010 vcrun2015 \
 dotnet48 \
 msxml3 msxml6 \
 mfc140 \
-directplay d3dx9_43 d3dcompiler_47 d3dx11_43 \
-dxvk vkd3d dxvk2010 \
-xact devenum \
 dsound windowscodecs dinput8 xinput \
 mimeassoc=on \
-richtx32 corefonts allfonts 
+xact devenum \
+richtx32 corefonts \
+dxvk dxvk2010 vkd3d \
+
+sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
+sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10
 
 wget -P $winedir/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine $winedir/.cache/wine/mt5setup.exe /auto
