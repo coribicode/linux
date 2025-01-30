@@ -87,6 +87,7 @@ sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10
 
 # sudo -u $USER winetricks -q \
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
+forcemono \
 vcrun2010 vcrun2015 \
 dotnet48 \
 msxml3 msxml6 \
