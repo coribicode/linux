@@ -11,11 +11,13 @@ apt update && apt upgrade -y && systemctl daemon-reload
 apt install -y --install-recommends \
 winehq-stable \
 winetricks \
-winehq-devel \
-wine-devel-dev \
+wine-devel \
 mono-complete \
 fonts-wine \
 wine-binfmt
+
+# winehq-devel \
+# wine-devel-dev \
 
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
