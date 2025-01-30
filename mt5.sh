@@ -70,6 +70,7 @@ libgnutls28-dev
 mkdir /opt/wine-stable/win64apps
 winedir=/opt/wine-stable/win64apps
 chown -R $USER:$USER $winedir
+chown -R $USER:$USER $PWD
 
 mkdir $PWD/.cache
 mkdir $PWD/.cache/wine
