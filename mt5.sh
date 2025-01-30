@@ -67,22 +67,26 @@ libgphoto2-dev \
 libodbc1 \
 libgnutls28-dev
 
-mkdir $PWD/.cache/
-mkdir $PWD/.cache/wine
+mkdir /opt/wine-stable/win64apps
+winedir=/opt/wine-stable/win64apps
 
-chown -R $USER:$USER $PWD
+mkdir $winedir/.cache
+mkdir $winedir/.cache/wine
 
-wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
-sudo -u $USER wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
+chown -R $USER:$USER $winedir
 
-wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
-sudo -u $USER wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
+wget -P $winedir/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
+sudo -u $USER wine msiexec /i $winedir/.cache/wine/wine-mono-9.4.0-x86.msi
 
-sudo -u $USER WINEPREFIX="$PWD/.wine" WINEARCH=win64 wine wineboot -u -f -r
-sudo -u $USER WINEPREFIX="$PWD/.wine" wineserver -k
-sudo -u $USER WINEPREFIX="$PWD/.wine" wine winecfg -v win10
+wget -P $winedir/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
+sudo -u $USER wine msiexec -i $winedir/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-sudo -u $USER winetricks -q \
+sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
+sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10
+
+# sudo -u $USER winetricks -q \
+sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
 vcrun2010 vcrun2015 \
 dotnet48 \
 msxml3 msxml6 \
@@ -94,7 +98,7 @@ dsound windowscodecs dinput8 xinput \
 mimeassoc=on \
 richtx32 corefonts allfonts 
 
-wget -P $PWD/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
-sudo -u $USER wine $PWD/.cache/wine/mt5setup.exe /auto
+wget -P $winedir/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine $winedir/.cache/wine/mt5setup.exe /auto
 
 find / | grep terminal64.exe
