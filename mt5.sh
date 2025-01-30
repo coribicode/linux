@@ -12,7 +12,6 @@ apt install -y --install-recommends \
 winehq-stable \
 winetricks \
 winehq-devel \
-wine-devel \
 wine-devel-dev \
 mono-complete \
 fonts-wine \
