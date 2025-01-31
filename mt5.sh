@@ -94,7 +94,7 @@ mimeassoc=on \
 # allfonts \
 sleep 3
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
-dxvk dxvk2010 \
+vkd3d dxvk2010 dxvk  \
 vcrun2010 vcrun2015 \
 dotnet48 \
 msxml3 msxml6 \
