@@ -16,9 +16,6 @@ mono-complete \
 fonts-wine \
 wine-binfmt
 
-# winehq-devel \
-# wine-devel-dev \
-
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
 apt install -y --install-recommends \
@@ -86,11 +83,41 @@ mkdir $PWD/.cache
 mkdir $PWD/.cache/wine
 chown -R $USER:$USER $PWD
 
+
+
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
+
+
+PACKAGES="vkd3d dxvk2010 dxvk vcrun2010 vcrun2015 dotnet48 msxml3 msxml6 mfc140 directplay d3dx9 d3dx9_43 d3dx11_43 d3dcompiler_43 d3dcompiler_47 dsound windowscodecs dinput8 xinput xact devenum richtx32 corefonts"
+
+echo
+echo "Winetricks Instalação"
+sleep 2
+echo "Pacostes a serem instalados: $PACKAGES"
+sleep 3
+echo "Instalando..."
+sleep 3
+echo
+
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install-winetricks.sh 2>/dev/null | grep "E:"
+INSTALLER="install-winetricks.sh"
+
+echo
+echo "[ Instalação ]: Inicio"
+if grep PACKAGE_NAME $INSTALLER > /dev/null
+  then
+    sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
+    sh $INSTALLER
+  else
+    sh $INSTALLER
+fi
+echo "[ Instalação ]: Fim."
+echo
+sleep 2
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
 forcemono \
@@ -99,15 +126,7 @@ mimeassoc=on \
 # allfonts \
 sleep 3
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
-vkd3d dxvk2010 dxvk  \
-vcrun2010 vcrun2015 \
-dotnet48 \
-msxml3 msxml6 \
-mfc140 \
-directplay d3dx9 d3dx9_43 d3dx11_43 d3dcompiler_43 d3dcompiler_47 \
-dsound windowscodecs dinput8 xinput \
-xact devenum \
-richtx32 corefonts \
+\
 vkd3d dxvk2010 dxvk | grep -w installed
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
