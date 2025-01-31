@@ -87,23 +87,22 @@ sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec /i $PWD/.cache/wine/wine-
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 
-# sudo -u $USER winetricks -q \
-# directplay d3dx9_43 d3dcompiler_47 d3dx11_43 allfonts \
-sleep 3
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
 forcemono \
+mimeassoc=on \
+
+# allfonts \
+sleep 3
+sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
 vcrun2010 vcrun2015 \
 dotnet48 \
 msxml3 msxml6 \
 mfc140 \
+directplay d3dx9 d3dx9_43 d3dx11_43 d3dcompiler_43 d3dcompiler_47 \
 dsound windowscodecs dinput8 xinput \
-mimeassoc=on \
 xact devenum \
-richtx32 corefonts
-
-sleep 3
-sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q --force \
-vkd3d dxvk dxvk2010
+richtx32 corefonts \
+vkd3d dxvk2010 dxvk | grep -w installled
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
 sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
