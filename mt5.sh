@@ -89,7 +89,7 @@ sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec -i $PWD/.cache/wine/wine-
 
 # sudo -u $USER winetricks -q \
 # directplay d3dx9_43 d3dcompiler_47 d3dx11_43 allfonts \
-
+sleep 3
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
 forcemono \
 vcrun2010 vcrun2015 \
@@ -101,6 +101,7 @@ mimeassoc=on \
 xact devenum \
 richtx32 corefonts
 
+sleep 3
 sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q --force \
 vkd3d dxvk dxvk2010
 
