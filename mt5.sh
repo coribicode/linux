@@ -71,7 +71,12 @@ libgphoto2-dev \
 libodbc1 \
 libgnutls28-dev \
 libwine-dev \
-libkwineffects14 
+libkwineffects14 \
+zlib1g-dev \
+libglm-dev \
+libvulkan-dev \
+libdrm-dev \
+mesa-utils 
 
 mkdir /opt/wine-stable/win64apps
 winedir=/opt/wine-stable/win64apps
