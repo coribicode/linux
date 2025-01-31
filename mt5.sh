@@ -11,7 +11,7 @@ apt update && apt upgrade -y && systemctl daemon-reload
 apt install -y --install-recommends \
 winehq-stable \
 winetricks \
-wine-devel \
+winehq-devel
 mono-complete \
 fonts-wine \
 wine-binfmt
