@@ -102,7 +102,7 @@ directplay d3dx9 d3dx9_43 d3dx11_43 d3dcompiler_43 d3dcompiler_47 \
 dsound windowscodecs dinput8 xinput \
 xact devenum \
 richtx32 corefonts \
-vkd3d dxvk2010 dxvk | grep -w installled
+vkd3d dxvk2010 dxvk | grep -w installed
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
 sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
