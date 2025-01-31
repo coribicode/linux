@@ -101,7 +101,7 @@ mimeassoc=on \
 xact devenum \
 richtx32 corefonts
 
-sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q \
+sudo -u $USER WINEPREFIX="$winedir/.wine" winetricks -q --force \
 vkd3d dxvk dxvk2010
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
