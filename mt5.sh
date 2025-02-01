@@ -1,12 +1,24 @@
 #!/bin/sh
-
 # -------  REPOSITORIO WINEHQ ------- INICIO
 DEBIAN_VERSION_CODENAME=$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2)
+PATH_SOURCE=/etc/apt/sources.list.d/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources
+
+if [ -e $PATH_SOURCE ]
+then
+echo "[ Repositório - WINEHQ ]: - OK!"
+else
+echo "[ Repositório - WINEHQ ]: - Configurando..."
 mkdir -pm755 /etc/apt/keyrings
 wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/stable/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources
 dpkg --add-architecture i386
-apt update && apt upgrade -y && systemctl daemon-reload
+apt-get update -qq 2>&1 | grep "E:"
+apt-get upgrade -qqy 2>&1 | grep "E:"
+systemctl daemon-reload 2>&1 | grep "E:"
+apt-get --fix-broken -qq install | grep "E:"
+echo "[ Repositório - WINEHQ ]: - OK!"
+fi
+
 @ ------- REPOSITORIO WINEHQ ------- FIM
 
 @ ------- INSTALAÇÃO WINEHQ ------- INICIO
