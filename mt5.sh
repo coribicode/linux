@@ -31,7 +31,7 @@ dpkg --add-architecture i386
 apt-get update -qq  > /dev/null 2>&1
 apt-get upgrade -qqy  > /dev/null 2>&1
 systemctl daemon-reload  > /dev/null 2>&1
-apt-get --fix-broken -qq install  > /dev/null 2>&1"
+apt-get --fix-broken -qq install  > /dev/null 2>&1
 echo "[ Repositório - WINEHQ ]: - OK!"
 fi
 
