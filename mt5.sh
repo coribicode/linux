@@ -49,14 +49,41 @@ echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select tr
 
 # ------- INSTALAÇÃO WINETRICKS ------- INICIO
 
-mkdir /opt/wine-stable/win64apps
-winedir=/opt/wine-stable/win64apps
+PATH_SOURCE="/opt/wine-stable/win64apps"
+if [ -e $PATH_SOURCE ]
+then
+echo "[ $PATH_SOURCE  ]: OK!"
+else
+echo "[ $PATH_SOURCE  ]: Criando..."
+mkdir $PATH_SOURCE
 sleep 2
+echo "[ $PATH_SOURCE  ]: OK!"
+fi
+
+winedir=/opt/wine-stable/win64apps
 chown -R $USER:$USER $winedir
 
-mkdir $PWD/.cache
-mkdir $PWD/.cache/wine
+PATH_SOURCE="$PWD/.cache"
+if [ -e $PATH_SOURCE ]
+then
+echo "[ $PATH_SOURCE  ]: OK!"
+else
+echo "[ $PATH_SOURCE  ]: Criando..."
+mkdir $PATH_SOURCE
 sleep 2
+echo "[ $PATH_SOURCE  ]: OK!"
+fi
+
+PATH_SOURCE="$PWD/.cache/wine"
+if [ -e $PATH_SOURCE ]
+then
+echo "[ $PATH_SOURCE  ]: OK!"
+else
+echo "[ $PATH_SOURCE  ]: Criando..."
+mkdir $PATH_SOURCE
+sleep 2
+echo "[ $PATH_SOURCE  ]: OK!"
+fi
 chown -R $USER:$USER $PWD
 
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
@@ -94,5 +121,9 @@ sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10
 wget -P $winedir/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine $winedir/.cache/wine/mt5setup.exe /auto
 echo
+sleep 3
+echo
+echo "------------------------------------------------------------------------------"
+echo "[ WINEPREFIX ]: $(echo $WINEPREFIX_PATH)"
 echo "[ Metatrader 5 ]: $(find / | grep terminal64.exe)"
-echo "[ Metatrader 5 ]: WINEPREFIX="$winedir/.wine" wine $(find / | grep terminal64.exe)"
+echo "[ Metatrader 5 ]: Concluído"
