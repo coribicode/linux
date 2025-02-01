@@ -22,72 +22,10 @@ fi
 # ------- REPOSITORIO WINEHQ ------- FIM
 
 # ------- INSTALAÇÃO WINEHQ ------- INICIO
-PACKAGES=" \
-winehq-stable \
-winetricks \
-winehq-devel
-mono-complete \
-fonts-wine \
-wine-binfmt \
-winbind \
-ttf-mscorefonts-installer \
-binfmt-support \
-xorg \
-xvfb \
-gtk2-engines-pixbuf \
-imagemagick xauth \
-vulkan-tools \
-python3 \
-libc6-i386 \
-zlib1g \
-libxft2 \
-libcairo2 \
-libvulkan1 \
-libpcl1 \
-libpcl1-dev \
-libvulkan1:i386 \
-libmpg123-dev \
-libinput-dev \
-libwine \
-libvkd3d1 \
-libz-mingw-w64 \
-libwine \
-libgtk-3-dev \
-libpng-dev \
-libeio1 \
-libeinfo1 \
-libx11-dev \
-libxcomposite-dev \
-libxrandr-dev \
-libxext-dev \
-libfreetype6-dev \
-libxfixes-dev \
-libssl-dev \
-libvulkan-dev \
-libasound2-dev \
-libpcap-dev \
-libsqlite3-dev \
-libdbus-1-dev \
-libopenal-dev \
-libgl1-mesa-dev \
-libv4l-dev \
-libsdl2-dev \
-libgphoto2-dev \
-libodbc1 \
-libgnutls28-dev \
-libwine-dev \
-libkwineffects14 \
-zlib1g-dev \
-libglm-dev \
-libvulkan-dev \
-libdrm-dev \
-mesa-utils"
-
+PROGRAMS="winehq-stable winetricks winehq-devel mono-complete fonts-wine wine-binfmt winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools python3 libwine libwine-dev libkwineffects14 libvulkan1 libvulkan1:i386 libvkd3d1 libvulkan-dev libasound2-dev libinput-dev libssl-dev libxcomposite-dev libx11-dev libxrandr-dev libpng-dev libgtk-3-dev libsqlite3-dev libz-mingw-w64 libc6-i386 zlib1g libxft2 libcairo2 libpcl1 libpcl1-dev libmpg123-dev libeio1 libeinfo1 libxext-dev libfreetype6-dev libxfixes-dev libpcap-dev libdbus-1-dev libopenal-dev libgl1-mesa-dev libv4l-dev libsdl2-dev libgphoto2-dev libodbc1 libgnutls28-dev zlib1g-dev libglm-dev libdrm-dev mesa-utils"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
 INSTALLER="install.sh"
-
-echo
-echo "[ Instalação ]: Inicio"
+echo "[ Essentials ]: Inicio"
 if grep PACKAGE_NAME $INSTALLER > /dev/null
   then
     sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
@@ -95,10 +33,9 @@ if grep PACKAGE_NAME $INSTALLER > /dev/null
   else
     sh $INSTALLER
 fi
-echo "[ Instalação ]: Fim."
-echo
+echo "[ Essentials ]: Fim."
+sleep 2
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
-
 # ------- INSTALAÇÃO WINEHQ ------- FIM
 
 # ------- INSTALAÇÃO WINETRICKS ------- INICIO
