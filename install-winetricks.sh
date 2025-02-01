@@ -21,8 +21,8 @@ do
       echo "Pacote [ $package ]: Instalando pacote..."
       sleep 2
       # export DEBIAN_FRONTEND=noninteractive
-      # apt install -qq -y $package 2>&1 | grep "E:"
-      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed > /dev/null
+      # apt install -qq -y $package 2>/dev/null
+      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed 2>/dev/null
       # Variável para controlar tentativas
       retry_count=0
 
@@ -48,7 +48,7 @@ do
           echo "Pacote [ $package ]: Tentando instalar novamente..."
           retry_count=$((retry_count + 1))
           sleep 2
-          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed > /dev/null
+          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed 2>/dev/null
         fi
       done
     fi
