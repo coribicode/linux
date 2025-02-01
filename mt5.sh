@@ -1,11 +1,11 @@
 #!/bin/sh
-echo "[ Essentials ]: Verificando..."
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
-echo "[ Essentials ]: OK!"
-echo "--------------------------------------------------------------------"
 echo "[ Sistema ]: Verificando..."
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh
 echo "[ Sistema ]: OK!"
+echo "--------------------------------------------------------------------"
+echo "[ Essentials ]: Verificando..."
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
+echo "[ Essentials ]: OK!"
 echo "--------------------------------------------------------------------"
 
 # -------  REPOSITORIO WINEHQ ------- INICIO
@@ -18,13 +18,13 @@ echo "[ Repositório - WINEHQ ]: - OK!"
 else
 echo "[ Repositório - WINEHQ ]: - Configurando..."
 mkdir -pm755 /etc/apt/keyrings
-wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/stable/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources
+wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key > /dev/null 2>&1
+wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/stable/winehq-$(cat /etc/*release* | grep VERSION_CODENAME | cut -d '=' -f 2).sources > /dev/null 2>&1
 dpkg --add-architecture i386
-apt-get update -qq 2>&1 | grep "E:"
-apt-get upgrade -qqy 2>&1 | grep "E:"
-systemctl daemon-reload 2>&1 | grep "E:"
-apt-get --fix-broken -qq install | grep "E:"
+apt-get update -qq  > /dev/null 2>&1
+apt-get upgrade -qqy  > /dev/null 2>&1
+systemctl daemon-reload  > /dev/null 2>&1
+apt-get --fix-broken -qq install  > /dev/null 2>&1"
 echo "[ Repositório - WINEHQ ]: - OK!"
 fi
 
@@ -32,7 +32,7 @@ fi
 
 # ------- INSTALAÇÃO WINEHQ ------- INICIO
 PACKAGES="winehq-stable winetricks mono-complete fonts-wine wine-binfmt winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools python3 libwine libwine-dev libkwineffects14 libvulkan1 libvkd3d1 libvulkan-dev libasound2-dev libinput-dev libssl-dev libxcomposite-dev libx11-dev libxrandr-dev libpng-dev libgtk-3-dev libsqlite3-dev libz-mingw-w64 libc6-i386 zlib1g libxft2 libcairo2 libpcl1 libpcl1-dev libmpg123-dev libeio1 libeinfo1 libxext-dev libfreetype6-dev libxfixes-dev libpcap-dev libdbus-1-dev libopenal-dev libgl1-mesa-dev libv4l-dev libsdl2-dev libgphoto2-dev libodbc1 libgnutls28-dev zlib1g-dev libglm-dev libdrm-dev mesa-utils"
-curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh > /dev/null 2>&1
 INSTALLER="install.sh"
 echo "[ INSTALAÇÃO WINEHQ  ]: Inicio"
 if grep PACKAGE_NAME $INSTALLER > /dev/null
@@ -92,7 +92,7 @@ then
 echo "[ $PATH_SOURCE  ]: OK!"
 else
 echo "[ $PATH_SOURCE  ]: Downloading..."
-wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi > /dev/null
+wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi > /dev/null 2>&1
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
 sleep 2
 echo "[ $PATH_SOURCE  ]: OK!"
@@ -104,7 +104,7 @@ then
 echo "[ $PATH_SOURCE  ]: OK!"
 else
 echo "[ $PATH_SOURCE  ]: Downloading..."
-wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
+wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi > /dev/null 2>&1
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 sleep 2
 echo "[ $PATH_SOURCE  ]: OK!"
