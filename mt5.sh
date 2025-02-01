@@ -86,11 +86,29 @@ echo "[ $PATH_SOURCE  ]: OK!"
 fi
 chown -R $USER:$USER $PWD
 
-wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
+PATH_SOURCE=$PWD/.cache/wine/wine-mono-9.4.0-x86.msi
+if [ -e $PATH_SOURCE ]
+then
+echo "[ $PATH_SOURCE  ]: OK!"
+else
+echo "[ $PATH_SOURCE  ]: Downloading..."
+wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi > /dev/null
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec /i $PWD/.cache/wine/wine-mono-9.4.0-x86.msi
+sleep 2
+echo "[ $PATH_SOURCE  ]: OK!"
+fi
 
+PATH_SOURCE=$PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
+if [ -e $PATH_SOURCE ]
+then
+echo "[ $PATH_SOURCE  ]: OK!"
+else
+echo "[ $PATH_SOURCE  ]: Downloading..."
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine msiexec -i $PWD/.cache/wine/wine-gecko-2.47.4-x86_64.msi
+sleep 2
+echo "[ $PATH_SOURCE  ]: OK!"
+fi
 
 PACKAGES="forcemono mimeassoc=on vkd3d dxvk2010 dxvk vcrun2010 vcrun2015 dotnet48 msxml3 msxml6 mfc140 directplay d3dx9 d3dx9_43 d3dx11_43 d3dcompiler_43 d3dcompiler_47 dsound windowscodecs dinput8 xinput xact devenum richtx32 corefonts"
 WINEPREFIX_PATH='WINEPREFIX="/opt/wine-stable/win64apps/.wine"'
@@ -114,12 +132,22 @@ echo
 
 # ------- INSTALAÇÃO WINETRICKS ------- FIM
 
-sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
-sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
-sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10
+sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r > /dev/null
+sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k > /dev/null
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10 > /dev/null
 
+PATH_SOURCE=$winedir/.cache/wine/mt5setup.exe
+if [ -e $PATH_SOURCE ]
+then
+echo "[ $PATH_SOURCE  ]: OK!"
+else
+echo "[ $PATH_SOURCE  ]: Downloading..."
 wget -P $winedir/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 sudo -u $USER WINEPREFIX="$winedir/.wine" wine $winedir/.cache/wine/mt5setup.exe /auto
+sleep 2
+echo "[ $PATH_SOURCE  ]: OK!"
+fi
+
 echo
 sleep 3
 echo
