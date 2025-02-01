@@ -22,7 +22,7 @@ fi
 # ------- REPOSITORIO WINEHQ ------- FIM
 
 # ------- INSTALAÇÃO WINEHQ ------- INICIO
-PACKAGES="\
+PACKAGES=" \
 winehq-stable \
 winetricks \
 winehq-devel
