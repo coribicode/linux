@@ -52,18 +52,6 @@ fi
 sleep 2
 
 echo "-------------------------------------------------"
-echo "[ NOVOS Repositórios ]: Verificando ..."
-sleep 2
-if [ ! -e ~/repo ]
-then
-echo "[ NOVOS Repositórios ]: Não há"
-else
-sh ~/repo
-echo "[ NOVOS Repositórios ]: OK!"
-fi
-sleep 2
-
-echo "-------------------------------------------------"
 echo "[ Sistema ]: Atualizando ..."
 sleep 2
 apt-get update -qq 2>&1 | grep "E:"
@@ -88,6 +76,18 @@ echo "[ Fix LDCONFIG ]: OK!"
 fi
 echo "-------------------------------------------------"
 sleep 2
+
+#echo "-------------------------------------------------"
+#echo "[ NOVOS Repositórios ]: Verificando ..."
+#sleep 2
+#if [ ! -e ~/repo ]
+#then
+#echo "[ NOVOS Repositórios ]: Não há"
+#else
+#sh ~/repo
+#echo "[ NOVOS Repositórios ]: OK!"
+#fi
+#sleep 2
 
 #echo "-------------------------------------------------"
 #echo "[ GRUB - Interface FIX ]: Verificando ..."
