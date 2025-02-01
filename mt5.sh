@@ -50,11 +50,13 @@ echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select tr
 # ------- INSTALAÇÃO WINETRICKS ------- INICIO
 
 mkdir /opt/wine-stable/win64apps
-chown -R $USER:$USER $winedir
 winedir=/opt/wine-stable/win64apps
+sleep 2
+chown -R $USER:$USER $winedir
 
 mkdir $PWD/.cache
 mkdir $PWD/.cache/wine
+sleep 2
 chown -R $USER:$USER $PWD
 
 wget -P $PWD/.cache/wine https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
