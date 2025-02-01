@@ -1,14 +1,17 @@
 #!/bin/sh
 # Verifica se o ID do usuário atual é 0 (root)
-if [ $EUID -ne 0 ]; then
-    echo "Você precisa ser root para executar este comando. Por favor, mude para o root"
-    sleep 3
-    echo "Saindo..."
-    sleep 3
-    exit 0
+
+if [ $EUID -ne 0 ];
+then
+echo "Você precisa ser root para executar este comando. Por favor, mude para o root"
+sleep 3
+echo "Saindo..."
+sleep 3
+exit
 else
-    echo "Você está logado como root."
+echo "Você está logado como root."
 fi
+
 echo "[ Sistema ]: Verificando..."
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh 
 echo "[ Sistema ]: OK!"
