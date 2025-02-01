@@ -9,7 +9,7 @@ do
     echo "Pacote [ $package ]: OK!"
     echo "--------------------------------------------------------------------"
   else
-    check_repo=$( sudo -u $USER WINEPREFIX_PATH winetricks list-all | grep -w $package)
+    check_repo=$(sudo -u $USER WINEPREFIX_PATH winetricks list-all | grep -w $package)
     if [ ! -n "$check_repo" ]
     then
       echo "Pacote [ $package ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
@@ -21,11 +21,10 @@ do
       echo "Pacote [ $package ]: Instalando pacote..."
       sleep 2
       # export DEBIAN_FRONTEND=noninteractive
-      # apt install -qq -y $package 2>/dev/null
-      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed 2>/dev/null
+      # apt install -qq -y $package > /dev/null
+      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed
       # Variável para controlar tentativas
       retry_count=0
-
       # Verifica se o pacote foi instalado, se não, tenta novamente uma vez
       while true; do
         check_package_installed=$(sudo -u $USER WINEPREFIX_PATH winetricks list-installed | grep -w $package)
@@ -43,12 +42,11 @@ do
             echo "--------------------------------------------------------------------"
             exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
           fi
-
           # Tentar novamente
           echo "Pacote [ $package ]: Tentando instalar novamente..."
           retry_count=$((retry_count + 1))
           sleep 2
-          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed 2>/dev/null
+          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed
         fi
       done
     fi
