@@ -1,7 +1,7 @@
 #!/bin/sh
 # Verifica se o ID do usuário atual é 0 (root)
 
-if [ $EUID -ne 0 ];
+if [$EUID -ne 0]
 then
 echo "Você precisa ser root para executar este comando. Por favor, mude para o root"
 sleep 3
