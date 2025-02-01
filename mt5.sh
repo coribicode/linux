@@ -132,9 +132,9 @@ echo
 
 # ------- INSTALAÇÃO WINETRICKS ------- FIM
 
-sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r > /dev/null
-sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k > /dev/null
-sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10 > /dev/null
+sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r > /dev/null 2>&1
+sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k > /dev/null 2>&1
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10 > /dev/null 2>&1
 
 PATH_SOURCE=$winedir/.cache/wine/mt5setup.exe
 if [ -e $PATH_SOURCE ]
@@ -142,8 +142,8 @@ then
 echo "[ $PATH_SOURCE  ]: OK!"
 else
 echo "[ $PATH_SOURCE  ]: Downloading..."
-wget -P $winedir/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
-sudo -u $USER WINEPREFIX="$winedir/.wine" wine $winedir/.cache/wine/mt5setup.exe /auto
+wget -P $winedir/.cache/wine https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe > /dev/null 2>&1
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine $winedir/.cache/wine/mt5setup.exe /auto > /dev/null 2>&1
 sleep 2
 echo "[ $PATH_SOURCE  ]: OK!"
 fi
