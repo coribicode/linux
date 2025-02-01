@@ -19,9 +19,9 @@ apt-get --fix-broken -qq install | grep "E:"
 echo "[ Repositório - WINEHQ ]: - OK!"
 fi
 
-@ ------- REPOSITORIO WINEHQ ------- FIM
+# ------- REPOSITORIO WINEHQ ------- FIM
 
-@ ------- INSTALAÇÃO WINEHQ ------- INICIO
+# ------- INSTALAÇÃO WINEHQ ------- INICIO
 PACKAGES="\
 winehq-stable \
 winetricks \
@@ -99,9 +99,9 @@ echo "[ Instalação ]: Fim."
 echo
 echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
 
-@ ------- INSTALAÇÃO WINEHQ ------- FIM
+# ------- INSTALAÇÃO WINEHQ ------- FIM
 
-@ ------- INSTALAÇÃO WINETRICKS ------- INICIO
+# ------- INSTALAÇÃO WINETRICKS ------- INICIO
 
 mkdir /opt/wine-stable/win64apps
 chown -R $USER:$USER $winedir
@@ -137,7 +137,7 @@ fi
 echo "[ Instalação Winetricks ]: Fim."
 echo
 
-@ ------- INSTALAÇÃO WINETRICKS ------- FIM
+# ------- INSTALAÇÃO WINETRICKS ------- FIM
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r
 sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k
