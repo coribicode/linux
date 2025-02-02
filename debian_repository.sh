@@ -9,6 +9,8 @@ COMPONENTES='main contrib non-free non-free-firmware'
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/$CODENAME.sources"
 
+echo
+echo "### REPOSITORIO DEBIAN STABLE ###"
 echo "-------------------------------------------------"
 echo "[ Prioridade IPv4 ]: Verificando ..."
 sleep 2
