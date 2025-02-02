@@ -7,11 +7,11 @@ package_install='apt-get install -qq -y'
 echo "--------------------------------------------------------------------"
 for package in $package_list
 do
-  if [ -n "$package_check_installed" ] ;
+  if [ -n $package_check_installed ] ;
   then
     echo "Pacote [ $package ]: OK!"
   else
-    if [ ! -n "$package_check" ]
+    if [ ! -n $package_check ]
     then
       echo "Pacote [ $package ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
       echo "--------------------------------------------------------------------"
@@ -23,7 +23,7 @@ do
       retry_count=0
       # Verifica se o pacote foi instalado, se não, tenta novamente uma vez
       while true; do
-        if [ -n "$package_check_installed" ] ;
+        if [ -n $package_check_installed ] ;
         then
           echo "Pacote [ $package ]: Instalado!"
           echo "--------------------------------------------------------------------"
@@ -48,7 +48,7 @@ done
 echo "Pacote: Checando..."
 for package in $package_list
 do
-  if [ -n "$package_check_installed" ] ;
+  if [ -n $package_check_installed ] ;
   then
     echo "Pacote [ $package ]: OK!"
   fi
