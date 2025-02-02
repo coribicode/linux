@@ -17,7 +17,7 @@ then
 echo "[ Prioridade IPv4 ]: OK!"
 else
 echo "[ Prioridade IPv4 ]: Configurando ... "
-sed -i 's|"#precedence ::ffff:0:0/96  100|precedence ::ffff:0:0/96  100|g'" >> /etc/gai.conf
+sed -i 's|#precedence ::ffff:0:0/96  100|precedence ::ffff:0:0/96  100|g' /etc/gai.conf
 sleep 2
 echo "[ Prioridade IPv4 ]: OK!"
 fi
