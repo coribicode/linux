@@ -37,15 +37,11 @@ export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 systemctl daemon-reload
-sleep 3
-source ~/.bashrc 2>&1
-sleep 3
-source /etc/profile 2>&1
-sleep 3
+#source ~/.bashrc 2>&1
+#source /etc/profile 2>&1
 ldconfig
 echo "[ Fix LDCONFIG ]: OK!"
 fi
-echo "-------------------------------------------------"
 sleep 2
 
 echo "-------------------------------------------------"
