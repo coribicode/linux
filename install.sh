@@ -1,8 +1,8 @@
 #!/bin/bash
 package_list="PACKAGE_NAME"
-package_check_installed='dpkg --get-selections | grep ^"$package" | grep -w install'
-package_check='apt-cache search $package| grep ^"$package "'
-package_install='apt-get install -qq -y'
+package_check_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
+package_check=$(apt-cache search $package| grep ^"$package ")
+package_install=$(apt-get install -qq -y)
 
 echo "--------------------------------------------------------------------"
 for package in $package_list
