@@ -135,7 +135,7 @@ echo
 
 sudo -u $USER WINEPREFIX="$winedir/.wine" WINEARCH=win64 wine wineboot -u -f -r > /dev/null
 sudo -u $USER WINEPREFIX="$winedir/.wine" wineserver -k > /dev/null
-sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win10 > /dev/null
+sudo -u $USER WINEPREFIX="$winedir/.wine" wine winecfg -v win81 > /dev/null
 
 PATH_SOURCE=$winedir/.cache/wine/mt5setup.exe
 if [ -e $PATH_SOURCE ]
