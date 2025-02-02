@@ -32,11 +32,14 @@ echo "[ Fix LDCONFIG ]: OK!"
 else
 echo "[ Fix LDCONFIG ]: Configurando ... "
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
-echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 systemctl daemon-reload
-sleep 5
+sleep 3
+source ~/.bashrc
+sleep 3
 source /etc/profile
+sleep 3
 ldconfig
 echo "[ Fix LDCONFIG ]: OK!"
 fi
