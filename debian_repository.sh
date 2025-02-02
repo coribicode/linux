@@ -97,8 +97,8 @@ echo "[ GRUB - Interface FIX ]: Configurando ... "
 sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
 #sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
 export PATH=/sbin:$PATH
-update-initramfs -u
-update-grub
+update-initramfs -u > /dev/null
+update-grub > /dev/null
 sleep 2
 echo "[ GRUB - Interface FIX ]: OK!"
 fi
