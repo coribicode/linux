@@ -38,9 +38,9 @@ echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 systemctl daemon-reload
 sleep 3
-source ~/.bashrc > /dev/null
+source ~/.bashrc 2> /dev/null
 sleep 3
-source /etc/profile > /dev/null
+source /etc/profile 2> /dev/null
 sleep 3
 ldconfig
 echo "[ Fix LDCONFIG ]: OK!"
