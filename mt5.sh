@@ -12,13 +12,13 @@ else
 echo "Você está logado como root."
 fi
 
-echo "[ Sistema ]: Verificando..."
-curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh 
-echo "[ Sistema ]: OK!"
-echo "--------------------------------------------------------------------"
 echo "[ Essentials ]: Verificando..."
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
 echo "[ Essentials ]: OK!"
+echo "--------------------------------------------------------------------"
+echo "[ Sistema ]: Verificando..."
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repository.sh | sh 
+echo "[ Sistema ]: OK!"
 echo "--------------------------------------------------------------------"
 
 # -------  REPOSITORIO WINEHQ ------- INICIO
