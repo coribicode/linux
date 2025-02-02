@@ -48,13 +48,11 @@ do
   fi
 done
 
+echo "Pacote: Checando..."
 for package in $package_list
 do
   package_installed=$package_check_installed
   if [ -n "$package_installed" ] ;
   then
     echo "Pacote [ $package ]: OK!"
-  else
-    echo "..."
-  if
 done
