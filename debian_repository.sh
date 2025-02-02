@@ -38,9 +38,9 @@ echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 systemctl daemon-reload
 sleep 3
-source ~/.bashrc 2> /dev/null
+source ~/.bashrc 2>&1
 sleep 3
-source /etc/profile 2> /dev/null
+source /etc/profile 2>&1
 sleep 3
 ldconfig
 echo "[ Fix LDCONFIG ]: OK!"
@@ -79,10 +79,10 @@ sleep 2
 echo "-------------------------------------------------"
 echo "[ Sistema ]: Atualizando ..."
 sleep 2
-apt-get update -qq 2>&1 | grep "E:"
-apt-get upgrade -qqy 2>&1 | grep "E:"
-systemctl daemon-reload 2>&1 | grep "E:"
-apt-get --fix-broken -qq install | grep "E:"
+apt-get update -qq 2>&1 
+apt-get upgrade -qqy 2>&1 
+systemctl daemon-reload 2>&1 
+apt-get --fix-broken -qq install 2>&1
 echo "[ Sistema ]: OK!"
 sleep 2
 
@@ -97,8 +97,8 @@ echo "[ GRUB - Interface FIX ]: Configurando ... "
 sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
 #sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
 export PATH=/sbin:$PATH
-update-initramfs -u > /dev/null
-update-grub > /dev/null
+update-initramfs -u 2>&1
+update-grub 2>&1
 sleep 2
 echo "[ GRUB - Interface FIX ]: OK!"
 fi
