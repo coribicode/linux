@@ -55,4 +55,5 @@ do
   if [ -n "$package_installed" ] ;
   then
     echo "Pacote [ $package ]: OK!"
+  fi
 done
