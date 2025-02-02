@@ -24,6 +24,26 @@ fi
 sleep 2
 
 echo "-------------------------------------------------"
+echo "[ Fix LDCONFIG ]: Verificando ..."
+sleep 2
+if grep ^'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' ~/.bashrc > /dev/null
+then
+echo "[ Fix LDCONFIG ]: OK!"
+else
+echo "[ Fix LDCONFIG ]: Configurando ... "
+export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
+echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> ~/.bashrc
+systemctl daemon-reload
+sleep 5
+source /etc/profile
+ldconfig
+echo "[ Fix LDCONFIG ]: OK!"
+fi
+echo "-------------------------------------------------"
+sleep 2
+
+echo "-------------------------------------------------"
 echo "[ Repositório - $CODENAME ]: Verificando ..."
 sleep 2
 if [ -e $PATH_SOURCE ]
@@ -59,24 +79,6 @@ apt-get upgrade -qqy 2>&1 | grep "E:"
 systemctl daemon-reload 2>&1 | grep "E:"
 apt-get --fix-broken -qq install | grep "E:"
 echo "[ Sistema ]: OK!"
-sleep 2
-
-echo "-------------------------------------------------"
-echo "[ Fix LDCONFIG ]: Verificando ..."
-sleep 2
-if grep ^'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' ~/.bashrc > /dev/null
-then
-echo "[ Fix LDCONFIG ]: OK!"
-else
-echo "[ Fix LDCONFIG ]: Configurando ... "
-echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
-export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
-systemctl daemon-reload
-sleep 3
-source /etc/profile
-echo "[ Fix LDCONFIG ]: OK!"
-fi
-echo "-------------------------------------------------"
 sleep 2
 
 #echo "-------------------------------------------------"
