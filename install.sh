@@ -1,49 +1,47 @@
 #!/bin/bash
-package_list="PACKAGE_NAME"
-package_check_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
-package_check=$(apt-cache search $package| grep ^"$package ")
-package_install=$(apt-get install -qq -y)
+# Criado por: Davi dos Santos Galúcio - 2024
+# Verifica e instala pacote automaticamente
 
+package_list="PACKAGE_NAME"
 echo "--------------------------------------------------------------------"
 for package in $package_list
-do
-  if [ -n $package_check_installed ] ;
-  then
-    echo "Pacote [ $package ]: OK!"
-  else
-    if [ ! -n $package_check ]
+  do
+  package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
+  if [ -ne "$package_installed" ] ;
+    then
+    install
+  fi
+done
+
+install(){
+check_repo=$(apt-cache search $package| grep ^"$package ")
+  if [ ! -n "$check_repo" ]
     then
       echo "Pacote [ $package ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
       echo "--------------------------------------------------------------------"
       exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
-    else
+      else
+      echo "Pacote [ $package ]: Não instalado!"
+      sleep 2
+      echo "Pacote [ $package ]: Instalando pacote..."
+      sleep 2
       export DEBIAN_FRONTEND=noninteractive
-      $package_install $package 2>&2 /dev/null
-      # Variável para controlar tentativas
-      retry_count=0
-      # Verifica se o pacote foi instalado, se não, tenta novamente uma vez
-      while true; do
-        if [ -n $package_check_installed ] ;
+      apt-get install -qq -y $package > /dev/null
+      check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
+      sleep 2
+      if [ -n "$check_package_installed" ] ;
         then
-          echo "Pacote [ $package ]: Instalado!"
-          echo "--------------------------------------------------------------------"
-          break
+        echo "Pacote [ $package ]: Instalado!"
+        echo "--------------------------------------------------------------------"
         else
-          if [ $retry_count -eq 1 ]; then
-            sleep 2
-            echo "Houve erro na instalação, verifique os logs e tente novamnete"
-            echo "--------------------------------------------------------------------"
-            exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
-          fi
-          # Tentar novamente
-          retry_count=$((retry_count + 1))
-          sleep 2
-          $package_install $package 2>&2 /dev/null
-        fi
-      done
+        echo "Pacote [ $package ]: Não Instalado!"
+        sleep 2
+        echo "Houve erro na instalação, verifique os logs e tente novamnete"
+        echo "--------------------------------------------------------------------"
+        exit ## >>>>>>> SAI DA INSTALAÇÃO SE HOUVER ERRO <<<<<<<<<<< ##
+      fi
     fi
-  fi
-done
+}
 
 echo "Pacote: Checando..."
 for package in $package_list
