@@ -86,6 +86,24 @@ apt-get --fix-broken -qq install | grep "E:"
 echo "[ Sistema ]: OK!"
 sleep 2
 
+echo "-------------------------------------------------"
+echo "[ GRUB - Interface FIX ]: Verificando ..."
+sleep 2
+if grep "net.ifnames=0 biosdevname=0"  /etc/default/grub > /dev/null
+then
+echo "[ GRUB - Interface FIX ]: OK!"
+else
+echo "[ GRUB - Interface FIX ]: Configurando ... "
+sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
+#sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
+export PATH=/sbin:$PATH
+update-initramfs -u
+update-grub
+sleep 2
+echo "[ GRUB - Interface FIX ]: OK!"
+fi
+sleep 2
+
 #echo "-------------------------------------------------"
 #echo "[ NOVOS Repositórios ]: Verificando ..."
 #sleep 2
@@ -95,22 +113,6 @@ sleep 2
 #else
 #sh ~/repo
 #echo "[ NOVOS Repositórios ]: OK!"
-#fi
-#sleep 2
-
-#echo "-------------------------------------------------"
-#echo "[ GRUB - Interface FIX ]: Verificando ..."
-#sleep 2
-#if grep "net.ifnames=0 biosdevname=0"  /etc/default/grub > /dev/null
-#then
-#echo "[ GRUB - Interface FIX ]: OK!"
-#else
-#echo "[ GRUB - Interface FIX ]: Configurando ... "
-#sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
-# sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
-#update-grub
-#sleep 2
-#echo "[ GRUB - Interface FIX ]: OK!"
 #fi
 #sleep 2
 
