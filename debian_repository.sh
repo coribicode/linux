@@ -71,6 +71,8 @@ else
 echo "[ Fix LDCONFIG ]: Configurando ... "
 echo 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' >> /etc/profile
 export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin
+systemctl daemon-reload
+sleep 3
 source /etc/profile
 echo "[ Fix LDCONFIG ]: OK!"
 fi
