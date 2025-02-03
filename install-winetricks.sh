@@ -22,13 +22,12 @@ do
       sleep 2
       # export DEBIAN_FRONTEND=noninteractive
       # apt install -qq -y $package > /dev/null
-      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed
+      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed > /dev/null
       # Variável para controlar tentativas
       retry_count=0
       # Verifica se o pacote foi instalado, se não, tenta novamente uma vez
       while true; do
         check_package_installed=$(sudo -u $USER WINEPREFIX_PATH winetricks list-installed | grep -w $package)
-
         if [ -n "$check_package_installed" ] ;
         then
           echo "Pacote [ $package ]: Instalado!"
@@ -46,7 +45,7 @@ do
           echo "Pacote [ $package ]: Tentando instalar novamente..."
           retry_count=$((retry_count + 1))
           sleep 2
-          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed
+          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed > /dev/null
         fi
       done
     fi
