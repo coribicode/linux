@@ -1,5 +1,5 @@
 #!/bin/bash
-package_list='PACKAGE_NAME'
+package_list="PACKAGE_NAME" > /dev/null
 echo "--------------------------------------------------------------------"
 for package in $package_list
 do
