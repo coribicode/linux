@@ -1,5 +1,5 @@
 #!/bin/bash
-package_list="PACKAGE_NAME" > /dev/null
+package_list="PACKAGE_NAME" > /dev/null 2>&1
 echo "--------------------------------------------------------------------"
 for package in $package_list
 do
@@ -21,8 +21,8 @@ do
       echo "Pacote [ $package ]: Instalando pacote..."
       sleep 2
       # export DEBIAN_FRONTEND=noninteractive
-      # apt install -qq -y $package > /dev/null
-      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed 2> /dev/null
+      # apt install -qq -y $package > /dev/null 2>&1
+      sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed > /dev/null 2>&1
       # Variável para controlar tentativas
       retry_count=0
       # Verifica se o pacote foi instalado, se não, tenta novamente uma vez
@@ -45,7 +45,7 @@ do
           echo "Pacote [ $package ]: Tentando instalar novamente..."
           retry_count=$((retry_count + 1))
           sleep 2
-          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed 2> /dev/null
+          sudo -u $USER WINEPREFIX_PATH winetricks -q $package | grep -w installed > /dev/null 2>&1
         fi
       done
     fi
