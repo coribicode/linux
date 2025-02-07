@@ -24,7 +24,7 @@ for package in $package_list
       echo "Pacote [ $package ]: Instalando pacote..."
       sleep 2
       export DEBIAN_FRONTEND=noninteractive
-      apt-get install -qq -y $package 2> /dev/null
+      apt-get install -qq -y $package > /dev/null
       check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
       sleep 2
       if [ -n "$check_package_installed" ] ;
