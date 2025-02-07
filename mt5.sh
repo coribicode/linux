@@ -111,7 +111,7 @@ sleep 2
 echo "[ $PATH_SOURCE  ]: OK!"
 fi
 
-PACKAGES="forcemono mimeassoc=on vkd3d dxvk2010 dxvk comctl32ocx comdlg32ocx corefonts d3dcompiler_42 d3dcompiler_43 d3dcompiler_46 d3dcompiler_47 d3drm d3dx10 d3dx10_43 d3dx11_42 d3dx11_43 d3dxof devenum dinput dinput8 directplay directx9 dmband dmcompos dmime dmloader dmscript  dmstyle  dmsynth dotnet40 dotnet45 dotnet452 dotnet46 dotnet461 dotnet462 dotnet471 dotnet472 dotnet48 dpvoice dsdmo dsound dswave dxdiag dxvk dxvk1103 dxvk2000 dxvk2010 esent faudio faudio1906 faudio190607 gdiplus mfc140 mfc80 mfc90 msaa msxml3 msxml4 msxml6 prntvpt richtx32 vb6run vcrun2005 vcrun2010 vcrun2015 vkd3d webio windowscodecs xact xinput xmllite xna40"
+PACKAGES="forcemono mimeassoc=on vkd3d dxvk2010 dxvk comctl32ocx comdlg32ocx corefonts d3dcompiler_42 d3dcompiler_43 d3dcompiler_46 d3dcompiler_47 d3drm d3dx10 d3dx10_43 d3dx11_42 d3dx11_43 d3dxof devenum dinput dinput8 directplay directx9 dmband dmcompos dmime dmloader dmscript  dmstyle  dmsynth dotnet40 dotnet45 dotnet452 dotnet46 dotnet461 dotnet462 dotnet471 dotnet472 dotnet48 dpvoice dsdmo dsound dswave dxdiag dxvk dxvk1103 dxvk2000 dxvk2010 esent faudio faudio1906 faudio190607 gdiplus mfc140 mfc80 mfc90 msaa msxml3 msxml4 msxml6 prntvpt richtx32 vcrun2005 vcrun2010 vcrun2015 vkd3d webio windowscodecs xact xinput xmllite xna40"
 
 WINEPREFIX_PATH='WINEPREFIX="/opt/wine-stable/win64apps/.wine"'
 
