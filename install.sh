@@ -2,7 +2,7 @@
 # Criado por: Davi dos Santos Galúcio - 2024
 # Verifica e instala pacote automaticamente
 
-package_list="PACKAGE_NAME" 2> /dev/null
+package_list="PACKAGE_NAME" > /dev/null 2>&1
 echo "--------------------------------------------------------------------"
 for package in $package_list
   do
@@ -24,7 +24,7 @@ for package in $package_list
       echo "Pacote [ $package ]: Instalando pacote..."
       sleep 2
       export DEBIAN_FRONTEND=noninteractive
-      apt-get install -qq -y $package > /dev/null
+      apt-get install -qq -y $package > /dev/null 2>&1
       check_package_installed=$(dpkg --get-selections | grep ^"$package" | grep -w install)
       sleep 2
       if [ -n "$check_package_installed" ] ;
