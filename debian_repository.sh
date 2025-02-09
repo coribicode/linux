@@ -14,7 +14,7 @@ echo "### REPOSITORIO DEBIAN STABLE ###"
 echo "-------------------------------------------------"
 echo "[ Prioridade IPv4 ]: Verificando ..."
 sleep 2
-if grep ^'precedence ::ffff:0:0/96  100' /etc/gai.conf > /dev/null
+if grep ^'precedence ::ffff:0:0/96  100' /etc/gai.conf > /dev/null 2>&1
 then
 echo "[ Prioridade IPv4 ]: OK!"
 else
@@ -28,7 +28,7 @@ sleep 2
 echo "-------------------------------------------------"
 echo "[ Fix LDCONFIG ]: Verificando ..."
 sleep 2
-if grep ^'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' ~/.bashrc > /dev/null
+if grep ^'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin' ~/.bashrc > /dev/null 2>&1
 then
 echo "[ Fix LDCONFIG ]: OK!"
 else
@@ -53,7 +53,7 @@ echo "[ Repositório - $CODENAME ]: - OK!"
 else
 echo "[ Repositório - $CODENAME ]: Configurando ..."
 sleep 2
-mv /etc/apt/sources.list /etc/apt/sources.list.bkp 2>&1 | grep "mv"
+mv /etc/apt/sources.list /etc/apt/sources.list.bkp > /dev/null 2>&1
 cat > $PATH_SOURCE << EOF
 ## $CODENAME RESPOSITORY ##
 Types: $TYPES
@@ -75,17 +75,17 @@ sleep 2
 echo "-------------------------------------------------"
 echo "[ Sistema ]: Atualizando ..."
 sleep 2
-apt-get update -qq 2>&1 
-apt-get upgrade -qqy 2>&1 
-systemctl daemon-reload 2>&1 
-apt-get --fix-broken -qq install 2>&1
+apt-get update -qq > /dev/null 2>&1
+apt-get upgrade -qqy > /dev/null 2>&1
+systemctl daemon-reload > /dev/null 2>&1 
+apt-get --fix-broken -qq install > /dev/null 2>&1
 echo "[ Sistema ]: OK!"
 sleep 2
 
 #echo "-------------------------------------------------"
 #echo "[ GRUB - Interface FIX ]: Verificando ..."
 #sleep 2
-#if grep "net.ifnames=0 biosdevname=0"  /etc/default/grub > /dev/null
+#if grep "net.ifnames=0 biosdevname=0"  /etc/default/grub > /dev/null 2>&1
 #then
 #echo "[ GRUB - Interface FIX ]: OK!"
 #else
@@ -93,8 +93,8 @@ sleep 2
 #sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"|g' /etc/default/grub
 #sed -i 's|GRUB_CMDLINE_LINUX=""|GRUB_CMDLINE_LINUX="net.ifnames=0"|g' /etc/default/grub
 #export PATH=/sbin:$PATH
-#update-initramfs -u 2>&1
-#update-grub 2>&1
+#update-initramfs -u > /dev/null 2>&1
+#update-grub > /dev/null 2>&1
 #sleep 2
 #echo "[ GRUB - Interface FIX ]: OK!"
 #fi
