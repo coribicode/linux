@@ -32,8 +32,8 @@ sudo -u $USER xpra start :100 \
  --env=DISPLAY=:100 \
  --no-notifications
   
-xpra list
+sudo -u $USER xpra list
 
-# xpra stop :100
+# sudo -u $USER xpra stop :100
 # xpra start :100 --start-child=xclock --bind-tcp=0.0.0.0:10000 --html=on --start=xterm
 # xpra start :100 --bind-tcp=0.0.0.0:10000 --html=on --start=xterm --env=XPRA_FORCE_COLOR_DEPTH=32   --env=DISPLAY=:100   --dpi=144
