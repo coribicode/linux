@@ -1,3 +1,5 @@
+apt update
+apt upgrade -y
 apt install git curl sudo apt-transport-https software-properties-common ca-certificates -y
 curl https://xpra.org/gpg.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/xpra.gpg
 git clone https://github.com/Xpra-org/xpra
