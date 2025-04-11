@@ -12,14 +12,15 @@ apt install -y gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-ba
 apt install -y libpam-dev libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264-dev libvpx-dev libturbojpeg-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx7 libwebp7 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev
 apt install -y python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify
 
-XPRA_APP=xterm
+apt install -y lxterminal
+XPRA_APP=lxterminal
 sudo -u $USER xpra start :100 \
  --bind-tcp=0.0.0.0:10000 \
- --start-child="$XPRA_APP" \
+ --start="$XPRA_APP" \
  --encodings=h264,vp9 \
  --quality=100 \
- --min-quality=70 \
- --speed=50 \
+ --min-quality=80 \
+ --speed=100 \
  --opengl=yes \
  --dpi=144 \
  --video-scaling=off \
