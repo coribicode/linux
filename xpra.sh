@@ -22,11 +22,13 @@ XPRA_USER_SEQ=${XPRA_USER: -1}
 XPRA_USER_PORT=1000$XPRA_USER_SEQ
 XPRA_USER_DISPLAY=10$XPRA_USER_SEQ
 XPRA_USER_UID=$(id -u $XPRA_USER)
+XPRA_USER_HOME=$(getent passwd $XPRA_USER | cut -d: -f6)
 
 mkdir /run/user/$XPRA_USER_UID
 chown -R $XPRA_USER:$XPRA_USER /run/user/$XPRA_USER_UID
 chmod -R 0700 /run/user/$XPRA_USER_UID
 XDG_RUNTIME_DIR=/run/user/$XPRA_USER_UID
+echo "export XDG_RUNTIME_DIR=\"$XDG_RUNTIME_DIR\"" >> $XPRA_USER_HOME/.bashrc
 
 apt install -y lxterminal
 XPRA_APP=lxterminal 
