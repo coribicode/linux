@@ -12,20 +12,29 @@ apt install -y gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-ba
 apt install -y libpam-dev libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264-dev libvpx-dev libturbojpeg-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx7 libwebp7 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev
 apt install -y python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify
 
+
+XPRA_USER=user005
+XPRA_USER_PASSWORD=123
+sudo useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:$XPRA_USER_PASSWORD" | sudo chpasswd
+usermod -aG $(groups $USER | cut -d ":" -f2 | sed -e 's/^[[:space:]]*//g' | tr ' ' ',') $XPRA_USER
+
+XPRA_USER_SEQ=${XPRA_USER: -1}
+XPRA_USER_PORT=1000$XPRA_USER_SEQ
+XPRA_USER_DISPLAY=10$XPRA_USER_SEQ
+XPRA_USER_SKT=100$XPRA_USER_SEQ
+
+mkdir /run/user/$XPRA_USER_SKT
+chown -R $XPRA_USER:$XPRA_USER /run/user/$XPRA_USER_SKT
+chmod -R 0700 /run/user/$XPRA_USER_SKT
+sudo -u $XPRA_USER export XDG_RUNTIME_DIR=/run/user/$XPRA_USER_SKT
+
 apt install -y lxterminal
-# XPRA_APP=lxterminal
-
-$XPRA_USER=user005
-sudo useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:123" | sudo chpasswd
-
-sudo -u $XPRA_USER mkdir /run/user/$XPRA_USER
-sudo -u $XPRA_USER chmod -R $XPRA_USER:$XPRA_USER /run/user/$XPRA_USER
-sudo -u $XPRA_USER chmod -R 0700 /run/user/$XPRA_USER
-sudo -u $XPRA_USER export XDG_RUNTIME_DIR=/run/user/$XPRA_USER
 sudo -u $XPRA_USER export XPRA_APP=lxterminal 
 
-sudo -u $XPRA_USER xpra start :100 \
- --bind-tcp=0.0.0.0:10000 \
+
+
+sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
+ --bind-tcp=0.0.0.0:$XPRA_USER_PORT \
  --start="$XPRA_APP" \
  --encodings=h264,vp9 \
  --quality=100 \
