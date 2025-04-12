@@ -35,7 +35,7 @@ XPRA_APP=lxterminal
 
 sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
  --bind-tcp=0.0.0.0:$XPRA_USER_PORT \
- --start="$XPRA_APP" \
+ --start=$XPRA_APP \
  --encodings=h264,vp9 \
  --quality=100 \
  --min-quality=80 \
