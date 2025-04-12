@@ -1,3 +1,5 @@
+cat << 'EOL' > /usr/local/bin/xpra_config.sh
+#!/bin/sh
 GROUP_METATRADER=metatrader
 XPRA_USERS=("user001" "user002" "user003") 
 
@@ -18,8 +20,6 @@ for i in "${!XPRA_USERS[@]}"; do
 done
 
 getent group $GROUP_METATRADER | cut -d: -f4 | tr ',' ' '
-
-newgrp $GROUP_METATRADER
 
 cat << 'EOF' > /usr/local/bin/start_xpra_user.sh
 #!/bin/bash
@@ -118,4 +118,9 @@ chmod +x /usr/local/bin/start_xpra_user.sh
 chmod +x /usr/local/bin/gerar_servicos_xpra.sh
 sudo ./gerar_servicos_xpra.sh
 
+newgrp $GROUP_METATRADER
+
 # usermod -aG $(groups $USER | cut -d ":" -f2 | sed -e 's/^[[:space:]]*//g' | tr ' ' ',') $XPRA_USER
+EOL
+chmod +x /usr/local/bin/xpra_config.sh
+sh /usr/local/bin/xpra_config.sh
