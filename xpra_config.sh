@@ -7,7 +7,7 @@ sudo useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:$XPRA_USER_PASSWORD"
 usermod -aG $(groups $USER | cut -d ":" -f2 | sed -e 's/^[[:space:]]*//g' | tr ' ' ',') $XPRA_USER
 
 XPRA_USER_UID=$(id -u $XPRA_USER)
-XPRA_USER_PORT=$(id -u $XPRA_USER)
+XPRA_USER_PORT=9$(id -u $XPRA_USER)
 XPRA_USER_DISPLAY=$(id -u $XPRA_USER)
 XPRA_USER_HOME=$(getent passwd $XPRA_USER | cut -d: -f6)
 
