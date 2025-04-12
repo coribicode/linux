@@ -11,9 +11,10 @@ apt install -y dbus-x11 ibus uglifyjs quilt xserver-xorg-dev xutils-dev xserver-
 apt install -y gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 apt install -y libpam-dev libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264-dev libvpx-dev libturbojpeg-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx7 libwebp7 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev
 apt install -y python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify
+apt install -y lxterminal
 
-
-XPRA_USER=user005
+XPRA_APP=lxterminal
+XPRA_USER=user001
 XPRA_USER_PASSWORD=123
 sudo useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:$XPRA_USER_PASSWORD" | sudo chpasswd
 usermod -aG $(groups $USER | cut -d ":" -f2 | sed -e 's/^[[:space:]]*//g' | tr ' ' ',') $XPRA_USER
@@ -30,10 +31,7 @@ chmod -R 0700 /run/user/$XPRA_USER_UID
 XDG_RUNTIME_DIR=/run/user/$XPRA_USER_UID
 echo "export XDG_RUNTIME_DIR=\"$XDG_RUNTIME_DIR\"" >> $XPRA_USER_HOME/.bashrc
 
-apt install -y lxterminal
-XPRA_APP=lxterminal 
-
-sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
+cd / && sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
  --bind-tcp=0.0.0.0:$XPRA_USER_PORT \
  --start=$XPRA_APP \
  --encodings=h264,vp9 \
