@@ -9,3 +9,5 @@ curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/debian_repos
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.sh | sh
 
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/xpra.sh | sh
+
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/wine-stable.sh | sh
