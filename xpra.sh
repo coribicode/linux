@@ -19,10 +19,9 @@ XPRA_USER_PASSWORD=123
 sudo useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:$XPRA_USER_PASSWORD" | sudo chpasswd
 usermod -aG $(groups $USER | cut -d ":" -f2 | sed -e 's/^[[:space:]]*//g' | tr ' ' ',') $XPRA_USER
 
-XPRA_USER_SEQ=${XPRA_USER: -1}
-XPRA_USER_PORT=1000$XPRA_USER_SEQ
-XPRA_USER_DISPLAY=10$XPRA_USER_SEQ
 XPRA_USER_UID=$(id -u $XPRA_USER)
+XPRA_USER_PORT=$(id -u $XPRA_USER)
+XPRA_USER_DISPLAY=$(id -u $XPRA_USER)
 XPRA_USER_HOME=$(getent passwd $XPRA_USER | cut -d: -f6)
 
 mkdir /run/user/$XPRA_USER_UID
