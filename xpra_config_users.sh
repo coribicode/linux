@@ -1,3 +1,4 @@
+cat << 'EOL' > config3.sh
 #!/bin/bash
 GROUP_METATRADER=metatrader
 XPRA_USERS=("user001" "user002" "user003")
@@ -118,3 +119,7 @@ EOF
 chmod +x /usr/local/bin/start_xpra_user.sh
 chmod +x /usr/local/bin/gerar_servicos_xpra.sh
 sudo ./gerar_servicos_xpra.sh
+EOL
+chmod +x config3.sh
+sudo ./config3.sh
+echo "FIM"
