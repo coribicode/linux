@@ -48,7 +48,7 @@ sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
  --no-mmap \
  --html=on \
  --env=XPRA_FORCE_COLOR_DEPTH=32 \
- --env=DISPLAY=:100 \
+ --env=DISPLAY=:$XPRA_USER_DISPLAY \
  --no-notifications \
  --socket-dir=$XDG_RUNTIME_DIR
   
