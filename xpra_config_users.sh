@@ -5,24 +5,6 @@ XPRA_USERS=("user001" "user002" "user003")
 
 sudo groupadd $GROUP_METATRADER
 
-for i in "${!XPRA_USERS[@]}"; do
-    XPRA_USER="${XPRA_USERS[$i]}"
-
-    # Verifica se o usuário existe
-    if ! id "$XPRA_USER" &>/dev/null; then
-        echo "⚠️  Usuário '$XPRA_USER' não existe. Cadastrando..."
-        XPRA_USER_PASSWORD=123
-        GROUP_METATRADER=metatrader
-        useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:$XPRA_USER_PASSWORD" | sudo chpasswd
-        usermod -aG $GROUP_METATRADER $XPRA_USER
-        continue
-    fi
-done
-
-getent group $GROUP_METATRADER | cut -d: -f4 | tr ',' ' '
-
-newgrp $GROUP_METATRADER
-
 cat << 'EOF' > /usr/local/bin/start_xpra_user.sh
 #!/bin/bash
 
@@ -118,7 +100,23 @@ EOF
 
 chmod +x /usr/local/bin/start_xpra_user.sh
 chmod +x /usr/local/bin/gerar_servicos_xpra.sh
-sudo ./gerar_servicos_xpra.sh
+
+for i in "${!XPRA_USERS[@]}"; do
+    XPRA_USER="${XPRA_USERS[$i]}"
+
+    # Verifica se o usuário existe
+    if ! id "$XPRA_USER" &>/dev/null; then
+        echo "⚠️  Usuário '$XPRA_USER' não existe. Cadastrando..."
+        XPRA_USER_PASSWORD=123
+        GROUP_METATRADER=metatrader
+        useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:$XPRA_USER_PASSWORD" | sudo chpasswd
+        usermod -aG $GROUP_METATRADER $XPRA_USER
+        getent group $GROUP_METATRADER | cut -d: -f4 | tr ',' ' '
+        newgrp $GROUP_METATRADER
+        continue
+    fi
+   sudo ./gerar_servicos_xpra.sh
+done
 EOL
 chmod +x config3.sh
 sudo ./config3.sh
