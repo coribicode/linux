@@ -21,17 +21,15 @@ usermod -aG $(groups $USER | cut -d ":" -f2 | sed -e 's/^[[:space:]]*//g' | tr '
 XPRA_USER_SEQ=${XPRA_USER: -1}
 XPRA_USER_PORT=1000$XPRA_USER_SEQ
 XPRA_USER_DISPLAY=10$XPRA_USER_SEQ
-XPRA_USER_SKT=100$XPRA_USER_SEQ
+XPRA_USER_UID=$(id -u $XPRA_USER)
 
-mkdir /run/user/$XPRA_USER_SKT
-chown -R $XPRA_USER:$XPRA_USER /run/user/$XPRA_USER_SKT
-chmod -R 0700 /run/user/$XPRA_USER_SKT
-XDG_RUNTIME_DIR=/run/user/$XPRA_USER_SKT
+mkdir /run/user/$XPRA_USER_UID
+chown -R $XPRA_USER:$XPRA_USER /run/user/$XPRA_USER_UID
+chmod -R 0700 /run/user/$XPRA_USER_UID
+XDG_RUNTIME_DIR=/run/user/$XPRA_USER_UID
 
 apt install -y lxterminal
 XPRA_APP=lxterminal 
-
-
 
 sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
  --bind-tcp=0.0.0.0:$XPRA_USER_PORT \
