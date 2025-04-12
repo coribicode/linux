@@ -29,7 +29,7 @@ chmod -R 0700 /run/user/$XPRA_USER_SKT
 XDG_RUNTIME_DIR=/run/user/$XPRA_USER_SKT
 
 apt install -y lxterminal
-sudo -u $XPRA_USER export XPRA_APP=lxterminal 
+XPRA_APP=lxterminal 
 
 
 
