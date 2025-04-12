@@ -13,8 +13,18 @@ apt install -y libpam-dev libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264
 apt install -y python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify
 
 apt install -y lxterminal
-XPRA_APP=lxterminal
-sudo -u $USER xpra start :100 \
+# XPRA_APP=lxterminal
+
+$XPRA_USER=user005
+sudo useradd -m -s /bin/bash $XPRA_USER && echo "$XPRA_USER:123" | sudo chpasswd
+
+sudo -u $XPRA_USER mkdir /run/user/$XPRA_USER
+sudo -u $XPRA_USER chmod -R $XPRA_USER:$XPRA_USER /run/user/$XPRA_USER
+sudo -u $XPRA_USER chmod -R 0700 /run/user/$XPRA_USER
+sudo -u $XPRA_USER export XDG_RUNTIME_DIR=/run/user/$XPRA_USER
+sudo -u $XPRA_USER export XPRA_APP=lxterminal 
+
+sudo -u $XPRA_USER xpra start :100 \
  --bind-tcp=0.0.0.0:10000 \
  --start="$XPRA_APP" \
  --encodings=h264,vp9 \
@@ -30,7 +40,8 @@ sudo -u $USER xpra start :100 \
  --html=on \
  --env=XPRA_FORCE_COLOR_DEPTH=32 \
  --env=DISPLAY=:100 \
- --no-notifications
+ --no-notifications \
+ --socket-dir=$XDG_RUNTIME_DIR
   
 sudo -u $USER xpra list
 
