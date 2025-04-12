@@ -50,7 +50,7 @@ sudo -u $XPRA_USER xpra start :$XPRA_USER_DISPLAY \
  --no-notifications \
  --socket-dir=$XDG_RUNTIME_DIR
   
-sudo -u $USER xpra list
+sudo -u $XPRA_USER xpra list
 
 # sudo -u $USER xpra stop :100
 # xpra start :100 --start-child=xclock --bind-tcp=0.0.0.0:10000 --html=on --start=xterm
