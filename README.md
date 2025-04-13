@@ -10,4 +10,6 @@ curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/essentials.s
 
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/xpra.sh | sh
 
+curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/xpra_start.sh | sh
+
 curl -fsSL https://raw.githubusercontent.com/davigalucio/linux/main/wine-stable.sh | sh
