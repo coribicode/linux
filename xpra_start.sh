@@ -75,14 +75,8 @@ EOF
 
 sudo -u $USER pip3 install --user --break-system-packages PyOpenGL_accelerate
 
-pip3 install --user --break-system-packages PyOpenGL_accelerate
-
 ibus-daemon -drx
 ibus engine xkb:us::eng
-
-export GTK_IM_MODULE=ibus
-export QT_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
 
 sudo systemctl daemon-reload
 sudo systemctl enable xpra-$XPRA_USER.service
