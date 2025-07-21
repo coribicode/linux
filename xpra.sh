@@ -11,7 +11,7 @@ apt install -y dbus-x11 ibus uglifyjs quilt xserver-xorg-dev xutils-dev xserver-
 apt install -y gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 apt install -y libpam-dev libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264-dev libvpx-dev libturbojpeg-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx7 libwebp7 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev
 apt install -y python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify
-
 apt install -y vainfo libva-drm2 libva-x11-2 i965-va-driver x264 va-driver-all vdpau-driver-all libva-drm2 libva-x11-2 intel-media-va-driver-non-free ibus-gtk3 ibus-pinyin
+pip3 install --user --break-system-packages PyOpenGL_accelerate
 
 xpra --version
