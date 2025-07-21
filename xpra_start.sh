@@ -34,8 +34,27 @@ export DISPLAY=":$DISPLAY_NUM"
 # Inicia o xpra como o usuário especificado
 sudo -u "$USER" \
     XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-    xpra start ":$DISPLAY_NUM" --bind-tcp=0.0.0.0:$PORT --start-child=lxterminal --html=on \
-    --daemon=no --systemd-run=no
+    xpra start ":$DISPLAY_NUM" \
+    --env=GTK_IM_MODULE=ibus \
+    --env=QT_IM_MODULE=ibus \
+    --env=XMODIFIERS=@im=ibus \
+    --bind-tcp=0.0.0.0:$PORT \
+    --opengl=yes \
+    --tcp-auth=none \
+    --compression=0 \    
+    --start-child=lxterminal \
+    --html=on \
+    --daemon=no \
+    --encoding=video \
+    --min-quality=50 \
+    --min-speed=50 \
+    --speed=100 \
+    --quality=100 \
+    --dpi=96 \
+    --webcam=no \
+    --systemd-run=no \
+    --no-mdns \    
+    --systemd-run=no
 EOF
 
 chmod +x /usr/local/bin/start_xpra_user.sh
