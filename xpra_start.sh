@@ -39,6 +39,7 @@ sudo -u "$USER" \
     --env=QT_IM_MODULE=ibus \
     --env=XMODIFIERS=@im=ibus \
     --bind-tcp=0.0.0.0:$PORT \
+    --video-encoders="x264" \
     --opengl=yes \
     --tcp-auth=none \
     --compression=0 \    
