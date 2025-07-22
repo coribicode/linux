@@ -40,7 +40,7 @@ PACKAGES_DEPENDECES="gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plug
 INSTALLING
 
 NAME_PACKAGE="XPRA LIBS"
-PACKAGES_DEPENDECES="libva-drm2 libva-x11-2 libva-drm2 libva-x11-2 libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264-dev libvpx-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx7 libwebp7 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev libpam-dev libturbojpeg-dev"
+PACKAGES_DEPENDECES="libva-drm2 libva-x11-2 libva-drm2 libva-x11-2 libjs-jquery libjs-jquery-ui libnvidia-encode1 libx264-dev libvpx-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx7 libwebp7 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev libpam0g-dev libturbojpeg0-dev"
 INSTALLING
 
 FILE_GPG=/etc/apt/trusted.gpg.d/xpra.gpg
