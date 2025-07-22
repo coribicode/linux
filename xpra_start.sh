@@ -1,6 +1,8 @@
 #!/bin/bash
 apt install lxterminal -y
 
+sudo modprobe v4l2loopback
+
 XPRA_USER=$USER
 XPRA_USER_DISPLAY=100
 XPRA_USER_PORT=10000
