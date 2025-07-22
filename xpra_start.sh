@@ -29,12 +29,12 @@ chmod 700 "$RUNTIME_DIR"
 
 # Exporta variáveis
 export XDG_RUNTIME_DIR="$RUNTIME_DIR"
-export DISPLAY=":$DISPLAY_NUM"
+export DISPLAY=:"$DISPLAY_NUM"
 
 # Inicia o xpra como o usuário especificado
 sudo -u "$USER" \
     XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-    xpra start ":$DISPLAY_NUM" \
+    xpra start :"$DISPLAY_NUM" \
     --env=GTK_IM_MODULE=ibus \
     --env=QT_IM_MODULE=ibus \
     --env=XMODIFIERS=@im=ibus \
@@ -42,7 +42,7 @@ sudo -u "$USER" \
     --env=XPRA_FORCE_COLOR_DEPTH=32 \
     --bind-tcp=0.0.0.0:$PORT
     --video-scaling=off \
-    --socket-dir=$XDG_RUNTIME_DIR \
+    --socket-dir="$XDG_RUNTIME_DIR" \
     --video-encoders=nvenc_h264,x264,vaapi_h264,ffmpeg_h264,vpx \
     --encoding=h264,vp8,vp9,jpeg,png,rgb,webp \
     --opengl=yes \
