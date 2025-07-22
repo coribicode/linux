@@ -1,4 +1,4 @@
-PACKAGES_DEPENDECES="alsa-utils pulseaudio pulseaudio-module-zeroconf firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate libx11-freedesktop-desktopentry-perl librust-x11-dev librust-x11rb+xinput-dev libx11-6 libx11-dev clang"
+PACKAGES_DEPENDECES="alsa-utils pulseaudio pulseaudio-module-zeroconf firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate libx11-freedesktop-desktopentry-perl librust-x11-dev librust-x11rb-dev libx11-6 libx11-dev clang"
 
 apt install -y curl 2>/dev/null | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
