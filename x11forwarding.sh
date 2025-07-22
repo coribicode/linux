@@ -15,6 +15,7 @@ if grep PACKAGE_NAME $INSTALLER > /dev/null
     sh $INSTALLER
 fi
 echo "[ Instalação de Pacotes ]: OK!"
+echo
 sleep 2
 
 sudo -u $USER pulseaudio --start
