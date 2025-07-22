@@ -53,7 +53,6 @@ sudo -u "$USER" \
     --quality=100 \
     --dpi=96 \
     --webcam=no \
-    --systemd-run=no \
     --no-mdns \    
     --systemd-run=no
 EOF
