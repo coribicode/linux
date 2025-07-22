@@ -23,8 +23,8 @@ DISPLAY_NUM=$2
 PORT=$3
 
 # Pega UID
-UID=$(id -u "$USER")
-RUNTIME_DIR="/run/user/$UID"
+UID_USER_XPRA=$(id -u "$USER")
+RUNTIME_DIR="/run/user/$UID_USER_XPRA"
 
 # Garante que o diretório exista
 mkdir -p "$RUNTIME_DIR"
