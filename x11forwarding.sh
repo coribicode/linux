@@ -118,9 +118,7 @@ else
 echo "[ $FILE_VAR ]: Não encontrado!"
 fi
 
-source /etc/environment
+export $(grep -v '^#' /etc/environment | xargs)
 
 systemctl restart sshd
 systemctl daemon-reload
-
-" ---------------------------------------------------------------------------------------------
