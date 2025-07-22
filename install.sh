@@ -12,7 +12,7 @@ for package in $package_list
     echo "Pacote [ $package ]: OK!"
     echo "--------------------------------------------------------------------"
     else
-    check_repo=$(apt-cache search $package| grep ^"$package ")
+    check_repo=$(aptitude search ^$package$)
     if [ ! -n "$check_repo" ]
       then
       echo "Pacote [ $package ]: ERROR - Não foi possível instalar porque não foi encontrado nos repositórios"
