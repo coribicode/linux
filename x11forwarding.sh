@@ -7,11 +7,16 @@ sed -i 's|#load-module module-native-protocol-tcp|load-module module-native-prot
 sed -i 's|#load-module module-zeroconf-publish|load-module module-zeroconf-publish|g' /etc/pulse/default.pa
 sudo usermod -aG audio $USER
 
-cat << EOF >> /etc/pulse/daemon.conf
-realtime-scheduling = yes
-default-fragments = 4
-default-fragment-size-msec = 25
-EOF
+PATH_SOURCE=/etc/pulse/daemon.conf
+if [ -e $PATH_SOURCE ]
+then
+ADD_CONFIG="realtime-scheduling = yes"
+echo $ADD_CONFIG >> $PATH_SOURCE
+ADD_CONFIG="default-fragments = 4"
+echo $ADD_CONFIG >> $PATH_SOURCE
+ADD_CONFIG="default-fragment-size-msec = 25"
+echo $ADD_CONFIG >> $PATH_SOURCE
+fi
 
 sudo -u $USER pulseaudio -k
 sudo -u $USER pulseaudio --start
