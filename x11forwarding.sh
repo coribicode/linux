@@ -1,7 +1,22 @@
-# -- Configurações para passagem de som via X11 Forwarding ------------------------------------
+PACKAGES_DEPENDECES="alsa-utils pulseaudio pulseaudio-module-zeroconf firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate libx11-freedesktop-desktopentry-perl librust-x11-dev librust-x11rb+xinput-dev libx11-6 libx11-dev clang"
 
-apt install -y alsa-utils pulseaudio pulseaudio-module-zeroconf firmware-linux dbus-x11 x11-apps x11-xfs-utils s3dx11gate
-apt install -y libx11-freedesktop-desktopentry-perl librust-x11+xinput-dev  librust-x11rb+xinput-dev libx11-6 libx11-dev clang
+apt install -y curl 2>/dev/null | grep "E:"
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
+INSTALLER="install.sh"
+
+package_list="$PACKAGES_DEPENDECES"
+echo
+echo "[ Instalação de Pacotes ]"
+if grep PACKAGE_NAME $INSTALLER > /dev/null
+  then
+    sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
+    sh $INSTALLER
+  else
+    sh $INSTALLER
+fi
+echo "[ Instalação de Pacotes ]: OK!"
+sleep 2
+
 sudo -u $USER pulseaudio --start
 sudo usermod -aG audio $USER
 
