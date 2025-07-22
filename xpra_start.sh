@@ -47,15 +47,15 @@ sudo -u "$USER" \
     --encoding=h264,vp8,vp9,jpeg,png,rgb,webp \
     --opengl=yes \
     --tcp-auth=none \
-    --compression=0 \
+    --compression=lz4 \
     --start-child=lxterminal \
     --html=on \
     --daemon=no \
-    --min-quality=50 \
-    --min-speed=50 \
+    --min-quality=80 \
+    --min-speed=80 \
     --speed=100 \
     --quality=100 \
-    --dpi=96 \
+    --dpi=144 \
     --webcam=no \
     --no-mdns \
     --no-pulseaudio \
