@@ -18,8 +18,21 @@ sed -i 's|#AllowTcpForwarding yes|AllowTcpForwarding yes|g' /etc/ssh/sshd_config
 sed -i 's|#X11Forwarding yes|X11Forwarding yes|g' /etc/ssh/sshd_config
 sed -i 's|#X11UseLocalhost yes|X11UseLocalhost yes|g' /etc/ssh/sshd_config
 
-export LIBGL_ALWAYS_SOFTWARE=1
-export MOZ_WEBGL_DISABLE_UNSAFE=1
+ADD_VAR="LIBGL_ALWAYS_SOFTWARE=1"
+if grep $ADD_VAR /etc/environment > /dev/null
+then
+echo "VAR LIBGL_ALWAYS_SOFTWARE: Variavel já cadastrado!"
+else
+echo "LIBGL_ALWAYS_SOFTWARE=1" >> /etc/environment 
+fi
+
+ADD_VAR="MOZ_WEBGL_DISABLE_UNSAFE=1"
+if grep "$ADD_VAR" /etc/environment > /dev/null
+then
+echo "VAR LIBGL_ALWAYS_SOFTWARE: Variavel já cadastrado!"
+else
+echo "MOZ_WEBGL_DISABLE_UNSAFE=1" >> /etc/environment 
+fi
 
 sudo -u $USER pulseaudio -k
 sudo -u $USER pulseaudio --start
