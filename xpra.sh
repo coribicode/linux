@@ -48,11 +48,12 @@ if [ -e $FILE_GPG ]
 then
 echo "[ $FILE_GPG ]: Arquivo já existe!"
 else
-curl https://xpra.org/gpg.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/xpra.gpg > /dev/null
-git clone https://github.com/Xpra-org/xpra > /dev/null
-cd xpra
-./setup.py install-repo
-apt update
+curl https://xpra.org/gpg.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/xpra.gpg > /dev/null | grep "E:"
+git clone https://github.com/Xpra-org/xpra > /dev/null | grep "E:"
+cd xpra 
+./setup.py install-repo > /dev/null | grep "E:"
+apt-get update > /dev/null
+apt-get upgrade -y > /dev/null
 fi
 
 NAME_PACKAGE="XPRA"
