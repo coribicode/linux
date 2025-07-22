@@ -16,6 +16,8 @@ ADD_CONFIG="default-fragments = 4"
 echo $ADD_CONFIG >> $PATH_SOURCE
 ADD_CONFIG="default-fragment-size-msec = 25"
 echo $ADD_CONFIG >> $PATH_SOURCE
+else
+echo "[ $PATH_SOURCE ]: Não encontrado!"
 fi
 
 sudo -u $USER pulseaudio -k
@@ -26,20 +28,22 @@ sed -i 's|#AllowTcpForwarding yes|AllowTcpForwarding yes|g' /etc/ssh/sshd_config
 sed -i 's|#X11Forwarding yes|X11Forwarding yes|g' /etc/ssh/sshd_config
 sed -i 's|#X11UseLocalhost yes|X11UseLocalhost yes|g' /etc/ssh/sshd_config
 
+PATH_VAR="/etc/environment"
+
 ADD_VAR="LIBGL_ALWAYS_SOFTWARE=1"
-if grep $ADD_VAR /etc/environment > /dev/null
+if grep "$ADD_VAR" $PATH_VAR  > /dev/null
 then
-echo "VAR LIBGL_ALWAYS_SOFTWARE: Variavel já cadastrado!"
+echo "VAR $ADD_VAR: Variavel já cadastrado!"
 else
-echo "LIBGL_ALWAYS_SOFTWARE=1" >> /etc/environment 
+echo "$ADD_VAR" >> $PATH_VAR 
 fi
 
 ADD_VAR="MOZ_WEBGL_DISABLE_UNSAFE=1"
-if grep "$ADD_VAR" /etc/environment > /dev/null
+if grep "$ADD_VAR" $PATH_VAR > /dev/null
 then
-echo "VAR LIBGL_ALWAYS_SOFTWARE: Variavel já cadastrado!"
+echo "VAR $ADD_VAR: Variavel já cadastrado!"
 else
-echo "MOZ_WEBGL_DISABLE_UNSAFE=1" >> /etc/environment 
+echo "$ADD_VAR" >> $PATH_VAR 
 fi
 
 source /etc/environment
