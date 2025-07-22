@@ -38,22 +38,28 @@ sudo -u "$USER" \
     --env=GTK_IM_MODULE=ibus \
     --env=QT_IM_MODULE=ibus \
     --env=XMODIFIERS=@im=ibus \
-    --bind-tcp=0.0.0.0:$PORT \
-    --video-encoders="x264" \
+    --env=XPRA_ALLOW_ROOT=1 \
+    --env=XPRA_FORCE_COLOR_DEPTH=32 \
+    --bind-tcp=0.0.0.0:$PORT
+    --video-scaling=off \
+    --socket-dir=$XDG_RUNTIME_DIR \
+    --video-encoders=nvenc_h264,x264,vaapi_h264,ffmpeg_h264,vpx \
+    --encoding=h264,vp8,vp9,jpeg,png,rgb,webp \
     --opengl=yes \
     --tcp-auth=none \
-    --compression=0 \    
+    --compression=0 \
     --start-child=lxterminal \
     --html=on \
     --daemon=no \
-    --encoding=video \
     --min-quality=50 \
     --min-speed=50 \
     --speed=100 \
     --quality=100 \
     --dpi=96 \
     --webcam=no \
-    --no-mdns \    
+    --no-mdns \
+    --no-pulseaudio \
+    --no-notifications \
     --systemd-run=no
 EOF
 
