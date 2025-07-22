@@ -1,4 +1,4 @@
-apt update && apt upgrade -y
+apt update && apt upgrade -y > /dev/null
 
 apt install -y curl 2>/dev/null | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
