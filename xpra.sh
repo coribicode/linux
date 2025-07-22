@@ -36,12 +36,6 @@ sleep 2
 
 sudo -u $USER pip3 install --user --break-system-packages PyOpenGL_accelerate
 
-curl https://xpra.org/gpg.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/xpra.gpg
-git clone https://github.com/Xpra-org/xpra
-cd xpra
-./setup.py install-repo
-apt update
-
 PACKAGES_DEPENDECES="gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly vainfo dbus-x11 ibus ibus-gtk3 ibus-pinyin uglifyjs quilt xserver-xorg-dev xutils-dev xserver-xorg-video-dummy xvfb keyboard-configuration brotli gir1.2-rsvg-2.0 yasm cython3 devscripts build-essential lintian debhelper pandoc gnome-backgrounds openssh-client sshpass"
 package_list="$PACKAGES_DEPENDECES"
 echo
@@ -86,6 +80,18 @@ fi
 echo "[ XPRA DRIVERS ]: OK!"
 echo
 sleep 2
+
+FILE_GPG=/etc/apt/trusted.gpg.d/xpra.gpg
+if [ -e $FILE_GPG ]
+then
+echo "[ $FILE_GPG ]: Arquivo já existe!"
+else
+curl https://xpra.org/gpg.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/xpra.gpg > /dev/null
+git clone https://github.com/Xpra-org/xpra > /dev/null
+cd xpra
+./setup.py install-repo
+apt update
+fi
 
 PACKAGES_DEPENDECES="xpra xpra-client-gtk3 xpra-codecs-extras xpra-codecs xpra-common xpra-client xpra-audio xpra-codecs-extras xpra-x11 xpra-html5 xpra-server xpra-codecs-nvidia"
 package_list="$PACKAGES_DEPENDECES"
