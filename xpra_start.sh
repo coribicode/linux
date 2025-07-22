@@ -61,7 +61,7 @@ chmod +x /usr/local/bin/start_xpra_user.sh
 
 cat <<EOF>> /etc/systemd/system/xpra-$XPRA_USER.service
 [Unit]
-Description=XPRA para user001
+Description=XPRA
 After=network.target
 
 [Service]
@@ -72,8 +72,6 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-
-sudo -u $USER pip3 install --user --break-system-packages PyOpenGL_accelerate
 
 ibus-daemon -drx
 ibus engine xkb:us::eng
