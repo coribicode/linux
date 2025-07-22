@@ -13,6 +13,10 @@ XDG_RUNTIME_DIR="$XPRA_USER_RUNTIME_DIR"
 
 cat <<'EOF'>> /usr/local/bin/start_xpra_user.sh
 #!/bin/bash
+
+ibus-daemon -drx
+ibus engine xkb:us::eng
+
 # Recebe parâmetros: usuário, display, porta
 USER=$1
 DISPLAY_NUM=$2
@@ -78,9 +82,6 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-
-ibus-daemon -drx
-ibus engine xkb:us::eng
 
 sudo systemctl daemon-reload
 sudo systemctl enable xpra-$XPRA_USER.service
