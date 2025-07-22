@@ -13,6 +13,9 @@ default-fragments = 4
 default-fragment-size-msec = 25
 EOF
 
+sudo -u $USER pulseaudio -k
+sudo -u $USER pulseaudio --start
+
 sed -i 's|#AllowAgentForwarding yes|AllowAgentForwarding yes|g' /etc/ssh/sshd_config
 sed -i 's|#AllowTcpForwarding yes|AllowTcpForwarding yes|g' /etc/ssh/sshd_config
 sed -i 's|#X11Forwarding yes|X11Forwarding yes|g' /etc/ssh/sshd_config
@@ -34,8 +37,7 @@ else
 echo "MOZ_WEBGL_DISABLE_UNSAFE=1" >> /etc/environment 
 fi
 
-sudo -u $USER pulseaudio -k
-sudo -u $USER pulseaudio --start
+source /etc/environment
 
 systemctl restart sshd
 systemctl daemon-reload
