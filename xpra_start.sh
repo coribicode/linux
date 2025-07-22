@@ -13,18 +13,14 @@ XDG_RUNTIME_DIR="$XPRA_USER_RUNTIME_DIR"
 
 cat <<'EOF'>> /usr/local/bin/start_xpra_user.sh
 #!/bin/bash
-
-ibus-daemon -drx
-ibus engine xkb:us::eng
-
 # Recebe parâmetros: usuário, display, porta
 USER=$1
 DISPLAY_NUM=$2
 PORT=$3
 
 # Pega UID
-UID_USER_XPRA=$(id -u "$USER")
-RUNTIME_DIR="/run/user/$UID_USER_XPRA"
+UID=$(id -u "$USER")
+RUNTIME_DIR="/run/user/$UID"
 
 # Garante que o diretório exista
 mkdir -p "$RUNTIME_DIR"
@@ -33,45 +29,20 @@ chmod 700 "$RUNTIME_DIR"
 
 # Exporta variáveis
 export XDG_RUNTIME_DIR="$RUNTIME_DIR"
-export DISPLAY=:"$DISPLAY_NUM"
+export DISPLAY=":$DISPLAY_NUM"
 
 # Inicia o xpra como o usuário especificado
 sudo -u "$USER" \
     XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-    xpra start :"$DISPLAY_NUM" \
-    --env=GTK_IM_MODULE=ibus \
-    --env=QT_IM_MODULE=ibus \
-    --env=XMODIFIERS=@im=ibus \
-    --env=XPRA_ALLOW_ROOT=1 \
-    --env=XPRA_FORCE_COLOR_DEPTH=32 \
-    --bind-tcp=0.0.0.0:$PORT \
-    --video-scaling=off \
-    --socket-dir="$XDG_RUNTIME_DIR" \
-    --video-encoders=nvenc_h264,x264,vaapi_h264,ffmpeg_h264,vpx \
-    --encoding=h264,vp8,vp9,jpeg,png,rgb,webp \
-    --opengl=yes \
-    --tcp-auth=none \
-    --compression=lz4 \
-    --start-child=lxterminal \
-    --html=on \
-    --daemon=no \
-    --min-quality=80 \
-    --min-speed=80 \
-    --speed=100 \
-    --quality=100 \
-    --dpi=144 \
-    --webcam=no \
-    --no-mdns \
-    --no-pulseaudio \
-    --no-notifications \
-    --systemd-run=no
+    xpra start ":$DISPLAY_NUM" --bind-tcp=0.0.0.0:$PORT --start-child=lxterminal --html=on \
+    --daemon=no --systemd-run=no
 EOF
 
 chmod +x /usr/local/bin/start_xpra_user.sh
 
 cat <<EOF>> /etc/systemd/system/xpra-$XPRA_USER.service
 [Unit]
-Description=XPRA
+Description=XPRA para user001
 After=network.target
 
 [Service]
