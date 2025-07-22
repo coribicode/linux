@@ -44,7 +44,7 @@ sudo -u "$USER" \
     --env=XMODIFIERS=@im=ibus \
     --env=XPRA_ALLOW_ROOT=1 \
     --env=XPRA_FORCE_COLOR_DEPTH=32 \
-    --bind-tcp=0.0.0.0:$PORT
+    --bind-tcp=0.0.0.0:$PORT \
     --video-scaling=off \
     --socket-dir="$XDG_RUNTIME_DIR" \
     --video-encoders=nvenc_h264,x264,vaapi_h264,ffmpeg_h264,vpx \
