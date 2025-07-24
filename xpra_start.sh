@@ -1,7 +1,7 @@
 #!/bin/bash
-apt install lxterminal -y > /dev/null | grep "E:"
+apt-get install lxterminal -y > /dev/null | grep "E:"
 
-apt install -y libdrm-intel1 libdrm-dev mesa-drm-shim drm-info > /dev/null | grep "E:"
+apt-get install -y libdrm-intel1 libdrm-dev mesa-drm-shim drm-info > /dev/null | grep "E:"
 MODULES=hyperv_drm
 if grep '^$MODULES$' /etc/modules > /dev/null
 then
@@ -11,7 +11,7 @@ echo $MODULES | sudo tee -a /etc/modules
 modprobe $MODULES
 fi
 
-apt install -y v4l2loopback-dkms v4l2loopback-utils > /dev/null | grep "E:"
+apt-get install -y v4l2loopback-dkms v4l2loopback-utils > /dev/null | grep "E:"
 MODULES=v4l2loopback
 if grep '^$MODULES$' /etc/modules > /dev/null
 then
