@@ -1,7 +1,24 @@
 #!/bin/bash
 apt install lxterminal -y
 
-sudo modprobe v4l2loopback
+MODULES=hyperv_drm
+if grep '^$MODULES$' /etc/modules > /dev/null
+then
+echo "[ $MODULES ]: Já configurado!"
+else
+echo $MODULES | sudo tee -a /etc/modules
+modprobe $MODULES
+fi
+
+MODULES=v4l2loopback
+if grep '^$MODULES$' /etc/modules > /dev/null
+then
+echo "[ $MODULES ]: Já configurado!"
+else
+echo $MODULES | sudo tee -a /etc/modules
+modprobe $MODULES
+fi
+
 
 XPRA_USER=$USER
 XPRA_USER_DISPLAY=100
