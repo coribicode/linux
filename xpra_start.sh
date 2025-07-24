@@ -19,6 +19,9 @@ echo $MODULES | sudo tee -a /etc/modules
 modprobe $MODULES
 fi
 
+systemctl stop systemd-modules-load.service
+systemctl start systemd-modules-load.service
+systemctl status systemd-modules-load.service
 
 XPRA_USER=$USER
 XPRA_USER_DISPLAY=100
