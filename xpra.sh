@@ -36,7 +36,7 @@ PACKAGES_DEPENDECES="i965-va-driver x264 va-driver-all vdpau-driver-all intel-me
 INSTALLING
 
 NAME_PACKAGE="OTHERS PACKAGES"
-PACKAGES_DEPENDECES="gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly vainfo v4l2loopback-dkms v4l2loopback-utils menu-xdg dbus-x11 ibus ibus-gtk3 ibus-pinyin uglifyjs quilt xserver-xorg-dev xutils-dev xserver-xorg-video-dummy xvfb keyboard-configuration brotli gir1.2-rsvg-2.0 yasm cython3 devscripts build-essential lintian debhelper pandoc gnome-backgrounds openssh-client sshpass"
+PACKAGES_DEPENDECES="gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly vainfo menu-xdg dbus-x11 ibus ibus-gtk3 ibus-pinyin uglifyjs quilt xserver-xorg-dev xutils-dev xserver-xorg-video-dummy xvfb keyboard-configuration brotli gir1.2-rsvg-2.0 yasm cython3 devscripts build-essential lintian debhelper pandoc gnome-backgrounds openssh-client sshpass"
 INSTALLING
 
 NAME_PACKAGE="XPRA LIBS"
