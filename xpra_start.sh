@@ -1,6 +1,7 @@
 #!/bin/bash
-apt install lxterminal -y
+apt install lxterminal -y > /dev/null | grep "E:"
 
+apt install -y libdrm-intel1 libdrm-dev mesa-drm-shim drm-info > /dev/null | grep "E:"
 MODULES=hyperv_drm
 if grep '^$MODULES$' /etc/modules > /dev/null
 then
