@@ -10,6 +10,7 @@ echo $MODULES | sudo tee -a /etc/modules
 modprobe $MODULES
 fi
 
+apt install -y v4l2loopback-dkms v4l2loopback-utils > /dev/null | grep "E:"
 MODULES=v4l2loopback
 if grep '^$MODULES$' /etc/modules > /dev/null
 then
