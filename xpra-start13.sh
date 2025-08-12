@@ -79,7 +79,7 @@ EOF
 
 # 4️⃣ Criar usuários conforme config
 echo "Criando usuários..."
-while read -r user_xpra;
+while read -r user_xpra display port;
 do
     if id "$user_xpra"; then
         echo "Usuário $user_xpra já existe"
