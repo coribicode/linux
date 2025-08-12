@@ -21,7 +21,7 @@ fi
 # ------- REPOSITORIO WINEHQ ------- FIM
 
 # ------- INSTALAÇÃO WINEHQ ------- INICIO
-PACKAGES="wine winetricks mono-complete fonts-wine wine-binfmt winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools python3 libwine libwine-dev libkwin6 libvulkan1 libvkd3d1 libvulkan-dev libasound2-dev libinput-dev libssl-dev libxcomposite-dev libx11-dev libxrandr-dev libpng-dev libgtk-3-dev libsqlite3-dev libz-mingw-w64 libc6-i386 zlib1g libxft2 libcairo2 libpcl-dev libmpg123-dev libeio1 libeinfo1 libxext-dev libfreetype6-dev libxfixes-dev libpcap-dev libdbus-1-dev libopenal-dev libgl1-mesa-dev libv4l-dev libsdl2-dev libgphoto2-dev libodbc1 libgnutls28-dev zlib1g-dev libglm-dev libdrm-dev mesa-utils"
+PACKAGES="wine winetricks mono-complete fonts-wine wine-binfmt winbind ttf-mscorefonts-installer binfmt-support xorg xvfb gtk2-engines-pixbuf imagemagick xauth vulkan-tools python3 libwine libwine-dev libkwin6 libvulkan1 libvkd3d1 libvulkan-dev libasound2-dev libinput-dev libssl-dev libxcomposite-dev libx11-dev libxrandr-dev libpng-dev libgtk-3-dev libsqlite3-dev libz-mingw-w64 libc6-i386 zlib1g libxft2 libcairo2 libpcl-dev libmpg123-dev libeio1 libeinfo1 libxext-dev libfreetype-dev libxfixes-dev libpcap-dev libdbus-1-dev libopenal-dev libgl1-mesa-dev libv4l-dev libsdl2-dev libgphoto2-dev libodbc1 libgnutls28-dev zlib1g-dev libglm-dev libdrm-dev mesa-utils"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh > /dev/null 2>&1
 INSTALLER="install.sh"
 echo "[ INSTALAÇÃO WINEHQ  ]: Inicio"
