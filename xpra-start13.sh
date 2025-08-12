@@ -81,7 +81,6 @@ EOF
 # 4️⃣ Criar usuários conforme config
 echo "Criando usuários..."
 while read -r user display port; do
-    [[ "$user" =~ ^# ]] && continue
     if id "$user" &>/dev/null; then
         echo "Usuário $user já existe"
     else
