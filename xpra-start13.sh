@@ -79,17 +79,15 @@ EOF
 
 # 4️⃣ Criar usuários conforme config
 echo "Criando usuários..."
-while read -r user_xpra display port;
-do
-    if id "$user_xpra"; then
-        echo "Usuário $user_xpra já existe"
+while read -r user display port; do
+    if id "$user"; then
+        echo "Usuário $user já existe"
     else
-        sudo useradd -r -s /bin/bash -m "$user_xpra"
-	sudo mkdir /run/user/$(id -u $user_xpra)
-        sudo chown $user_xpra /run/user/$(id -u $user_xpra)
-	sudo chmod 2700 /run/user/$(id -u $user_xpra)
-        echo "Usuário $user_xpra criado | $(ls -llah /run/user/)"
-	sleep 3
+        sudo useradd -r -s /bin/bash -m "$user"
+	    sudo mkdir /run/user/$(id -u $user)
+        sudo chown $user /run/user/$(id -u $user)
+	    sudo chmod 2700 /run/user/$(id -u $user)
+        echo "Usuário $user criado | $(ls -llah /run/user/)"
     fi
 done < "$CONFIG_FILE"
 
