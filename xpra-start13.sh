@@ -49,6 +49,7 @@ exec xpra start "$DISPLAY_NUM" \
     --pulseaudio=yes \
     --min-quality=100 \
     --speed=1000 \
+	--dpi=96
 EOF
 sudo chmod +x "$SCRIPT_FILE"
 
