@@ -44,7 +44,7 @@ exec xpra start "$DISPLAY_NUM" \
     --bind-tcp=0.0.0.0:$PORT \
     --html=on \
     --daemon=no \
-    --input-method=none \
+    --input-method=IBus \
     --opengl=no \
     --pulseaudio=yes \
     --min-quality=100 \
