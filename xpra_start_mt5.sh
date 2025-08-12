@@ -11,8 +11,8 @@ mkdir $HOME/.cache
 mkdir $HOME/.cache/wine
 cp /opt/*.msi $HOME/.cache/wine
 
-WINEPREFIX="$winedir/" wine msiexec -i /opt/wine-mono-9.4.0-x86.msi
-WINEPREFIX="$winedir/" wine msiexec -i /opt/wine-gecko-2.47.4-x86_64.msi
+sudo -u $USER wine msiexec -i /opt/wine-mono-9.4.0-x86.msi
+sudo -u $USER wine msiexec -i /opt/wine-gecko-2.47.4-x86_64.msi
 WINEPREFIX="$winedir/" wine /opt/mt5setup.exe /auto
 
 cat <<'EOF'>> /opt/mt5/MetaTrader5
