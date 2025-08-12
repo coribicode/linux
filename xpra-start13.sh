@@ -11,7 +11,6 @@ echo "=== Instalação do Xpra Multiusuário ==="
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Criando arquivo de configuração padrão em $CONFIG_FILE"
     sudo tee "$CONFIG_FILE" > /dev/null << 'EOF'
-# Formato: usuario display porta
 xpra1 :101 10101
 xpra2 :102 10102
 xpra3 :103 10103
