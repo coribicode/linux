@@ -2,18 +2,23 @@
 mkdir /opt/mt5
 winedir=/opt/mt5
 
+wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
+WINEPREFIX="$winedir/" wine /opt/mt5setup.exe /auto
+
 wget -P /opt/ https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
 wget -P /opt/ https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
-wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 
 HOME=$(eval echo "~$USER")
 mkdir $HOME/.cache
 mkdir $HOME/.cache/wine
 cp /opt/*.msi $HOME/.cache/wine
 
-sudo -u $USER wine msiexec -i /opt/wine-mono-9.4.0-x86.msi
-sudo -u $USER wine msiexec -i /opt/wine-gecko-2.47.4-x86_64.msi
-WINEPREFIX="$winedir/" wine /opt/mt5setup.exe /auto
+sudo -u $USER WINEARCH=win64 wine wineboot -u -f -r
+sudo -u $USER wineserver -k
+sudo -u $USER wine msiexec /i $HOME/.cache/wine/wine-gecko-2.47.4-x86_64.msi
+sudo -u $USER wine msiexec /i $HOME/.cache/wine/wine-mono-9.4.0-x86.msi
+sudo -u $USER wine winecfg -v win10
+
 
 cat <<'EOF'>> /opt/mt5/MetaTrader5
 wine /opt/mt5/drive_c/Program\ Files/MetaTrader\ 5/terminal64.exe
@@ -115,4 +120,6 @@ cp /opt/*.msi /home/$XPRA_USER/.cache/wine
 sudo -u $XPRA_USER XDG_RUNTIME_DIR=/run/user/$(id -u $XPRA_USER) wine msiexec /i /home/$XPRA_USER/.cache/wine/wine-gecko-2.47.4-x86_64.msi
 sudo -u $XPRA_USER XDG_RUNTIME_DIR=/run/user/$(id -u $XPRA_USER) wine msiexec /i /home/$XPRA_USER/.cache/wine/wine-mono-9.4.0-x86.msi
 sudo -u $XPRA_USER XDG_RUNTIME_DIR=/run/user/$(id -u $XPRA_USER) WINEPREFIX="/home/$XPRA_USER/.wine" wine winecfg -v win10
+
+
 
