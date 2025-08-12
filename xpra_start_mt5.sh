@@ -6,6 +6,7 @@ wget -P /opt/ https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
 wget -P /opt/ https://dl.winehq.org/wine/wine-gecko/2.47.4/wine-gecko-2.47.4-x86_64.msi
 wget -P /opt/ https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe
 
+HOME=$(eval echo "~$USER")
 mkdir $HOME/.cache
 mkdir $HOME/.cache/wine
 cp /opt/*.msi $HOME/.cache/wine
