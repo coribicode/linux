@@ -27,7 +27,7 @@ PACKAGES_DEPENDECES="git curl wget sudo apt-transport-https ca-certificates pkg-
 INSTALLING
 
 NAME_PACKAGE="PYTHON"
-PACKAGES_DEPENDECES="python3-pip python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify"
+PACKAGES_DEPENDECES="python3-distutils-extra python3-pip python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify"
 INSTALLING
 sudo -u $USER pip3 install --user --break-system-packages PyOpenGL_accelerate
 
