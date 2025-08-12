@@ -79,15 +79,16 @@ EOF
 
 # 4️⃣ Criar usuários conforme config
 echo "Criando usuários..."
-while read -r user display port; do
-    if id "$user" &>/dev/null; then
-        echo "Usuário $user já existe"
+while read -r user_xpra;
+do
+    if id "$user_xpra"; then
+        echo "Usuário $user_xpra já existe"
     else
-        sudo useradd -r -s /bin/bash -m "$user"
-	sudo mkdir /run/user/$(id -u $user)
-        sudo chown $user /run/user/$(id -u $user)
-	sudo chmod 2700 /run/user/$(id -u $user)
-        echo "Usuário $user criado | $(ls -llah /run/user/)"
+        sudo useradd -r -s /bin/bash -m "$user_xpra"
+	sudo mkdir /run/user/$(id -u $user_xpra)
+        sudo chown $user_xpra /run/user/$(id -u $user_xpra)
+	sudo chmod 2700 /run/user/$(id -u $user_xpra)
+        echo "Usuário $user_xpra criado | $(ls -llah /run/user/)"
 	sleep 3
     fi
 done < "$CONFIG_FILE"
@@ -99,7 +100,6 @@ sudo systemctl daemon-reload
 
 echo "Ativando e iniciando serviços..."
 while read -r user display port; do
-    [[ "$user" =~ ^# ]] && continue
     sudo systemctl enable "xpra-service@${user}"
     sudo systemctl start "xpra-service@${user}"
 done < "$CONFIG_FILE"
