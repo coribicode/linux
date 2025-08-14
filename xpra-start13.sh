@@ -85,10 +85,14 @@ while read -r user display port; do
         echo "Usuário $user já existe"
     else
         sudo useradd -r -s /bin/bash -m "$user"
+		echo "Usuário $user criado"
 	    sudo mkdir /run/user/$(id -u $user)
         sudo chown $user /run/user/$(id -u $user)
 	    sudo chmod 2700 /run/user/$(id -u $user)
-        echo "Usuário $user criado | $(ls -llah /run/user/)"
+	    echo "Liberando acesso ao servidor gráfico X11"
+	    xhost +SI:localuser:$user
+	    xhost
+		echo "Permissões da pasta do usuário: $(ls -llah /run/user/$(id -u $user))"
     fi
 done < "$CONFIG_FILE"
 
