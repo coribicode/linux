@@ -63,13 +63,14 @@ Requires=network.target
 
 [Service]
 User=%i
-RuntimeDirectory=%U
-#Environment=XDG_RUNTIME_DIR=/run/user/$(id -u $i)
 Environment=LIBGL_ALWAYS_SOFTWARE=1
 Environment=XPRA_IPV6=no
 RuntimeDirectory=%i-runtime
 RuntimeDirectoryMode=0700
 Environment=XDG_RUNTIME_DIR=/run/%i-runtime
+
+#RuntimeDirectory=%U
+#Environment=XDG_RUNTIME_DIR=/run/user/$(id -u $i)
 
 ExecStart=/usr/local/bin/xpra-service.sh
 Restart=on-failure
