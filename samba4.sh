@@ -86,7 +86,7 @@ apt install -y curl 2>/dev/null | grep "E:"
 curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
 
 INSTALLER="install.sh"
-PACKAGES_DEPENDECES="samba wget net-tools libpam-krb5 krb5-user dnsutils sudo smbclient ntpsec ntpdate cifs-utils libnss-winbind libpam-winbind acl ldap-utils attr ldb-tools smbldap-tools smbios-utils quota"
+PACKAGES_DEPENDECES="samba wget net-tools libpam-krb5 krb5-user sudo smbclient ntpsec cifs-utils libnss-winbind libpam-winbind acl ldap-utils attr ldb-tools smbldap-tools quota dnsutils"
 package_list="$PACKAGES_DEPENDECES"
 
 echo
