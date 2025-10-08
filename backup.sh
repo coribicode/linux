@@ -9,7 +9,7 @@ mkdir -p /webbkp/templates
 
 port="5000"
 
-cat > EOF << /webbkp/app.py
+cat > /webbkp/app.py <<EOF 
 import os, shutil, datetime, threading, json
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
