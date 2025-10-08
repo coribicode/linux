@@ -7,7 +7,12 @@ mkdir -p /webbkp/data
 mkdir -p /webbkp/static
 mkdir -p /webbkp/templates
 
-port="5000"
+webbkp_port="5000"
+webbkp_user="admin"
+webbkp_user_password="1234"
+webbkp_backup_size_gb="10"
+webbkp_folder_data="/webbkp/data"
+webbkp_folder_backup="/webbkp/BACKUP"
 
 cat > /webbkp/app.py <<EOF 
 import os, shutil, datetime, threading, json
@@ -17,11 +22,11 @@ app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 # Configurações
-BACKUP_DIR = "/webbkp/BACKUP"
-DATA_DIR = "/webbkp/data"
-MAX_SIZE_GB = 10
-USERNAME = "admin"
-PASSWORD = "1234"
+BACKUP_DIR = "$webbkp_folder_backup"
+DATA_DIR = "webbkp_folder_data"
+MAX_SIZE_GB = "$webbkp_backup_size_gb"
+USERNAME = "%webbkp_user"
+PASSWORD = "$webbkp_user_password"
 
 # Progressos globais
 progress = {"backup":0,"restore":0,"file":""}
