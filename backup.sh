@@ -7,7 +7,9 @@ mkdir -p /webbkp/data
 mkdir -p /webbkp/static
 mkdir -p /webbkp/templates
 
-cat << 'EOF' > /webbkp/app.py
+port="5000"
+
+cat > EOF << /webbkp/app.py
 import os, shutil, datetime, threading, json
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
@@ -198,7 +200,7 @@ def logout():
 if __name__=="__main__":
     os.makedirs(BACKUP_DIR,exist_ok=True)
     os.makedirs(DATA_DIR,exist_ok=True)
-    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=$port, debug=False, threaded=True)
 EOF
 
 cat <<'EOF'> /webbkp/static/style.css
@@ -583,3 +585,5 @@ systemctl daemon-reload
 systemctl enable webbkp.service
 systemctl start webbkp.service
 
+echo "Web Backup Python: Instalação Concluída!"
+echo "Acesse: http://$(hostname -I | cut -f1 -d' '):$port
