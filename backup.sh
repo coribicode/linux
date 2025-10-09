@@ -1,5 +1,5 @@
-sudo apt update
-sudo apt install python3-flask -y
+apt update
+apt install python3-flask -y
 
 mkdir -p /webbkp
 mkdir -p /webbkp/BACKUP
