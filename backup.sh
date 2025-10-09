@@ -23,9 +23,9 @@ app.secret_key = "supersecretkey"
 
 # Configurações
 BACKUP_DIR = "$webbkp_folder_backup"
-DATA_DIR = "webbkp_folder_data"
+DATA_DIR = "$webbkp_folder_data"
 MAX_SIZE_GB = "$webbkp_backup_size_gb"
-USERNAME = "%webbkp_user"
+USERNAME = "$webbkp_user"
 PASSWORD = "$webbkp_user_password"
 
 # Progressos globais
@@ -205,7 +205,7 @@ def logout():
 if __name__=="__main__":
     os.makedirs(BACKUP_DIR,exist_ok=True)
     os.makedirs(DATA_DIR,exist_ok=True)
-    app.run(host="0.0.0.0", port=$port, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=$webbkp_port, debug=False, threaded=True)
 EOF
 
 cat <<'EOF'> /webbkp/static/style.css
