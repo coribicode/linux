@@ -591,4 +591,7 @@ systemctl enable webbkp.service
 systemctl start webbkp.service
 
 echo "Web Backup Python: Instalação Concluída!"
-echo "Acesse: http://$(hostname -I | cut -f1 -d' '):$port
+echo "Acesse: http://$(hostname -I | cut -f1 -d' '):$port"
+echo "Usuário: $webbkp_user"
+echo "Senha: $webbkp_user_password"
+echo
