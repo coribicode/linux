@@ -1,75 +1,110 @@
 #!/bin/bash
 # ============================================================
-# Script de mapeamento de compartilhamento Windows no Linux
+# Script de mapeamento automático de compartilhamentos de rede
+# Suporta: SMB/CIFS (Windows/Samba) e NFS (Linux ↔ Linux)
 # Autor: ChatGPT
 # ============================================================
 
 set -e
 
-echo "=== Mapeamento de Compartilhamento Windows no Linux com montagem automatica no boot ==="
+echo "=== Mapeamento Automático de Compartilhamentos (CIFS/NFS) ==="
 echo
 
 # ------------------------------------------------------------
-# 1. Verificar dependências
+# 1. Perguntas iniciais
 # ------------------------------------------------------------
-echo "[1/7] Verificando dependências..."
-if ! command -v mount.cifs >/dev/null 2>&1; then
-    echo "Instalando pacote 'cifs-utils'..."
-    if [ -f /etc/debian_version ]; then
-        sudo apt update && sudo apt install -y cifs-utils
-    elif [ -f /etc/redhat-release ]; then
-        sudo dnf install -y cifs-utils || sudo yum install -y cifs-utils
-    else
-        echo "Distribuição não reconhecida. Instale manualmente o pacote 'cifs-utils'."
-        exit 1
-    fi
+read -rp "A. Diretório local de montagem (ex: /mnt/rede): " MOUNT_DIR
+read -rp "B. Caminho do compartilhamento (ex: //192.168.0.10/Publico ou 192.168.0.20:/dados): " SHARE_PATH
+
+# Detectar tipo pelo formato
+if [[ "$SHARE_PATH" == //* ]]; then
+    SHARE_TYPE="cifs"
+elif [[ "$SHARE_PATH" == *:* ]]; then
+    SHARE_TYPE="nfs"
 else
-    echo "✔ Dependências já instaladas."
+    echo "❌ Não foi possível identificar o tipo de compartilhamento (use // para CIFS ou :/ para NFS)"
+    exit 1
+fi
+
+echo "→ Tipo detectado: $SHARE_TYPE"
+echo
+
+# ------------------------------------------------------------
+# 2. Instalar dependências conforme o tipo
+# ------------------------------------------------------------
+if [ "$SHARE_TYPE" = "cifs" ]; then
+    echo "[1/6] Verificando dependências para CIFS..."
+    if ! command -v mount.cifs >/dev/null 2>&1; then
+        echo "Instalando pacote 'cifs-utils'..."
+        if [ -f /etc/debian_version ]; then
+            sudo apt update && sudo apt install -y cifs-utils
+        elif [ -f /etc/redhat-release ]; then
+            sudo dnf install -y cifs-utils || sudo yum install -y cifs-utils
+        else
+            echo "Distribuição não reconhecida. Instale manualmente o pacote 'cifs-utils'."
+            exit 1
+        fi
+    fi
+    echo "✔ Dependências CIFS instaladas."
+else
+    echo "[1/6] Verificando dependências para NFS..."
+    if ! command -v mount.nfs >/dev/null 2>&1; then
+        echo "Instalando pacote 'nfs-common'..."
+        if [ -f /etc/debian_version ]; then
+            sudo apt update && sudo apt install -y nfs-common
+        elif [ -f /etc/redhat-release ]; then
+            sudo dnf install -y nfs-utils || sudo yum install -y nfs-utils
+        else
+            echo "Distribuição não reconhecida. Instale manualmente 'nfs-common'."
+            exit 1
+        fi
+    fi
+    echo "✔ Dependências NFS instaladas."
 fi
 echo
 
 # ------------------------------------------------------------
-# 2. Coleta de informações do usuário
+# 3. Criar diretório de montagem
 # ------------------------------------------------------------
-read -rp "A. Diretório local de montagem (ex: /mnt/compartilhamento): " MOUNT_DIR
-read -rp "B. Caminho do compartilhamento (ex: //192.168.0.10/Publico): " SHARE_DIR
-read -rp "C. Usuário do Windows: " CIFS_USER
-
-while true; do
-    read -rsp "D. Senha: " CIFS_PASS
-    echo
-    read -rsp "Confirme a senha: " CIFS_PASS_CONFIRM
-    echo
-    [ "$CIFS_PASS" = "$CIFS_PASS_CONFIRM" ] && break
-    echo "❌ As senhas não coincidem. Tente novamente."
-done
-
-# ------------------------------------------------------------
-# 3. Cria diretório de montagem
-# ------------------------------------------------------------
-echo "[2/7] Criando diretório de montagem..."
+echo "[2/6] Criando diretório de montagem..."
 sudo mkdir -p "$MOUNT_DIR"
 echo "✔ Diretório criado: $MOUNT_DIR"
 echo
 
 # ------------------------------------------------------------
-# 4. Cria arquivo de credenciais
+# 4. Configuração e /etc/fstab
 # ------------------------------------------------------------
-echo "[3/7] Criando arquivo de credenciais..."
-sudo bash -c "cat > /etc/cifs-creds <<EOF
+if [ "$SHARE_TYPE" = "cifs" ]; then
+    read -rp "Usuário do Windows/Samba (deixe vazio para anônimo): " CIFS_USER
+
+    if [ -n "$CIFS_USER" ]; then
+        while true; do
+            read -rsp "Senha: " CIFS_PASS
+            echo
+            read -rsp "Confirme a senha: " CIFS_PASS_CONFIRM
+            echo
+            [ "$CIFS_PASS" = "$CIFS_PASS_CONFIRM" ] && break
+            echo "❌ As senhas não coincidem. Tente novamente."
+        done
+
+        echo "[3/6] Criando arquivo de credenciais..."
+        sudo bash -c "cat > /etc/cifs-creds <<EOF
 username=$CIFS_USER
 password=$CIFS_PASS
 EOF"
-sudo chmod 600 /etc/cifs-creds
-echo "✔ Credenciais salvas em /etc/cifs-creds"
-echo
+        sudo chmod 600 /etc/cifs-creds
+        FSTAB_LINE="$SHARE_PATH $MOUNT_DIR cifs credentials=/etc/cifs-creds,iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0777,dir_mode=0777 0 0"
+    else
+        FSTAB_LINE="$SHARE_PATH $MOUNT_DIR cifs guest,iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0777,dir_mode=0777 0 0"
+    fi
 
-# ------------------------------------------------------------
-# 5. Adiciona no /etc/fstab
-# ------------------------------------------------------------
-echo "[4/7] Configurando /etc/fstab..."
-FSTAB_LINE="$SHARE_DIR $MOUNT_DIR cifs credentials=/etc/cifs-creds,iocharset=utf8,uid=$(id -u),gid=$(id -g),file_mode=0777,dir_mode=0777 0 0"
-if ! grep -qF "$SHARE_DIR" /etc/fstab; then
+else
+    echo "[3/6] Configurando NFS..."
+    FSTAB_LINE="$SHARE_PATH $MOUNT_DIR nfs defaults 0 0"
+fi
+
+# Adicionar no fstab se não existir
+if ! grep -qF "$SHARE_PATH" /etc/fstab; then
     echo "$FSTAB_LINE" | sudo tee -a /etc/fstab > /dev/null
     echo "✔ Entrada adicionada ao /etc/fstab."
 else
@@ -78,31 +113,37 @@ fi
 echo
 
 # ------------------------------------------------------------
-# 6. Monta e lista o compartilhamento
+# 5. Montar e listar conteúdo
 # ------------------------------------------------------------
-echo "[5/7] Montando compartilhamento..."
+echo "[4/6] Montando compartilhamento..."
 sudo mount -a
+
 if mount | grep -q "$MOUNT_DIR"; then
     echo "✔ Compartilhamento montado com sucesso!"
     echo
-    echo "[6/7] Listando conteúdo de $MOUNT_DIR:"
+    echo "[5/6] Conteúdo de $MOUNT_DIR:"
     ls -lha "$MOUNT_DIR"
 else
-    echo "❌ Erro ao montar o compartilhamento. Verifique suas credenciais."
+    echo "❌ Erro ao montar o compartilhamento. Verifique permissões e exportações do servidor."
     exit 1
 fi
 echo
 
 # ------------------------------------------------------------
-# 7. Mostra opções para desmontar
+# 6. Opções para desmontar
 # ------------------------------------------------------------
-echo "[7/7] Opções para desmontar:"
+echo "[6/6] Opções para desmontar:"
 echo "-----------------------------------------"
 echo "Para desmontar este compartilhamento:"
 echo "  sudo umount $MOUNT_DIR"
 echo
-echo "Para desmontar todos os compartilhamentos CIFS:"
-echo "  sudo umount -a -t cifs"
+if [ "$SHARE_TYPE" = "cifs" ]; then
+    echo "Para desmontar todos os compartilhamentos CIFS:"
+    echo "  sudo umount -a -t cifs"
+else
+    echo "Para desmontar todos os compartilhamentos NFS:"
+    echo "  sudo umount -a -t nfs"
+fi
 echo "-----------------------------------------"
 echo
 echo "✅ Processo concluído com sucesso!"
