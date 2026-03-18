@@ -11,7 +11,7 @@ echo $MODULES | sudo tee -a /etc/modules
 modprobe $MODULES
 fi
 
-apt-get install -y v4l2loopback-dkms v4l2loopback-utils > /dev/null | grep "E:"
+apt-get install -y v4l2loopback-dkms v4l2loopback-utils linux-headers-$(uname -r) > /dev/null | grep "E:"
 MODULES=v4l2loopback
 if grep '^$MODULES$' /etc/modules > /dev/null
 then
@@ -20,6 +20,9 @@ else
 echo $MODULES | sudo tee -a /etc/modules
 modprobe $MODULES
 fi
+dkms autoinstall
+modprobe v4l2loopback
+lsmod | grep v4l2loopback
 
 systemctl stop systemd-modules-load.service
 systemctl start systemd-modules-load.service
