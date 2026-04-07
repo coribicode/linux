@@ -15,3 +15,5 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra_start.sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
 
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra_start_mt5.sh | sh
+
+curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra-start-painel-mt5.sh | sh
