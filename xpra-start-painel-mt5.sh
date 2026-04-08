@@ -71,7 +71,7 @@ chmod +x /usr/local/bin/start_xpra_user.sh
 
 cat <<EOF> /etc/systemd/system/xpra-$XPRA_USER.service
 [Unit]
-Description=XPRA para user001
+Description=XPRA for Multiple MetaTrader5 
 After=network.target
 
 [Service]
