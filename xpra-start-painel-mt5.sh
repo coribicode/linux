@@ -10,7 +10,7 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra-start-pa
 
 PACKAGES="python3 python3-pyqt5 python3-psutil python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip"
 echo
-curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh > /dev/null 2>&1
+curl -LO https://raw.githubusercontent.com/coribicode/linux/main/install.sh > /dev/null 2>&1
 INSTALLER="install.sh"
 
 echo "[ Packages Painel ]: Inicio"
