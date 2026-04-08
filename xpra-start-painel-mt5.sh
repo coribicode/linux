@@ -6,7 +6,6 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/debian_reposi
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
-curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra-start-painel-mt5.sh | sh
 
 PACKAGES="python3 python3-pyqt5 python3-psutil python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip"
 echo
