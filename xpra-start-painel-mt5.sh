@@ -1,4 +1,6 @@
 #!/bin/bash
+apt update
+apt install -y python3 python3-pyqt5 python3-psutil python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip
 USER=xpra-painel
 useradd -m -s /bin/bash $USER && echo "$USER:123" | sudo chpasswd
 
