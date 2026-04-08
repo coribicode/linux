@@ -1,6 +1,29 @@
 #!/bin/bash
-apt update
-apt install -y python3 python3-pyqt5 python3-psutil python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip
+apt update > /dev/null 2>&1
+apt upgrade -y > /dev/null 2>&1
+apt install -y curl > /dev/null 2>&1
+curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/debian_repository.sh | sh
+curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.sh | sh
+curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
+curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
+curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra-start-painel-mt5.sh | sh
+
+PACKAGES="python3 python3-pyqt5 python3-psutil python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip"
+echo
+curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh > /dev/null 2>&1
+INSTALLER="install.sh"
+
+echo "[ Packages Painel ]: Inicio"
+if grep PACKAGE_NAME $INSTALLER > /dev/null 2>&1
+  then
+    sed -i "s|PACKAGE_NAME|$PACKAGES|g" $INSTALLER
+    sh $INSTALLER
+  else
+    sh $INSTALLER
+fi
+echo "[ Packages Painel ]: Fim."
+sleep 2
+
 USER=xpra-painel
 useradd -m -s /bin/bash $USER && echo "$USER:123" | sudo chpasswd
 
