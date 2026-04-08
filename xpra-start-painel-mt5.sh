@@ -26,7 +26,7 @@ sleep 2
 USER=xpra-painel
 useradd -m -s /bin/bash $USER && echo "$USER:123" | sudo chpasswd
 
-cat <<'EOF'>> /etc/sudoers.d/xpra-painel
+cat <<'EOF'> /etc/sudoers.d/xpra-painel
 %sudo ALL=(ALL:ALL) NOPASSWD: ALL
 EOF
 
@@ -69,7 +69,7 @@ EOF
 
 chmod +x /usr/local/bin/start_xpra_user.sh
 
-cat <<EOF>> /etc/systemd/system/xpra-$XPRA_USER.service
+cat <<EOF> /etc/systemd/system/xpra-$XPRA_USER.service
 [Unit]
 Description=XPRA para user001
 After=network.target
