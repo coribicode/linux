@@ -25,7 +25,7 @@ sleep 2
 
 USER=xpra-painel
 useradd -m -s /bin/bash $USER && echo "$USER:123" | sudo chpasswd
-sudo usermod -aG sudo xpra-painel
+sudo usermod -aG sudo $USER
 
 cat <<'EOF'> /etc/sudoers.d/xpra-painel
 %sudo ALL=(ALL:ALL) NOPASSWD: ALL
