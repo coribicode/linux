@@ -64,7 +64,7 @@ export DISPLAY=":$DISPLAY_NUM"
 # Inicia o xpra como o usuário especificado
 sudo -u "$USER" \
     XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-    xpra start ":$DISPLAY_NUM" --exit-with-children=no --pulseaudio=yes --bind-tcp=0.0.0.0:$PORT --start-child="python3 /opt/painel.py" --html=on \
+    xpra start ":$DISPLAY_NUM" --pulseaudio=yes --bind-tcp=0.0.0.0:$PORT --start-child="python3 /opt/painel.py" --html=on \
     --daemon=no --systemd-run=no
 EOF
 
