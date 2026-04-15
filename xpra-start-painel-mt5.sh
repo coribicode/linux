@@ -7,7 +7,7 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
 
-PACKAGES="python3 python3-pyqt5 python3-tk python3-psutil python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip"
+PACKAGES="python3 python3-pyqt5 python3-tk python3-psutil python3-pyqt5.qtsvg python3-netifaces cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils p7zip-full unzip"
 echo
 curl -LO https://raw.githubusercontent.com/coribicode/linux/main/install.sh > /dev/null 2>&1
 INSTALLER="install.sh"
