@@ -63,9 +63,24 @@ export DISPLAY=":$DISPLAY_NUM"
 
 # Inicia o xpra como o usuário especificado
 sudo -u "$USER" \
-    XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-    xpra start ":$DISPLAY_NUM" --pulseaudio=yes --border=no --opengl=yes --speed=100 --min-quality=60 --bind-tcp=0.0.0.0:$PORT --start-child="python3 /opt/painel.py" --html=on \
-    --daemon=no --systemd-run=no
+XDG_RUNTIME_DIR="$RUNTIME_DIR" \
+xpra start ":$DISPLAY_NUM" \
+  --daemon=no \
+  --systemd-run=no \
+  --pulseaudio=no \
+  --border=no \
+  --opengl=on \
+  --encoding=h264 \
+  --video-encoders=nvenc,x264 \
+  --quality=90 \
+  --min-quality=70 \
+  --speed=100 \
+  --compress=0 \
+  −−use−display=no \
+  --exit-with-children=no \
+  --bind-tcp=0.0.0.0:$PORT \
+  --html=on \
+  --start-child="sudo python3 /opt/painel.py"
 EOF
 
 chmod +x /usr/local/bin/start_xpra_user.sh
