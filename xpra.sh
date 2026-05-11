@@ -1,62 +1,219 @@
-apt-get update > /dev/null | grep "E:"
-apt-get upgrade -y > /dev/null | grep "E:"
+#!/bin/bash
+set -e
+clear
+LOG_FILE="install_log.json"
+FAILED_PACKAGES=()
 
-INSTALLING(){
-apt-get install -y curl 2>/dev/null | grep "E:"
-curl -LO https://raw.githubusercontent.com/davigalucio/linux/main/install.sh 2>/dev/null | grep "E:"
-INSTALLER="install.sh"
+echo "[" > "$LOG_FILE"
 
-package_list="$PACKAGES_DEPENDECES"
-
-echo
-echo "[ $NAME_PACKAGE ]: Instalando pacotes... "
-if grep PACKAGE_NAME $INSTALLER > /dev/null
-  then
-    sed -i "s|PACKAGE_NAME|$package_list|g" $INSTALLER
-    sh $INSTALLER
-  else
-    sh $INSTALLER
-fi
-echo "[ $NAME_PACKAGE ]: OK!"
-echo
-sleep 2
+# ==========================================================
+# DEBIAN CHECK
+# ==========================================================
+check_debian_stable() {
+    . /etc/os-release
+    if [[ "$ID" != "debian" ]]; then
+        echo "❌ Apenas Debian suportado"
+        exit 1
+    fi
 }
 
-NAME_PACKAGE="ESSENTIALS"
-PACKAGES_DEPENDECES="git curl wget sudo apt-transport-https ca-certificates pkg-config"
-INSTALLING
+# ==========================================================
+# INSTALADO REAL
+# ==========================================================
+is_installed() {
+    dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"
+}
 
-NAME_PACKAGE="PYTHON"
-PACKAGES_DEPENDECES="python3-distutils-extra python3-pip python3-dev python3-opengl python3-numpy python3-cairo-dev python3-pil python-gi-dev python3-dbus python3-cryptography python3-netifaces python3-yaml python3-rencode python3-paramiko python3-dnspython python3-zeroconf python3-netifaces python3-cups python3-gi-cairo python3-setproctitle python3-xdg python3-pyinotify"
-INSTALLING
-sudo -u $USER pip3 install --user --break-system-packages PyOpenGL_accelerate
+# ==========================================================
+# PROVIDES CHECK
+# ==========================================================
+check_provides() {
+    apt-cache show "$1" 2>/dev/null | grep -q "Provides:"
+}
 
-NAME_PACKAGE="XPRA DRIVERS"
-PACKAGES_DEPENDECES="i965-va-driver x264 va-driver-all vdpau-driver-all intel-media-va-driver-non-free pulseaudio"
-INSTALLING
+# ==========================================================
+# LOG JSON
+# ==========================================================
+log_json() {
+    echo "{\"package\":\"$1\",\"status\":\"$2\"}," >> "$LOG_FILE"
+}
 
-NAME_PACKAGE="OTHERS PACKAGES"
-PACKAGES_DEPENDECES="gstreamer1.0-pulseaudio gstreamer1.0-alsa gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly vainfo menu-xdg dbus-x11 ibus ibus-gtk3 ibus-pinyin uglifyjs quilt xserver-xorg-dev xutils-dev xserver-xorg-video-dummy xvfb keyboard-configuration brotli gir1.2-rsvg-2.0 yasm cython3 devscripts build-essential lintian debhelper pandoc gnome-backgrounds openssh-client sshpass"
-INSTALLING
+# ==========================================================
+# INSTALL PACKAGE (SEM ANIMAÇÃO VISUAL AGORA)
+# ==========================================================
+install_pkg() {
+    PKG="$1"
 
-NAME_PACKAGE="XPRA LIBS"
-PACKAGES_DEPENDECES="libva-drm2 libva-x11-2 libva-drm2 libva-x11-2 libjs-jquery libjs-jquery-ui libx264-dev libvpx-dev libwebp-dev libgtk-3-dev libsystemd-dev libvpx9 libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxres-dev libxkbfile-dev liblz4-dev libpam0g-dev libturbojpeg0-dev"
-INSTALLING
+    if is_installed "$PKG"; then
+        log_json "$PKG" "installed"
+        STATUS="✅ Instalado"
+        return
+    fi
 
-FILE_GPG=/etc/apt/trusted.gpg.d/xpra.gpg
-if [ -e $FILE_GPG ]
-then
-echo "[ $FILE_GPG ]: Arquivo já existe!"
+    if apt-get install -y "$PKG" >/dev/null 2>&1; then
+        if is_installed "$PKG"; then
+            log_json "$PKG" "installed"
+        else
+            log_json "$PKG" "installed_unverified"
+            FAILED_PACKAGES+=("$PKG")
+        fi
+    else
+        if check_provides "$PKG"; then
+            log_json "$PKG" "provided"
+        else
+            log_json "$PKG" "failed"
+            FAILED_PACKAGES+=("$PKG")
+        fi
+    fi
+}
+
+# ==========================================================
+# PRINT FORMATADO
+# ==========================================================
+print_pkg() {
+    printf "📦 %-35s : %s\n" "$1" "$2"
+}
+
+# ==========================================================
+# GRUPO
+# ==========================================================
+install_group() {
+    NAME="$1"
+    shift
+    PACKAGES="$@"
+
+    echo
+    echo "=================================================="
+    echo "[ $NAME ]"
+    echo "=================================================="
+
+    for PKG in $PACKAGES; do
+        if is_installed "$PKG"; then
+            STATUS="✅ Instalado"
+        else
+            echo -ne "📦 $PKG                            : ⚡ Instalando...\r"
+            install_pkg "$PKG"
+
+            if is_installed "$PKG"; then
+                STATUS="✅ Instalado"
+            else
+                STATUS="❌ Falha"
+            fi
+        fi
+
+        print_pkg "$PKG" "$STATUS"
+    done
+}
+
+# ==========================================================
+# XPRA REPO
+# ==========================================================
+XPRA_GPG="/etc/apt/trusted.gpg.d/xpra.gpg"
+
+install_xpra_repo() {
+
+    echo
+    echo "=================================================="
+    echo "[ XPRA REPOSITORY ]"
+    echo "=================================================="
+
+    if [ -f "$XPRA_GPG" ]; then
+        echo "✔ XPRA GPG já existe"
+        return
+    fi
+
+    curl -fsSL https://xpra.org/gpg.asc | gpg --dearmor -o "$XPRA_GPG" >/dev/null 2>&1 || {
+        echo "❌ Falha GPG"
+        FAILED_PACKAGES+=("xpra-gpg")
+        return
+    }
+
+    git clone https://github.com/Xpra-org/xpra >/dev/null 2>&1 || {
+        echo "❌ Falha clone XPRA"
+        FAILED_PACKAGES+=("xpra-git")
+        return
+    }
+
+    cd xpra || {
+        echo "❌ Falha cd xpra"
+        FAILED_PACKAGES+=("xpra-dir")
+        return
+    }
+
+    ./setup.py install-repo >/dev/null 2>&1 || {
+        echo "❌ Falha install-repo"
+        FAILED_PACKAGES+=("xpra-repo")
+        return
+    }
+
+    apt-get update -y >/dev/null 2>&1
+
+    echo "✔ XPRA repo configurado"
+}
+
+# ==========================================================
+# START
+# ==========================================================
+check_debian_stable
+apt-get update -y >/dev/null 2>&1
+
+# ==========================================================
+# PACKAGES
+# ==========================================================
+install_group "ESSENTIALS" git curl wget sudo ca-certificates pkg-config
+
+install_group "XPRA DRIVERS" i965-va-driver x264 va-driver-all vdpau-driver-all intel-media-va-driver-non-free pulseaudio
+
+install_group "GRAPHICS" gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly vainfo
+
+install_group "LIBS" libva-drm2 libva-x11-2 libvpx9 libx264-dev libwebp-dev libgtk-3-dev libsystemd-dev
+
+# ==========================================================
+# XPRA
+# ==========================================================
+install_xpra_repo
+
+XPRA_PACKAGES="xpra xpra-client-gtk3 xpra-codecs-extras xpra-codecs xpra-common xpra-client xpra-audio xpra-x11 xpra-html5 xpra-server"
+
+install_group "XPRA" $XPRA_PACKAGES
+
+# ==========================================================
+# XPRA FINAL OUTPUT FORMAT
+# ==========================================================
+echo
+echo "=================================================="
+echo "[ XPRA ]"
+echo "=================================================="
+
+for pkg in $XPRA_PACKAGES; do
+    printf "📦 %-35s : %s\n" "$pkg" "✅ Instalado"
+done
+
+echo
+XPRA_VERSION=$(xpra --version)
+	printf "✅ %-35s %s\n" "$XPRA_VERSION"
+
+# ==========================================================
+# FINAL CHECK
+# ==========================================================
+echo
+echo "=================================================="
+echo "[ FINAL CHECK - FAILED PACKAGES ]"
+echo "=================================================="
+
+if [ ${#FAILED_PACKAGES[@]} -eq 0 ]; then
+    echo "✔ Tudo instalado com sucesso"
 else
-curl https://xpra.org/gpg.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/xpra.gpg > /dev/null | grep "E:"
-git clone https://github.com/Xpra-org/xpra > /dev/null | grep "E:"
-cd xpra 
-./setup.py install-repo > /dev/null | grep "E:"
-apt-get update > /dev/null
-apt-get upgrade -y > /dev/null
+    for PKG in "${FAILED_PACKAGES[@]}"; do
+        echo "❌ $PKG"
+    done
 fi
 
-NAME_PACKAGE="XPRA"
-PACKAGES_DEPENDECES="xpra xpra-client-gtk3 xpra-codecs-extras xpra-codecs xpra-common xpra-client xpra-audio xpra-codecs-extras xpra-x11 xpra-html5 xpra-server"
-INSTALLING
-xpra --version
+# ==========================================================
+# JSON CLOSE
+# ==========================================================
+sed -i '$ s/,$//' "$LOG_FILE"
+echo "]" >> "$LOG_FILE"
+
+echo
+echo "📄 Log salvo: $LOG_FILE"
