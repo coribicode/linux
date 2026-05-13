@@ -25,12 +25,12 @@ status_line() {
     printf "\r\033[2K✔ %s: %b%s%b" "$LABEL" "$COLOR" "$STATUS" "$NC"
 }
 
-echo -e "${CYAN}=====================================${NC}"
-echo -e "${CYAN} 🧰 AJUSTANDO O SISTEMA${NC}"
-echo -e "${CYAN}=====================================${NC}"
+echo "${CYAN}=====================================${NC}"
+echo "${CYAN} 🧰 AJUSTANDO O SISTEMA${NC}"
+echo "${CYAN}=====================================${NC}"
 echo
 
-echo -e "${WHITE} ⚙️ CONFIGURANDO O SISTEMA:${NC}"
+echo "${WHITE} ⚙️ CONFIGURANDO O SISTEMA:${NC}"
 echo
 
 # IPv4
@@ -79,7 +79,7 @@ else
 fi
 
 echo
-echo -e "${WHITE}⚡ ATUALIZAÇÃO DO SISTEMA:${NC}"
+echo "${WHITE}⚡ ATUALIZAÇÃO DO SISTEMA:${NC}"
 echo
 
 # Repo
