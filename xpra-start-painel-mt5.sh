@@ -85,7 +85,6 @@ check_debian_stable
 
 install_group "XPRA-PAINEL-PY" python3 python3-venv python3-pyqt5 python3-tk python3-psutil python3-pyqt5.qtsvg python3-netifaces systemd-container cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils wmctrl p7zip-full zram-tools unzip
 
-
 echo
 echo "=================================================="
 echo "[ FINAL CHECK - FAILED PACKAGES ]"
