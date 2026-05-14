@@ -5,9 +5,7 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
-PACKAGES=(
-build-essential firmware-linux lsb-release apt-transport-https lsof which module-assistant ca-certificates aptitude sudo wget acl git curl perl tar unzip lzip xorg xvfb xauth pulseaudio alsa-utils alsa-tools libasound2 libasound2-dev udns-utils net-tools rfkill screenfetch cmake g++ gcc make automake autoconf flex bison bc gdb gnupg gnupg1 gnupg2 gnutls-bin libjwt-gnutls-dev
-)
+PACKAGES="build-essential firmware-linux lsb-release apt-transport-https lsof which module-assistant ca-certificates aptitude sudo wget acl git curl perl tar unzip lzip xorg xvfb xauth pulseaudio alsa-utils alsa-tools libasound2 libasound2-dev udns-utils net-tools rfkill screenfetch cmake g++ gcc make automake autoconf flex bison bc gdb gnupg gnupg1 gnupg2 gnutls-bin libjwt-gnutls-dev"
 center_text() {
     local TEXT="$1"
     local WIDTH=$(tput cols)
