@@ -98,34 +98,37 @@ echo "=================================================="
 
 XPRA_USER="xpra-painel"
 XPRA_USER_PASSWORD="123"
+
+USER_EXISTS=$(id "$XPRA_USER" >/dev/null 2>&1; echo $?)
+if [ "$USER_EXISTS" -ne 0 ]; then
+  useradd -m -s /bin/bash "$XPRA_USER"
+  usermod -aG sudo,cdrom,floppy,audio,dip,video,plugdev,users,netdev "$XPRA_USER"
+  echo "$XPRA_USER:$XPRA_USER_PASSWORD" | chpasswd
+  echo "✔ Usuário criado: $XPRA_USER"
+else
+  echo "✔ Usuário já existe: $XPRA_USER"
+fi
+
 XPRA_USER_UID=$(id -u "$XPRA_USER")
 XPRA_USER_DISPLAY="$XPRA_USER_UID"
 XPRA_USER_PORT=$(( XPRA_USER_UID * 10 ))
 XPRA_USER_RUNTIME_DIR="/run/user/$XPRA_USER_UID"
 
-USER_EXISTS=$(id "$XPRA_USER" >/dev/null 2>&1; echo $?)
-if [ "$USER_EXISTS" -ne 0 ]; then
-useradd -m -s /bin/bash "$XPRA_USER"
-echo "$XPRA_USER:$XPRA_USER_PASSWORD" | chpasswd
-echo "✔ Usuário criado: $XPRA_USER"
-else
-echo "✔ Usuário já existe: $XPRA_USER"
-fi
-usermod -aG sudo,cdrom,floppy,audio,dip,video,plugdev,users,netdev "$XPRA_USER"
 SUDOERS_FILE="/etc/sudoers.d/$XPRA_USER"
 if [ ! -f "$SUDOERS_FILE" ]; then
 cat <<'EOF' > "$SUDOERS_FILE"
 %sudo ALL=(ALL:ALL) NOPASSWD: ALL
 EOF
 chmod 440 "$SUDOERS_FILE"
-echo "✔ Arquivo sudoers criado"
+  echo "✔ Arquivo sudoers criado"
 else
-echo "✔ Arquivo sudoers já existe"
+  echo "✔ Arquivo sudoers já existe"
 fi
 
 mkdir -p "$XPRA_USER_RUNTIME_DIR"
 chown "$XPRA_USER:$XPRA_USER" "$XPRA_USER_RUNTIME_DIR"
 chmod 700 "$XPRA_USER_RUNTIME_DIR"
+
 START_SCRIPT="/usr/local/bin/start_xpra_user.sh"
 cat <<'EOF' > "$START_SCRIPT"
 #!/bin/bash
@@ -160,8 +163,11 @@ xpra start ":$DISPLAY_NUM" \
 --html=on \
 --start-child="sudo python3 /opt/painel.py"
 EOF
+
 chmod +x "$START_SCRIPT"
+
 echo "✔ Script XPRA atualizado"
+
 SERVICE_FILE="/etc/systemd/system/xpra-$XPRA_USER.service"
 cat <<EOF > "$SERVICE_FILE"
 [Unit]
@@ -175,25 +181,30 @@ RestartSec=3
 [Install]
 WantedBy=multi-user.target
 EOF
-echo "✔ Serviço systemd atualizado"
+
+echo "✔ Serviço systemd Criado"
+
+sleep 2
+echo "---------------------------------------------------------------"
 systemctl daemon-reload
 systemctl enable "xpra-$XPRA_USER.service" >/dev/null 2>&1
 systemctl restart "xpra-$XPRA_USER.service"
-echo "---------------------------------------------------------------"
 systemctl status "xpra-$XPRA_USER.service" --no-pager
 echo "---------------------------------------------------------------"
+sleep 2
+
 if systemctl is-active --quiet "xpra-$XPRA_USER.service"; then
-echo
-echo "✔ XPRA iniciado com sucesso"
-echo
-xpra --version
-wine --version
-echo
-echo "---------------------------------------------------------------"
-echo "Acesse http://$(hostname -I | tr ' ' '\n' | grep -E '^[0-9]+\.' | head -n1):$XPRA_USER_PORT"
-echo "---------------------------------------------------------------"
-echo
+  echo
+  echo "✔ Serviço XPRA iniciado com sucesso"
+  echo
+  xpra --version
+  wine --version
+  echo
+  echo "---------------------------------------------------------------"
+  echo "Acesse http://$(hostname -I | tr ' ' '\n' | grep -E '^[0-9]+\.' | head -n1):$XPRA_USER_PORT"
+  echo "---------------------------------------------------------------"
+  echo
 else
-echo "❌ Falha ao iniciar XPRA"
-systemctl status "xpra-$XPRA_USER.service" --no-pager
+  echo "❌ Falha ao iniciar XPRA"
+  systemctl status "xpra-$XPRA_USER.service" --no-pager
 fi
