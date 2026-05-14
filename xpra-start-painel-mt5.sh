@@ -8,7 +8,6 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
 
-clear
 set -e
 LOG_FILE="install_log.json"
 FAILED_PACKAGES=""
@@ -97,18 +96,23 @@ echo "=================================================="
 echo "[ SERVICE XPRA PAINEL ]"
 echo "=================================================="
 
-USER="xpra-painel"
-USER_PASSWORD="123"
-USER_EXISTS=$(id "$USER" >/dev/null 2>&1; echo $?)
+XPRA_USER="xpra-painel"
+XPRA_USER_PASSWORD="123"
+XPRA_USER_UID=$(id -u "$XPRA_USER")
+XPRA_USER_DISPLAY="$XPRA_USER_UID"
+XPRA_USER_PORT=$(( XPRA_USER_UID * 10 ))
+XPRA_USER_RUNTIME_DIR="/run/user/$XPRA_USER_UID"
+
+USER_EXISTS=$(id "$XPRA_USER" >/dev/null 2>&1; echo $?)
 if [ "$USER_EXISTS" -ne 0 ]; then
-useradd -m -s /bin/bash "$USER"
-echo "$USER:$USER_PASSWORD" | chpasswd
-echo "✔ Usuário criado: $USER"
+useradd -m -s /bin/bash "$XPRA_USER"
+echo "$XPRA_USER:$XPRA_USER_PASSWORD" | chpasswd
+echo "✔ Usuário criado: $XPRA_USER"
 else
-echo "✔ Usuário já existe: $USER"
+echo "✔ Usuário já existe: $XPRA_USER"
 fi
-usermod -aG sudo,cdrom,floppy,audio,dip,video,plugdev,users,netdev "$USER"
-SUDOERS_FILE="/etc/sudoers.d/xpra-painel"
+usermod -aG sudo,cdrom,floppy,audio,dip,video,plugdev,users,netdev "$XPRA_USER"
+SUDOERS_FILE="/etc/sudoers.d/$XPRA_USER"
 if [ ! -f "$SUDOERS_FILE" ]; then
 cat <<'EOF' > "$SUDOERS_FILE"
 %sudo ALL=(ALL:ALL) NOPASSWD: ALL
@@ -118,11 +122,7 @@ echo "✔ Arquivo sudoers criado"
 else
 echo "✔ Arquivo sudoers já existe"
 fi
-XPRA_USER="$USER"
-XPRA_USER_UID=$(id -u "$XPRA_USER")
-XPRA_USER_DISPLAY="$XPRA_USER_UID"
-XPRA_USER_PORT=$(("$XPRA_USER_UID" * 10))
-XPRA_USER_RUNTIME_DIR="/run/user/$XPRA_USER_UID"
+
 mkdir -p "$XPRA_USER_RUNTIME_DIR"
 chown "$XPRA_USER:$XPRA_USER" "$XPRA_USER_RUNTIME_DIR"
 chmod 700 "$XPRA_USER_RUNTIME_DIR"
