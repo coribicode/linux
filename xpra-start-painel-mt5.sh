@@ -179,16 +179,20 @@ echo "✔ Serviço systemd atualizado"
 systemctl daemon-reload
 systemctl enable "xpra-$XPRA_USER.service" >/dev/null 2>&1
 systemctl restart "xpra-$XPRA_USER.service"
+echo "---------------------------------------------------------------"
 systemctl status "xpra-$XPRA_USER.service" --no-pager
+echo "---------------------------------------------------------------"
+if systemctl is-active --quiet "xpra-$XPRA_USER.service"; then
+echo
+echo "✔ XPRA iniciado com sucesso"
 echo
 xpra --version
 wine --version
 echo
+echo "---------------------------------------------------------------"
 echo "Acesse http://$(hostname -I | tr ' ' '\n' | grep -E '^[0-9]+\.' | head -n1):$XPRA_USER_PORT"
+echo "---------------------------------------------------------------"
 echo
-sleep 2
-if systemctl is-active --quiet "xpra-$XPRA_USER.service"; then
-echo "✔ XPRA iniciado com sucesso"
 else
 echo "❌ Falha ao iniciar XPRA"
 systemctl status "xpra-$XPRA_USER.service" --no-pager
