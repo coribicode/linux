@@ -1,6 +1,5 @@
 #!/bin/sh
 set -e
-clear
 LOG_FILE="install_log.json"
 FAILED_PACKAGES=""
 printf "[\n" > "$LOG_FILE"
