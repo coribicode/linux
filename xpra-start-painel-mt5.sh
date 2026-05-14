@@ -161,7 +161,7 @@ xpra start ":$DISPLAY_NUM" \
 --exit-with-children=no \
 --bind-tcp=0.0.0.0:$PORT \
 --html=on \
---start-child="sudo python3 /opt/painel.py"
+--start-child=xterm
 EOF
 
 chmod +x "$START_SCRIPT"
