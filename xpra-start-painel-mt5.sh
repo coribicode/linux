@@ -8,94 +8,6 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
 
-set -e
-LOG_FILE="install_log.json"
-FAILED_PACKAGES=""
-XPRA_GPG="/etc/apt/keyrings/xpra.gpg"
-printf "[\n" > "$LOG_FILE"
-is_installed() {
-dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"
-}
-check_provides() {
-apt-cache show "$1" 2>/dev/null | grep -q "Provides:"
-}
-log_json() {
-printf '{"package":"%s","status":"%s"},\n' "$1" "$2" >> "$LOG_FILE"
-}
-add_failed() {
-FAILED_PACKAGES="$FAILED_PACKAGES $1"
-}
-install_pkg() {
-PKG="$1"
-if is_installed "$PKG"; then
-log_json "$PKG" "installed"
-STATUS="✅ Instalado"
-return
-fi
-if apt-get install -y "$PKG" >/dev/null 2>&1; then
-if is_installed "$PKG"; then
-log_json "$PKG" "installed"
-else
-log_json "$PKG" "installed_unverified"
-add_failed "$PKG"
-fi
-else
-if check_provides "$PKG"; then
-log_json "$PKG" "provided"
-else
-log_json "$PKG" "failed"
-add_failed "$PKG"
-fi
-fi
-}
-print_pkg() {
-printf "📦 %-35s : %s\n" "$1" "$2"
-}
-install_group() {
-NAME="$1"
-shift
-echo
-echo "=================================================="
-echo "[ $NAME ]"
-echo "=================================================="
-for PKG in "$@"; do
-if is_installed "$PKG"; then
-STATUS="✅ Instalado"
-else
-printf "📦 %-35s : ⚡ Instalando...\n" "$PKG"
-install_pkg "$PKG"
-if is_installed "$PKG"; then
-STATUS="✅ Instalado"
-else
-STATUS="❌ Falha"
-fi
-fi
-print_pkg "$PKG" "$STATUS"
-done
-}
-
-install_group "XPRA-PAINEL-PY" python3 python3-venv python3-pyqt5 python3-tk python3-psutil python3-pyqt5.qtsvg python3-netifaces systemd-container cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils wmctrl p7zip-full zram-tools unzip
-
-echo
-echo "=================================================="
-echo "[ FINAL CHECK - FAILED PACKAGES ]"
-echo "=================================================="
-if [ -z "$FAILED_PACKAGES" ]; then
-echo "✔ Tudo instalado com sucesso"
-else
-for PKG in $FAILED_PACKAGES; do
-echo "❌ $PKG"
-done
-fi
-sed -i '$ s/,$//' "$LOG_FILE"
-printf "]\n" >> "$LOG_FILE"
-echo
-echo "📄 Log salvo: $LOG_FILE"
-
-echo "=================================================="
-echo "[ SERVICE XPRA PAINEL ]"
-echo "=================================================="
-
 XPRA_USER="xpra-painel"
 XPRA_USER_PASSWORD="123"
 
@@ -183,6 +95,94 @@ WantedBy=multi-user.target
 EOF
 
 echo "✔ Serviço systemd Criado"
+
+set -e
+LOG_FILE="install_log.json"
+FAILED_PACKAGES=""
+XPRA_GPG="/etc/apt/keyrings/xpra.gpg"
+printf "[\n" > "$LOG_FILE"
+is_installed() {
+dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"
+}
+check_provides() {
+apt-cache show "$1" 2>/dev/null | grep -q "Provides:"
+}
+log_json() {
+printf '{"package":"%s","status":"%s"},\n' "$1" "$2" >> "$LOG_FILE"
+}
+add_failed() {
+FAILED_PACKAGES="$FAILED_PACKAGES $1"
+}
+install_pkg() {
+PKG="$1"
+if is_installed "$PKG"; then
+log_json "$PKG" "installed"
+STATUS="✅ Instalado"
+return
+fi
+if apt-get install -y "$PKG" >/dev/null 2>&1; then
+if is_installed "$PKG"; then
+log_json "$PKG" "installed"
+else
+log_json "$PKG" "installed_unverified"
+add_failed "$PKG"
+fi
+else
+if check_provides "$PKG"; then
+log_json "$PKG" "provided"
+else
+log_json "$PKG" "failed"
+add_failed "$PKG"
+fi
+fi
+}
+print_pkg() {
+printf "📦 %-35s : %s\n" "$1" "$2"
+}
+install_group() {
+NAME="$1"
+shift
+echo
+echo "=================================================="
+echo "[ $NAME ]"
+echo "=================================================="
+for PKG in "$@"; do
+if is_installed "$PKG"; then
+STATUS="✅ Instalado"
+else
+printf "📦 %-35s : ⚡ Instalando...\n" "$PKG"
+install_pkg "$PKG"
+if is_installed "$PKG"; then
+STATUS="✅ Instalado"
+else
+STATUS="❌ Falha"
+fi
+fi
+print_pkg "$PKG" "$STATUS"
+done
+}
+
+install_group "XPRA-PAINEL-PY" python3 python3-venv python3-pyqt5 python3-tk python3-psutil python3-pyqt5.qtsvg python3-netifaces systemd-container cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils wmctrl p7zip-full zram-tools unzip
+
+echo
+echo "=================================================="
+echo "[ FINAL CHECK - FAILED PACKAGES ]"
+echo "=================================================="
+if [ -z "$FAILED_PACKAGES" ]; then
+echo "✔ Tudo instalado com sucesso"
+else
+for PKG in $FAILED_PACKAGES; do
+echo "❌ $PKG"
+done
+fi
+sed -i '$ s/,$//' "$LOG_FILE"
+printf "]\n" >> "$LOG_FILE"
+echo
+echo "📄 Log salvo: $LOG_FILE"
+
+echo "=================================================="
+echo "[ SERVICE XPRA PAINEL ]"
+echo "=================================================="
 
 sleep 2
 echo "---------------------------------------------------------------"
