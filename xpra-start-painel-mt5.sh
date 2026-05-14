@@ -80,82 +80,92 @@ fi
 echo
 center_text "========================================================"
 
-USER=xpra-painel
-useradd -m -s /bin/bash $USER && echo "$USER:123" | sudo chpasswd
-sudo usermod -aG sudo,cdrom,floppy,audio,dip,video,plugdev,users,netdev $USER
-
-cat <<'EOF'> /etc/sudoers.d/xpra-painel
+USER="xpra-painel"
+USER_PASSWORD="123"
+USER_EXISTS=$(id "$USER" >/dev/null 2>&1; echo $?)
+if [ "$USER_EXISTS" -ne 0 ]; then
+useradd -m -s /bin/bash "$USER"
+echo "$USER:$USER_PASSWORD" | chpasswd
+echo "✔ Usuário criado: $USER"
+else
+echo "✔ Usuário já existe: $USER"
+fi
+usermod -aG sudo,cdrom,floppy,audio,dip,video,plugdev,users,netdev "$USER"
+SUDOERS_FILE="/etc/sudoers.d/xpra-painel"
+if [ ! -f "$SUDOERS_FILE" ]; then
+cat <<'EOF' > "$SUDOERS_FILE"
 %sudo ALL=(ALL:ALL) NOPASSWD: ALL
 EOF
-
-XPRA_USER=$USER
-XPRA_USER_DISPLAY=$(id -u $USER)
-XPRA_USER_PORT=$(($(id -u $USER) * 10))
+chmod 440 "$SUDOERS_FILE"
+echo "✔ Arquivo sudoers criado"
+else
+echo "✔ Arquivo sudoers já existe"
+fi
+XPRA_USER="$USER"
 XPRA_USER_UID=$(id -u "$XPRA_USER")
+XPRA_USER_DISPLAY="$XPRA_USER_UID"
+XPRA_USER_PORT=$(("$XPRA_USER_UID" * 10))
 XPRA_USER_RUNTIME_DIR="/run/user/$XPRA_USER_UID"
 mkdir -p "$XPRA_USER_RUNTIME_DIR"
 chown "$XPRA_USER:$XPRA_USER" "$XPRA_USER_RUNTIME_DIR"
 chmod 700 "$XPRA_USER_RUNTIME_DIR"
-XDG_RUNTIME_DIR="$XPRA_USER_RUNTIME_DIR"
-
-cat <<'EOF'>> /usr/local/bin/start_xpra_user.sh
+START_SCRIPT="/usr/local/bin/start_xpra_user.sh"
+cat <<'EOF' > "$START_SCRIPT"
 #!/bin/bash
-# Recebe parâmetros: usuário, display, porta
 USER=$1
 DISPLAY_NUM=$2
 PORT=$3
-
-# Pega UID
-UID=$(id -u "$USER")
-RUNTIME_DIR="/run/user/$UID"
-
-# Garante que o diretório exista
+USER_UID=$(id -u "$USER")
+RUNTIME_DIR="/run/user/$USER_UID"
 mkdir -p "$RUNTIME_DIR"
 chown "$USER:$USER" "$RUNTIME_DIR"
 chmod 700 "$RUNTIME_DIR"
-
-# Exporta variáveis
 export XDG_RUNTIME_DIR="$RUNTIME_DIR"
 export DISPLAY=":$DISPLAY_NUM"
-
-# Inicia o xpra como o usuário especificado
 sudo -u "$USER" \
 XDG_RUNTIME_DIR="$RUNTIME_DIR" \
+DISPLAY=":$DISPLAY_NUM" \
 xpra start ":$DISPLAY_NUM" \
-  --daemon=no \
-  --systemd-run=no \
-  --pulseaudio=no \
-  --border=no \
-  --opengl=on \
-  --encoding=h264 \
-  --video-encoders=nvenc,x264 \
-  --quality=90 \
-  --min-quality=70 \
-  --speed=100 \
-  --compress=0 \
-  −−use−display=no \
-  --exit-with-children=no \
-  --bind-tcp=0.0.0.0:$PORT \
-  --html=on \
-  --start-child="sudo python3 /opt/painel.py"
+--daemon=no \
+--systemd-run=no \
+--pulseaudio=no \
+--border=no \
+--opengl=on \
+--encoding=h264 \
+--video-encoders=nvenc,x264 \
+--quality=90 \
+--min-quality=70 \
+--speed=100 \
+--compress=0 \
+--use-display=no \
+--exit-with-children=no \
+--bind-tcp=0.0.0.0:$PORT \
+--html=on \
+--start-child="sudo python3 /opt/painel.py"
 EOF
-
-chmod +x /usr/local/bin/start_xpra_user.sh
-
-cat <<EOF> /etc/systemd/system/xpra-$XPRA_USER.service
+chmod +x "$START_SCRIPT"
+echo "✔ Script XPRA atualizado"
+SERVICE_FILE="/etc/systemd/system/xpra-$XPRA_USER.service"
+cat <<EOF > "$SERVICE_FILE"
 [Unit]
-Description=XPRA for Multiple MetaTrader5 
+Description=XPRA for Multiple MetaTrader5
 After=network.target
-
 [Service]
 Type=simple
-ExecStart=$(find / | grep start_xpra_user.sh) $XPRA_USER $XPRA_USER_DISPLAY $XPRA_USER_PORT
+ExecStart=$START_SCRIPT $XPRA_USER $XPRA_USER_DISPLAY $XPRA_USER_PORT
 Restart=on-failure
-
+RestartSec=3
 [Install]
 WantedBy=multi-user.target
 EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable xpra-$XPRA_USER.service
-sudo systemctl start xpra-$XPRA_USER.service
+echo "✔ Serviço systemd atualizado"
+systemctl daemon-reload
+systemctl enable "xpra-$XPRA_USER.service" >/dev/null 2>&1
+systemctl restart "xpra-$XPRA_USER.service"
+sleep 2
+if systemctl is-active --quiet "xpra-$XPRA_USER.service"; then
+echo "✔ XPRA iniciado com sucesso"
+else
+echo "❌ Falha ao iniciar XPRA"
+systemctl status "xpra-$XPRA_USER.service" --no-pager
+fi
