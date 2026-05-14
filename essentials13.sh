@@ -1,67 +1,93 @@
-#!/bin/bash
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-FAILED_PACKAGES=()
-PACKAGES=(
-build-essential firmware-linux lsb-release apt-transport-https lsof gnu-which module-assistant ca-certificates aptitude sudo wget acl git curl perl tar unzip lzip xorg xvfb xauth pulseaudio alsa-utils alsa-tools libasound2t64 libasound2-dev udns-utils net-tools rfkill screenfetch cmake g++ gcc make automake autoconf flex bison bc gdb gnupg gnutls-bin libjwt-gnutls-dev
-)
-center_text() {
-local TEXT="$1"
-local WIDTH=$(tput cols)
-local PADDING=$(( (WIDTH - ${#TEXT}) / 2 ))
-printf "%*s%s\n" "$PADDING" "" "$TEXT"
+#!/bin/sh
+set -e
+LOG_FILE="install_log.json"
+FAILED_PACKAGES=""
+XPRA_GPG="/etc/apt/keyrings/xpra.gpg"
+printf "[\n" > "$LOG_FILE"
+check_debian_stable() {
+. /etc/os-release
+if [ "$ID" != "debian" ]; then
+echo "❌ Apenas Debian suportado"
+exit 1
+fi
 }
 is_installed() {
 dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"
 }
-apt-get update -y >/dev/null 2>&1
-echo
-center_text "========================================================"
-center_text "[ CHECKLIST ]: INSTALAÇÃO DE PACOTES"
-center_text "========================================================"
-echo
-for PKG in "${PACKAGES[@]}"; do
+check_provides() {
+apt-cache show "$1" 2>/dev/null | grep -q "Provides:"
+}
+log_json() {
+printf '{"package":"%s","status":"%s"},\n' "$1" "$2" >> "$LOG_FILE"
+}
+add_failed() {
+FAILED_PACKAGES="$FAILED_PACKAGES $1"
+}
+install_pkg() {
+PKG="$1"
 if is_installed "$PKG"; then
-printf "${GREEN}✔${NC} %-30s ${GREEN}[ OK ]${NC} Já instalado\n" "$PKG"
-else
-printf "${RED}✘${NC} %-30s ${RED}[ NÃO INSTALADO ]${NC}\n" "$PKG"
-printf "${YELLOW}⠋${NC} %-30s ${YELLOW}[ INSTALANDO... ]${NC}\n" "$PKG"
-if DEBIAN_FRONTEND=noninteractive apt-get install -y "$PKG" >/dev/null 2>&1; then
+log_json "$PKG" "installed"
+STATUS="✅ Instalado"
+return
+fi
+if apt-get install -y "$PKG" >/dev/null 2>&1; then
 if is_installed "$PKG"; then
-printf "${GREEN}✔${NC} %-30s ${GREEN}[ INSTALADO ]${NC}\n" "$PKG"
+log_json "$PKG" "installed"
 else
-printf "${RED}✘${NC} %-30s ${RED}[ FALHA ]${NC}\n" "$PKG"
-FAILED_PACKAGES+=("$PKG")
+log_json "$PKG" "installed_unverified"
+add_failed "$PKG"
 fi
 else
-printf "${RED}✘${NC} %-30s ${RED}[ ERRO INSTALL ]${NC}\n" "$PKG"
-FAILED_PACKAGES+=("$PKG")
+if check_provides "$PKG"; then
+log_json "$PKG" "provided"
+else
+log_json "$PKG" "failed"
+add_failed "$PKG"
 fi
 fi
-done
+}
+print_pkg() {
+printf "📦 %-35s : %s\n" "$1" "$2"
+}
+install_group() {
+NAME="$1"
+shift
 echo
-center_text "========================================================"
-center_text "[ CHECKLIST ]: VALIDAÇÃO FINAL"
-center_text "========================================================"
-echo
-for PKG in "${PACKAGES[@]}"; do
+echo "=================================================="
+echo "[ $NAME ]"
+echo "=================================================="
+for PKG in "$@"; do
 if is_installed "$PKG"; then
-printf "${GREEN}✔${NC} %-30s ${GREEN}[ OK ]${NC} Instalado\n" "$PKG"
+STATUS="✅ Instalado"
 else
-printf "${RED}✘${NC} %-30s ${RED}[ ERRO ]${NC} Não instalado\n" "$PKG"
-fi
-done
-echo
-if [ ${#FAILED_PACKAGES[@]} -eq 0 ]; then
-printf "${GREEN}✔ Todos os pacotes instalados com sucesso${NC}\n"
+printf "📦 %-35s : ⚡ Instalando...\n" "$PKG"
+install_pkg "$PKG"
+if is_installed "$PKG"; then
+STATUS="✅ Instalado"
 else
-printf "${RED}Pacotes com falha:${NC}\n"
-for PKG in "${FAILED_PACKAGES[@]}"; do
-echo " - $PKG"
+STATUS="❌ Falha"
+fi
+fi
+print_pkg "$PKG" "$STATUS"
+done
+}
+
+check_debian_stable
+
+install_group "ESSENTIALS 13" build-essential firmware-linux lsb-release apt-transport-https lsof gnu-which module-assistant ca-certificates aptitude sudo wget acl git curl perl tar unzip lzip xorg xvfb xauth pulseaudio alsa-utils alsa-tools libasound2t64 libasound2-dev udns-utils net-tools rfkill screenfetch cmake g++ gcc make automake autoconf flex bison bc gdb gnupg gnutls-bin libjwt-gnutls-dev
+
+echo
+echo "=================================================="
+echo "[ FINAL CHECK - FAILED PACKAGES ]"
+echo "=================================================="
+if [ -z "$FAILED_PACKAGES" ]; then
+echo "✔ Tudo instalado com sucesso"
+else
+for PKG in $FAILED_PACKAGES; do
+echo "❌ $PKG"
 done
 fi
+sed -i '$ s/,$//' "$LOG_FILE"
+printf "]\n" >> "$LOG_FILE"
 echo
-center_text "========================================================"
+echo "📄 Log salvo: $LOG_FILE"
