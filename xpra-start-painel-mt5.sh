@@ -8,7 +8,6 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
 
-#!/bin/sh
 set -e
 LOG_FILE="install_log.json"
 FAILED_PACKAGES=""
