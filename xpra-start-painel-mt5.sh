@@ -8,18 +8,12 @@ curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/essentials13.
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/xpra.sh | sh
 curl -fsSL https://raw.githubusercontent.com/coribicode/linux/main/wine-stable.sh | sh
 
+clear
 set -e
 LOG_FILE="install_log.json"
 FAILED_PACKAGES=""
 XPRA_GPG="/etc/apt/keyrings/xpra.gpg"
 printf "[\n" > "$LOG_FILE"
-check_debian_stable() {
-. /etc/os-release
-if [ "$ID" != "debian" ]; then
-echo "❌ Apenas Debian suportado"
-exit 1
-fi
-}
 is_installed() {
 dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"
 }
@@ -81,8 +75,6 @@ print_pkg "$PKG" "$STATUS"
 done
 }
 
-check_debian_stable
-
 install_group "XPRA-PAINEL-PY" python3 python3-venv python3-pyqt5 python3-tk python3-psutil python3-pyqt5.qtsvg python3-netifaces systemd-container cgroup-tools x11-xserver-utils procps psmisc cabextract zenity xdg-utils wmctrl p7zip-full zram-tools unzip
 
 echo
@@ -105,7 +97,6 @@ echo "=================================================="
 echo "[ SERVICE XPRA PAINEL ]"
 echo "=================================================="
 
-clear
 USER="xpra-painel"
 USER_PASSWORD="123"
 USER_EXISTS=$(id "$USER" >/dev/null 2>&1; echo $?)
