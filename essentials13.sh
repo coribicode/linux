@@ -74,7 +74,7 @@ done
 
 check_debian_stable
 
-install_group "ESSENTIALS 13" build-essential firmware-linux lsb-release apt-transport-https lsof gnu-which module-assistant ca-certificates aptitude sudo wget acl git curl perl tar unzip lzip xorg xvfb xauth pulseaudio alsa-utils alsa-tools libasound2t64 libasound2-dev udns-utils net-tools rfkill screenfetch cmake g++ gcc make automake autoconf flex bison bc gdb gnupg gnutls-bin libjwt-gnutls-dev
+install_group "ESSENTIALS 13" build-essential systemd-container firmware-linux lsb-release apt-transport-https lsof gnu-which module-assistant ca-certificates aptitude sudo wget acl git curl perl tar unzip lzip xorg xvfb xauth pulseaudio alsa-utils alsa-tools libasound2t64 libasound2-dev udns-utils net-tools rfkill screenfetch cmake g++ gcc make automake autoconf flex bison bc gdb gnupg gnutls-bin libjwt-gnutls-dev
 
 echo
 echo "=================================================="
