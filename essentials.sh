@@ -11,7 +11,7 @@ COR_RESET="\e[0m"
 # =========================
 # PACOTES
 # =========================
-PACOTES="
+PACOTES=(
 util-linux
 build-essential
 firmware-linux
@@ -58,11 +58,11 @@ alsa-utils
 alsa-tools
 screenfetch
 wmctrl
-"
+)
 # =========================
-# VERIFICAÇÃO
+# VARIÁVEIS
 # =========================
-FALTANDO=""
+FALTANDO=()
 echo
 printf "%-35s %-20s %-35s\n" \
 "PACOTE" \
@@ -72,6 +72,9 @@ printf "%-35s %-20s %-35s\n" \
 "-----------------------------------" \
 "--------------------" \
 "-----------------------------------"
+# =========================
+# VERIFICAÇÃO
+# =========================
 for PACOTE in "${PACOTES[@]}"
 do
     if dpkg-query -W "$PACOTE" >/dev/null 2>&1
@@ -92,27 +95,25 @@ done
 # =========================
 # RESUMO
 # =========================
+TOTAL_PACOTES=${#PACOTES[@]}
+TOTAL_FALTANDO=${#FALTANDO[@]}
+TOTAL_INSTALADOS=$((TOTAL_PACOTES - TOTAL_FALTANDO))
 echo
 echo "====================================================="
 echo "RESUMO"
 echo "====================================================="
-echo "Total Pacotes : ${#PACOTES[@]}"
-echo "Instalados    : $((${#PACOTES[@]}-${#FALTANDO[@]}))"
-echo "Ausentes      : ${#FALTANDO[@]}"
+echo "Total Pacotes : $TOTAL_PACOTES"
+echo "Instalados    : $TOTAL_INSTALADOS"
+echo "Ausentes      : $TOTAL_FALTANDO"
 echo
 # =========================
 # TODOS INSTALADOS
 # =========================
-if [ ${#FALTANDO[@]} -eq 0 ]
+if [ "$TOTAL_FALTANDO" -eq 0 ]
 then
     echo -e "${COR_VERDE}✓ Todos os pacotes estão instalados.${COR_RESET}"
     echo
-    # NÃO ENCERRA O SCRIPT
-    # Apenas continua normalmente
 else
-    # =========================
-    # PACOTES AUSENTES
-    # =========================
     echo -e "${COR_AMARELO}Pacotes Ausentes:${COR_RESET}"
     echo
     printf ' - %s\n' "${FALTANDO[@]}"
@@ -121,7 +122,7 @@ else
     echo
     echo "apt update && apt install -y ${FALTANDO[*]}"
     echo
-    read -p "Deseja instalar os pacotes ausentes? (s/N): " RESP
+    read -rp "Deseja instalar os pacotes ausentes? (s/N): " RESP
     if [[ "$RESP" =~ ^[sS]$ ]]
     then
         echo
@@ -129,7 +130,7 @@ else
         apt update
         echo
         echo "Instalando pacotes..."
-        apt install -y "${FALTANDO[@]}" 2>/dev/null
+        apt install -y "${FALTANDO[@]}"
         echo
         echo -e "${COR_VERDE}✓ Instalação concluída.${COR_RESET}"
     else
@@ -137,3 +138,5 @@ else
         echo -e "${COR_VERMELHO}✗ Instalação cancelada.${COR_RESET}"
     fi
 fi
+echo
+read -rp "Pressione ENTER para continuar..."
