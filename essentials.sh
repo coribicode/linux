@@ -1,16 +1,21 @@
 #!/bin/bash
+
 clear
+
 # =========================
 # CORES
 # =========================
+
 COR_VERDE="\e[32m"
 COR_VERMELHO="\e[31m"
-COR_AZUL="\e[34m"
 COR_AMARELO="\e[33m"
+COR_AZUL="\e[34m"
 COR_RESET="\e[0m"
+
 # =========================
 # PACOTES
 # =========================
+
 PACOTES=(
 util-linux
 build-essential
@@ -59,85 +64,166 @@ alsa-tools
 screenfetch
 wmctrl
 )
+
 # =========================
-# VARIÁVEIS
+# SPINNER
 # =========================
-FALTANDO=()
+
+spinner() {
+    local PID=$1
+    local SPIN='|/-\'
+
+    while kill -0 "$PID" 2>/dev/null
+    do
+        for ((i=0; i<${#SPIN}; i++))
+        do
+            printf "\r${COR_AMARELO}[%c] Instalando...${COR_RESET}" "${SPIN:$i:1}"
+            sleep 0.10
+        done
+    done
+
+    printf "\r%-60s\r" ""
+}
+
+# =========================
+# CABEÇALHO
+# =========================
+
 echo
-printf "%-35s %-20s %-35s\n" \
+printf "%-4s %-35s %-20s %-25s\n" \
+"#" \
 "PACOTE" \
 "STATUS" \
 "VERSÃO"
-printf "%-35s %-20s %-35s\n" \
+
+printf "%-4s %-35s %-20s %-25s\n" \
+"----" \
 "-----------------------------------" \
 "--------------------" \
-"-----------------------------------"
+"-------------------------"
+
 # =========================
-# VERIFICAÇÃO
+# CONTADORES
 # =========================
+
+TOTAL=${#PACOTES[@]}
+ATUAL=0
+OK=0
+FALHA=0
+
+# =========================
+# PROCESSAMENTO
+# =========================
+
 for PACOTE in "${PACOTES[@]}"
 do
+
+    ((ATUAL++))
+
     STATUS=$(dpkg-query -W -f='${db:Status-Abbrev}' "$PACOTE" 2>/dev/null)
+
     if [[ "$STATUS" == ii* ]]
     then
+
         VERSAO=$(dpkg-query -W -f='${Version}' "$PACOTE" 2>/dev/null)
-        printf "%-35s ${COR_VERDE}%-20s${COR_RESET} ${COR_AZUL}%-35s${COR_RESET}\n" \
+
+        printf "%-4s %-35s ${COR_VERDE}%-20s${COR_RESET} ${COR_AZUL}%-25s${COR_RESET}\n" \
+            "[$ATUAL/$TOTAL]" \
             "$PACOTE" \
             "Instalado" \
             "$VERSAO"
-    else
-        printf "%-35s ${COR_VERMELHO}%-20s${COR_RESET} %-35s\n" \
-            "$PACOTE" \
-            "Não Instalado" \
-            "-"
-        FALTANDO+=("$PACOTE")
+
+        ((OK++))
+
+        continue
+
     fi
+
+    printf "%-4s %-35s ${COR_VERMELHO}%-20s${COR_RESET} %-25s\n" \
+        "[$ATUAL/$TOTAL]" \
+        "$PACOTE" \
+        "Não Instalado" \
+        "--"
+
+    read -rp "Instalar $PACOTE ? (s/N): " RESP < /dev/tty
+
+    if [[ ! "$RESP" =~ ^[sS]$ ]]
+    then
+        ((FALHA++))
+        continue
+    fi
+
+    echo
+
+    apt install -y "$PACOTE" >/dev/null 2>&1 &
+    APT_PID=$!
+
+    spinner "$APT_PID"
+
+    wait "$APT_PID"
+    RESULTADO=$?
+
+    if [ "$RESULTADO" -eq 0 ]
+    then
+
+        VERSAO=$(dpkg-query -W -f='${Version}' "$PACOTE" 2>/dev/null)
+
+        printf "%-4s %-35s ${COR_VERDE}%-20s${COR_RESET} ${COR_AZUL}%-25s${COR_RESET}\n" \
+            "[$ATUAL/$TOTAL]" \
+            "$PACOTE" \
+            "Instalado" \
+            "$VERSAO"
+
+        ((OK++))
+
+    else
+
+        printf "%-4s %-35s ${COR_VERMELHO}%-20s${COR_RESET} %-25s\n" \
+            "[$ATUAL/$TOTAL]" \
+            "$PACOTE" \
+            "Falhou" \
+            "--"
+
+        ((FALHA++))
+
+    fi
+
 done
+
 # =========================
 # RESUMO
 # =========================
-TOTAL_PACOTES=${#PACOTES[@]}
-TOTAL_FALTANDO=${#FALTANDO[@]}
-TOTAL_INSTALADOS=$((TOTAL_PACOTES - TOTAL_FALTANDO))
+
 echo
-echo "====================================================="
-echo "RESUMO"
-echo "====================================================="
-echo "Total Pacotes : $TOTAL_PACOTES"
-echo "Instalados    : $TOTAL_INSTALADOS"
-echo "Ausentes      : $TOTAL_FALTANDO"
+echo "=============================================================="
+echo "RESUMO FINAL"
+echo "=============================================================="
+
+echo -e "Total     : ${COR_AZUL}$TOTAL${COR_RESET}"
+echo -e "Sucesso   : ${COR_VERDE}$OK${COR_RESET}"
+echo -e "Falhas    : ${COR_VERMELHO}$FALHA${COR_RESET}"
+
+PERCENTUAL=$((OK * 100 / TOTAL))
+
 echo
-# =========================
-# TODOS INSTALADOS
-# =========================
-if [ "$TOTAL_FALTANDO" -eq 0 ]
-then
-    echo -e "${COR_VERDE}✓ Todos os pacotes estão instalados.${COR_RESET}"
-    echo
-else
-    echo -e "${COR_AMARELO}Pacotes Ausentes:${COR_RESET}"
-    echo
-    printf ' - %s\n' "${FALTANDO[@]}"
-    echo
-    echo "Comando de instalação:"
-    echo
-    echo "apt update && apt install -y ${FALTANDO[*]}"
-    echo
-    read -rp "Deseja instalar os pacotes ausentes? (s/N): " RESP < /dev/tty
-    if [[ "$RESP" =~ ^[sS]$ ]]
+printf "["
+
+BARRA=$((PERCENTUAL / 2))
+
+for ((i=0;i<50;i++))
+do
+    if [ "$i" -lt "$BARRA" ]
     then
-        echo
-        echo "Atualizando repositórios..."
-        apt update
-        echo
-        echo "Instalando pacotes..."
-        apt install -y "${FALTANDO[@]}"
-        echo
-        echo -e "${COR_VERDE}✓ Instalação concluída.${COR_RESET}"
+        printf "#"
     else
-        echo
-        echo -e "${COR_VERMELHO}✗ Instalação cancelada.${COR_RESET}"
+        printf "."
     fi
-fi
+done
+
+printf "] %d%%\n" "$PERCENTUAL"
+
 echo
+echo -e "${COR_VERDE}Processo concluído.${COR_RESET}"
+echo
+
 read -rp "Pressione ENTER para continuar..." < /dev/tty
