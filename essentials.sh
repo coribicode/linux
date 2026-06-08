@@ -122,7 +122,7 @@ else
     echo
     echo "apt update && apt install -y ${FALTANDO[*]}"
     echo
-    read -rp "Deseja instalar os pacotes ausentes? (s/N): " RESP
+    read -rp "Deseja instalar os pacotes ausentes? (s/N): " RESP < /dev/tty
     if [[ "$RESP" =~ ^[sS]$ ]]
     then
         echo
@@ -139,4 +139,4 @@ else
     fi
 fi
 echo
-read -rp "Pressione ENTER para continuar..."
+read -rp "Pressione ENTER para continuar..." < /dev/tty
