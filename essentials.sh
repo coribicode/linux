@@ -57,6 +57,7 @@ pulseaudio-utils
 alsa-utils
 alsa-tools
 screenfetch
+wmctrl
 )
 # =========================
 # VERIFICAÇÃO
