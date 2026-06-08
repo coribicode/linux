@@ -11,7 +11,7 @@ COR_RESET="\e[0m"
 # =========================
 # PACOTES
 # =========================
-PACOTES=(
+PACOTES="
 util-linux
 build-essential
 firmware-linux
@@ -58,7 +58,7 @@ alsa-utils
 alsa-tools
 screenfetch
 wmctrl
-)
+"
 # =========================
 # VERIFICAÇÃO
 # =========================
