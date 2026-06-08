@@ -45,37 +45,6 @@ else
     echo
 fi
 
-# Swap
-if swapon --show | grep -q .; then
-    status_line "Swap Desativado" "Não desativado" "$RED"
-    sleep 1
-    status_line "Swap Desativado" "Desativando..." "$YELLOW"
-    sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-    swapoff -a >/dev/null 2>&1
-    rm -f /swapfile >/dev/null 2>&1
-    sleep 1
-    status_line "Swap Desativado" "Desativado" "$GREEN"
-    echo
-else
-    status_line "Swap Desativado" "Desativado" "$GREEN"
-    echo
-fi
-
-# zRAM
-if systemctl is-active zramswap.service >/dev/null 2>&1; then
-    status_line "zRAM Desativado" "Não desativado" "$RED"
-    sleep 1
-    status_line "zRAM Desativado" "Desativando..." "$YELLOW"
-    systemctl stop zramswap.service >/dev/null 2>&1
-    systemctl disable zramswap.service >/dev/null 2>&1
-    sleep 1
-    status_line "zRAM Desativado" "Desativado" "$GREEN"
-    echo
-else
-    status_line "zRAM Desativado" "Desativado" "$GREEN"
-    echo
-fi
-
 echo
 echo "${WHITE}⚡ ATUALIZAÇÃO DO SISTEMA:${NC}"
 echo
