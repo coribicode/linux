@@ -77,7 +77,8 @@ printf "%-35s %-20s %-35s\n" \
 # =========================
 for PACOTE in "${PACOTES[@]}"
 do
-    if dpkg-query -W "$PACOTE" >/dev/null 2>&1
+    STATUS=$(dpkg-query -W -f='${db:Status-Abbrev}' "$PACOTE" 2>/dev/null)
+    if [[ "$STATUS" == ii* ]]
     then
         VERSAO=$(dpkg-query -W -f='${Version}' "$PACOTE" 2>/dev/null)
         printf "%-35s ${COR_VERDE}%-20s${COR_RESET} ${COR_AZUL}%-35s${COR_RESET}\n" \
