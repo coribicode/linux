@@ -62,7 +62,7 @@ wmctrl
 # =========================
 # VERIFICAÇÃO
 # =========================
-FALTANDO=()
+FALTANDO=""
 echo
 printf "%-35s %-20s %-35s\n" \
 "PACOTE" \
