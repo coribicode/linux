@@ -45,6 +45,7 @@ gcc
 make
 automake
 autoconf
+ssh
 tar
 unzip
 lzip
