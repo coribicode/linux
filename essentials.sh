@@ -1,15 +1,29 @@
 #!/bin/bash
-clear
-# =========================
+set -u
+# ==============================================================================
 # CORES
-# =========================
-VERDE=$'\033[32m'
-VERMELHO=$'\033[31m'
-RESET=$'\033[0m'
-# =========================
+# ==============================================================================
+if [ -t 1 ]; then
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    ORANGE='\033[38;5;208m'
+    CYAN='\033[1;36m'
+    WHITE='\033[1;37m'
+    NC='\033[0m'
+else
+    RED=''
+    GREEN=''
+    YELLOW=''
+    ORANGE=''
+    CYAN=''
+    WHITE=''
+    NC=''
+fi
+# ==============================================================================
 # PACOTES
-# =========================
-PACOTES=(
+# ==============================================================================
+PACKAGES=(
 util-linux
 build-essential
 firmware-linux
@@ -57,96 +71,207 @@ alsa-tools
 screenfetch
 wmctrl
 )
-# =========================
-# MAPA DEBIAN
-# =========================
-declare -A MAPA=(
-    [which]="debianutils"
-    [dnsutils]="bind9-dnsutils"
-)
-# =========================
-# CHECK
-# =========================
-resolve_installed() {
-    local p="$1"
-    if [[ -z "${MAPA[$p]}" ]]; then
-        dpkg -s "$p" >/dev/null 2>&1 && return 0
-        return 1
+# ==============================================================================
+# ARRAYS
+# ==============================================================================
+declare -A INSTALLED
+declare -A VERSION
+declare -A STATUS
+declare -A STATUS_COLOR
+MISSING_PACKAGES=()
+SPINNER=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
+# ==============================================================================
+# CARREGA PACOTES INSTALADOS
+# ==============================================================================
+load_installed_packages() {
+    INSTALLED=()
+    while read -r pkg ver
+    do
+        INSTALLED["$pkg"]="$ver"
+    done < <(
+        dpkg-query -W -f='${Package} ${Version}\n' 2>/dev/null
+    )
+}
+# ==============================================================================
+# VERIFICA PACOTE
+# ==============================================================================
+check_package() {
+    local pkg="$1"
+    if [[ -n "${INSTALLED[$pkg]:-}" ]]
+    then
+        VERSION["$pkg"]="${INSTALLED[$pkg]}"
+        STATUS["$pkg"]="Instalado"
+        STATUS_COLOR["$pkg"]="$GREEN"
+        return 0
     fi
-    for pkg in ${MAPA[$p]}; do
-        dpkg -s "$pkg" >/dev/null 2>&1 && return 0
-    done
+    VERSION["$pkg"]="---"
+    STATUS["$pkg"]="Não instalado"
+    STATUS_COLOR["$pkg"]="$RED"
     return 1
 }
-get_version() {
-    local p="$1"
-    if [[ -n "${MAPA[$p]}" ]]; then
-        for pkg in ${MAPA[$p]}; do
-            if dpkg -s "$pkg" >/dev/null 2>&1; then
-                dpkg -s "$pkg" | awk -F': ' '/Version/ {print $2}'
-                return
-            fi
-        done
-    fi
-    dpkg -s "$p" 2>/dev/null | awk -F': ' '/Version/ {print $2}'
-}
-# =========================
-# RENDER
-# =========================
-render() {
-    clear
-    echo "╔════════════════════════════════════════════════════════════╗"
-    echo "║                 PAINEL DE PACOTES APT                      ║"
-    echo "╚════════════════════════════════════════════════════════════╝"
-    # HEADER INVERTIDO
-    printf "%-25s %-20s %-10s\n" "PACOTE" "VERSÃO" "STATUS"
-    echo "------------------------------------------------------------"
-    for p in "${PACOTES[@]}"; do
-        if resolve_installed "$p"; then
-            version="$(get_version "$p")"
-            status="${VERDE}OK${RESET}"
-        else
-            version="--"
-            status="${VERMELHO}FALTA${RESET}"
+# ==============================================================================
+# VERIFICA TODOS
+# ==============================================================================
+verify_packages() {
+    MISSING_PACKAGES=()
+    load_installed_packages
+    for pkg in "${PACKAGES[@]}"
+    do
+        if ! check_package "$pkg"
+        then
+            MISSING_PACKAGES+=("$pkg")
         fi
-        # ORDEM INVERTIDA AQUI:
-        printf "%-25s %-20s %-10b\n" "$p" "$version" "$status"
     done
 }
-# =========================
-# EXECUÇÃO
-# =========================
-render
-# =========================
-# VERIFICA FALTANTES
-# =========================
-MISSING=()
-for p in "${PACOTES[@]}"; do
-    if ! resolve_installed "$p"; then
-        MISSING+=("$p")
-    fi
-done
-if [ "${#MISSING[@]}" -eq 0 ]; then
+# ==============================================================================
+# TABELA
+# ==============================================================================
+draw_table() {
+    echo -e "${WHITE}"
+    echo "╔══════════════════════════════════════════════════════════════════════════════════════╗"
+    echo "║                         INSTALADOR DE PACOTES - DEBIAN 13                           ║"
+    echo "╚══════════════════════════════════════════════════════════════════════════════════════╝"
+    echo -e "${NC}"
+    printf "${WHITE}%-30s %-25s %-25s${NC}\n" "PACOTE" "VERSÃO" "STATUS"
+    printf "${WHITE}%-30s %-25s %-25s${NC}\n" "------------------------------" "-------------------------" "-------------------------"
+    for pkg in "${PACKAGES[@]}"
+    do
+        printf "%b%-30s%b " \
+            "$ORANGE" "$pkg" "$NC"
+        printf "%-25s " "${VERSION[$pkg]}"
+        printf "%b%-25s%b\n" \
+            "${STATUS_COLOR[$pkg]}" \
+            "${STATUS[$pkg]}" \
+            "$NC"
+    done
     echo
-    echo -e "${VERDE}✔ Todos os pacotes já estão instalados.${RESET}"
+}
+# ==============================================================================
+# PROGRESSO
+# ==============================================================================
+show_install_progress() {
+    local pid="$1"
+    local total="$2"
+    local start
+    start=$(date +%s)
+    local frame=0
+    echo
+    echo "Pacotes solicitados : $total"
+    echo
+    while kill -0 "$pid" 2>/dev/null
+    do
+        local now elapsed hh mm ss
+        now=$(date +%s)
+        elapsed=$((now - start))
+        hh=$((elapsed / 3600))
+        mm=$(((elapsed % 3600) / 60))
+        ss=$((elapsed % 60))
+        printf "\rTempo: %02d:%02d:%02d   %s Instalando pacotes..." \
+            "$hh" "$mm" "$ss" \
+            "${SPINNER[$frame]}"
+        frame=$(( (frame + 1) % ${#SPINNER[@]} ))
+        sleep 0.2
+    done
+    echo
+    echo
+}
+# ==============================================================================
+# ROOT
+# ==============================================================================
+if [ "$(id -u)" -ne 0 ]
+then
+    echo
+    echo "Execute como root."
+    echo
+    exit 1
+fi
+# ==============================================================================
+# LIMPA TELA E ATUALIZA REPOSITÓRIOS
+# ==============================================================================
+clear
+echo
+echo -e "${CYAN}Atualizando repositórios...${NC}"
+if ! apt-get update -qq >/dev/null 2>&1
+then
+    echo
+    echo -e "${RED}Falha ao atualizar repositórios.${NC}"
+    exit 1
+fi
+echo -e "${GREEN}✓ Repositórios atualizados${NC}"
+echo
+# ==============================================================================
+# VERIFICAÇÃO INICIAL
+# ==============================================================================
+verify_packages
+draw_table
+# ==============================================================================
+# TUDO INSTALADO
+# ==============================================================================
+if [ "${#MISSING_PACKAGES[@]}" -eq 0 ]
+then
+    echo -e "${GREEN}Todos os pacotes já estão instalados.${NC}"
+    echo
     exit 0
 fi
+# ==============================================================================
+# LISTA DE PACOTES A INSTALAR
+# ==============================================================================
+echo -e "${WHITE}Pacotes que serão instalados:${NC}"
 echo
-read -rp "Instalar ${#MISSING[@]} pacotes faltantes? (s/N): " RESP < /dev/tty
-[[ ! "$RESP" =~ ^[sS]$ ]] && exit 0
-# =========================
-# INSTALAÇÃO
-# =========================
-for p in "${MISSING[@]}"; do
-    if [[ -n "${MAPA[$p]}" ]]; then
-        apt install -y ${MAPA[$p]} >/dev/null 2>&1
-    else
-        apt install -y "$p" >/dev/null 2>&1
-    fi
+for pkg in "${MISSING_PACKAGES[@]}"
+do
+    echo -e "  ${ORANGE}${pkg}${NC}"
 done
-# =========================
-# FINAL
-# =========================
-render
 echo
-echo -e "${VERDE}✔ CONCLUÍDO${RESET}"
+read -rp "Deseja continuar? [s/N]: " CONFIRM
+case "$CONFIRM" in
+    s|S|sim|SIM|y|Y)
+        echo
+        ;;
+    *)
+        echo
+        echo "Instalação cancelada."
+        exit 0
+        ;;
+esac
+# ==============================================================================
+# INSTALAÇÃO
+# ==============================================================================
+LOG_FILE="/tmp/install_packages.log"
+# Inicia a instalação em segundo plano
+apt-get install -y \
+    "${MISSING_PACKAGES[@]}" \
+    >"$LOG_FILE" 2>&1 &
+PID=$!
+# Mostra o progresso da instalação
+show_install_progress "$PID" "${#MISSING_PACKAGES[@]}"
+wait "$PID"
+RET=$?
+# ==============================================================================
+# ERRO
+# ==============================================================================
+if [ "$RET" -ne 0 ]
+then
+    echo -e "${RED}Falha durante a instalação.${NC}"
+    echo
+    tail -20 "$LOG_FILE"
+    exit 1
+fi
+# ==============================================================================
+# FINAL - MOSTRA RESULTADO (SEM LIMPAR TELA)
+# ==============================================================================
+# Verifica novamente os pacotes e desenha a tabela final
+verify_packages
+draw_table
+if [ "${#MISSING_PACKAGES[@]}" -eq 0 ]
+then
+    echo -e "${GREEN}✓ Todos os pacotes foram instalados com sucesso.${NC}"
+else
+    echo -e "${YELLOW}Alguns pacotes ainda não foram instalados:${NC}"
+
+    for pkg in "${MISSING_PACKAGES[@]}"
+    do
+        echo " - $pkg"
+    done
+fi
+echo
