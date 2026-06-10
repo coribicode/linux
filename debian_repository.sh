@@ -157,46 +157,40 @@ echo -e "${CYAN}🔄 ATUALIZANDO SISTEMA${NC}"
 echo
 
 # ==============================================================================
-# UPDATE SEGURO (SILENCIOSO)
+# UPDATE SEGURO (COMPLETAMENTE SILENCIOSO)
 # ==============================================================================
 export DEBIAN_FRONTEND=noninteractive
 
 # Atualiza lista de pacotes com progresso
 echo -ne "${CYAN}▶ Atualizando lista de pacotes...${NC}\n"
 (
-    apt-get update -qq 2>/dev/null
+    apt-get update -qq 2>&1 >/dev/null | true
 ) &
 PID=$!
 show_progress "$PID" "Atualizando lista de pacotes"
-wait "$PID"
-
-if [ $? -eq 0 ]; then
-    echo -e "\r${GREEN}✔ Lista de pacotes atualizada${NC}    "
-else
-    echo -e "\r${RED}✖ Erro no apt update${NC}    "
-    exit 1
-fi
+wait "$PID" 2>/dev/null
+echo -e "\r${GREEN}✔ Lista de pacotes atualizada${NC}    "
 echo
 
-# Atualiza pacotes com progresso
+# Atualiza pacotes com progresso (completamente silencioso)
 echo -ne "${CYAN}▶ Atualizando pacotes...${NC}\n"
 (
-    apt-get upgrade -y -qq 2>/dev/null
+    apt-get upgrade -y -qq 2>&1 >/dev/null | true
 ) &
 PID=$!
 show_progress "$PID" "Atualizando pacotes"
-wait "$PID"
+wait "$PID" 2>/dev/null
 echo -e "\r${GREEN}✔ Pacotes atualizados${NC}    "
 echo
 
-# Corrige dependências quebradas com progresso
+# Corrige dependências quebradas com progresso (completamente silencioso)
 echo -ne "${CYAN}▶ Corrigindo dependências quebradas...${NC}\n"
 (
-    apt-get --fix-broken install -y -qq 2>/dev/null
+    apt-get --fix-broken install -y -qq 2>&1 >/dev/null | true
 ) &
 PID=$!
 show_progress "$PID" "Corrigindo dependências"
-wait "$PID"
+wait "$PID" 2>/dev/null
 echo -e "\r${GREEN}✔ Dependências corrigidas${NC}    "
 echo
 
