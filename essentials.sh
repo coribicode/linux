@@ -23,6 +23,11 @@ else
 fi
 
 # ==============================================================================
+# FORÇA LEITURA DO TERMINAL MESMO EM PIPE
+# ==============================================================================
+exec < /dev/tty
+
+# ==============================================================================
 # PACOTES
 # ==============================================================================
 PACKAGES=(
@@ -85,6 +90,23 @@ declare -A STATUS_COLOR
 MISSING_PACKAGES=()
 
 SPINNER=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
+
+# ==============================================================================
+# FUNÇÃO PARA LER CONFIRMAÇÃO DO TERMINAL
+# ==============================================================================
+confirm_install() {
+    local answer
+    printf "Deseja continuar? [s/N]: " > /dev/tty
+    read answer < /dev/tty
+    case "$answer" in
+        s|S|sim|SIM|y|Y)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
 
 # ==============================================================================
 # CARREGA PACOTES INSTALADOS
@@ -238,19 +260,17 @@ do
     echo -e "  ${ORANGE}${pkg}${NC}"
 done
 echo
-read -rp "Deseja continuar? [s/N]: " CONFIRM
 
-# CORREÇÃO: O case estava mal formatado
-case "$CONFIRM" in
-    s|S|sim|SIM|y|Y)
-        echo
-        ;;
-    *)
-        echo
-        echo "Instalação cancelada."
-        exit 0
-        ;;
-esac
+# ==============================================================================
+# CONFIRMAÇÃO USANDO FUNÇÃO QUE LÊ DO TERMINAL
+# ==============================================================================
+if ! confirm_install; then
+    echo
+    echo "Instalação cancelada."
+    exit 0
+fi
+
+echo
 
 # ==============================================================================
 # INSTALAÇÃO
