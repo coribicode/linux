@@ -118,7 +118,7 @@ if [ ! -f "$PATH_SOURCE" ]; then
         echo -e "${GREEN}✔ Backup criado: /etc/apt/sources.list.bkp${NC}"
     fi
     
-    cat > "$PATH_SOURCE" <<EOF
+cat > "$PATH_SOURCE" <<EOF
 Types: $TYPES
 URIs: $URIS
 Suites: $SUITES
