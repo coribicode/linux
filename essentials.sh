@@ -23,11 +23,6 @@ else
 fi
 
 # ==============================================================================
-# FORÇA LEITURA DO TERMINAL MESMO EM PIPE
-# ==============================================================================
-exec < /dev/tty
-
-# ==============================================================================
 # PACOTES
 # ==============================================================================
 PACKAGES=(
@@ -96,8 +91,24 @@ SPINNER=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
 # ==============================================================================
 confirm_install() {
     local answer
-    printf "Deseja continuar? [s/N]: " > /dev/tty
-    read answer < /dev/tty
+    
+    # Tenta ler do terminal se disponível, senão usa stdin
+    if [ -t 0 ] && [ -t 1 ]; then
+        # Terminal interativo disponível
+        printf "Deseja continuar? [s/N]: "
+        read answer
+    else
+        # Se não houver terminal (curl | bash), usa /dev/tty se existir
+        if [ -e /dev/tty ]; then
+            printf "Deseja continuar? [s/N]: " > /dev/tty
+            read answer < /dev/tty 2>/dev/null
+        else
+            # Fallback: assume que quer continuar quando não há interação
+            echo "Modo não interativo detectado. Continuando automaticamente..."
+            return 0
+        fi
+    fi
+    
     case "$answer" in
         s|S|sim|SIM|y|Y)
             return 0
@@ -262,7 +273,7 @@ done
 echo
 
 # ==============================================================================
-# CONFIRMAÇÃO USANDO FUNÇÃO QUE LÊ DO TERMINAL
+# CONFIRMAÇÃO
 # ==============================================================================
 if ! confirm_install; then
     echo
