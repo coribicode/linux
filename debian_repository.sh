@@ -1,5 +1,7 @@
 #!/bin/bash
+
 set -u
+
 # ==============================================================================
 # CORES
 # ==============================================================================
@@ -20,14 +22,17 @@ else
     WHITE=''
     NC=''
 fi
+
 # ==============================================================================
 # SPINNER
 # ==============================================================================
 SPINNER=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
+
 # ==============================================================================
 # DETECTA CODENAME REAL
 # ==============================================================================
 CODENAME="$(. /etc/os-release && echo "$VERSION_CODENAME")"
+
 # ==============================================================================
 # CONFIGURAÇÕES DOS REPOSITÓRIOS
 # ==============================================================================
@@ -39,6 +44,7 @@ SUITES_SEC="$CODENAME-security"
 COMPONENTES="main contrib non-free non-free-firmware"
 SIGNED="/usr/share/keyrings/debian-archive-keyring.gpg"
 PATH_SOURCE="/etc/apt/sources.list.d/${CODENAME}.sources"
+
 # ==============================================================================
 # FUNÇÃO PARA MOSTRAR PROGRESSO
 # ==============================================================================
@@ -65,12 +71,14 @@ show_progress() {
     done
     printf "\r\033[K"
 }
+
 # ==============================================================================
 # FUNÇÃO PARA EXECUTAR COMANDOS SILENCIOSAMENTE
 # ==============================================================================
 run_silent() {
     "$@" >/dev/null 2>&1
 }
+
 # ==============================================================================
 # TABELA DE STATUS
 # ==============================================================================
@@ -82,6 +90,7 @@ draw_status_table() {
     echo -e "${NC}"
     echo
 }
+
 # ==============================================================================
 # CABEÇALHO
 # ==============================================================================
@@ -89,12 +98,14 @@ clear
 draw_status_table
 echo -e "${CYAN}▶ INICIANDO CONFIGURAÇÃO DO SISTEMA${NC}"
 echo
+
 # ==============================================================================
 # IPV4 PRIORITY
 # ==============================================================================
 echo -e "${WHITE}────────────────────────────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}📡 CONFIGURANDO PRIORIDADE IPv4${NC}"
 echo
+
 if grep -q "^precedence ::ffff:0:0/96  100" /etc/gai.conf 2>/dev/null; then
     echo -e "${GREEN}✔ Prioridade IPv4${NC}"
 else
@@ -102,10 +113,12 @@ else
     sed -i 's|#precedence ::ffff:0:0/96  100|precedence ::ffff:0:0/96  100|' /etc/gai.conf
     echo -e "${GREEN}✔ Prioridade IPv4 configurada${NC}"
 fi
+
 echo
 echo -e "${WHITE}────────────────────────────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}📦 CONFIGURANDO REPOSITÓRIOS${NC}"
 echo
+
 # ==============================================================================
 # REPOSITÓRIOS
 # ==============================================================================
@@ -118,33 +131,36 @@ if [ ! -f "$PATH_SOURCE" ]; then
         echo -e "${GREEN}✔ Backup criado: /etc/apt/sources.list.bkp${NC}"
     fi
     
-cat > "$PATH_SOURCE" <<EOF
-Types: $TYPES
-URIs: $URIS
-Suites: $SUITES
-Components: $COMPONENTES
-Signed-By: $SIGNED
-Enabled: yes
-
-Types: $TYPES
-URIs: $URIS_SEC
-Suites: $SUITES_SEC
-Components: $COMPONENTES
-Signed-By: $SIGNED
-Enabled: yes
-EOF    
+    # Cria o arquivo de sources usando echo em vez de here-document
+    echo "Types: $TYPES" > "$PATH_SOURCE"
+    echo "URIs: $URIS" >> "$PATH_SOURCE"
+    echo "Suites: $SUITES" >> "$PATH_SOURCE"
+    echo "Components: $COMPONENTES" >> "$PATH_SOURCE"
+    echo "Signed-By: $SIGNED" >> "$PATH_SOURCE"
+    echo "Enabled: yes" >> "$PATH_SOURCE"
+    echo "" >> "$PATH_SOURCE"
+    echo "Types: $TYPES" >> "$PATH_SOURCE"
+    echo "URIs: $URIS_SEC" >> "$PATH_SOURCE"
+    echo "Suites: $SUITES_SEC" >> "$PATH_SOURCE"
+    echo "Components: $COMPONENTES" >> "$PATH_SOURCE"
+    echo "Signed-By: $SIGNED" >> "$PATH_SOURCE"
+    echo "Enabled: yes" >> "$PATH_SOURCE"
+    
     echo -e "${GREEN}✔ Repositório Debian configurado em: $PATH_SOURCE${NC}"
 else
     echo -e "${GREEN}✔ Repositório Debian já existe${NC}"
 fi
+
 echo
 echo -e "${WHITE}────────────────────────────────────────────────────────────────────────────────${NC}"
 echo -e "${CYAN}🔄 ATUALIZANDO SISTEMA${NC}"
 echo
+
 # ==============================================================================
 # UPDATE SEGURO (SILENCIOSO)
 # ==============================================================================
 export DEBIAN_FRONTEND=noninteractive
+
 # Atualiza lista de pacotes com progresso
 echo -ne "${CYAN}▶ Atualizando lista de pacotes...${NC}\n"
 (
@@ -153,6 +169,7 @@ echo -ne "${CYAN}▶ Atualizando lista de pacotes...${NC}\n"
 PID=$!
 show_progress "$PID" "Atualizando lista de pacotes"
 wait "$PID"
+
 if [ $? -eq 0 ]; then
     echo -e "\r${GREEN}✔ Lista de pacotes atualizada${NC}    "
 else
@@ -160,6 +177,7 @@ else
     exit 1
 fi
 echo
+
 # Atualiza pacotes com progresso
 echo -ne "${CYAN}▶ Atualizando pacotes...${NC}\n"
 (
@@ -170,6 +188,7 @@ show_progress "$PID" "Atualizando pacotes"
 wait "$PID"
 echo -e "\r${GREEN}✔ Pacotes atualizados${NC}    "
 echo
+
 # Corrige dependências quebradas com progresso
 echo -ne "${CYAN}▶ Corrigindo dependências quebradas...${NC}\n"
 (
@@ -180,10 +199,12 @@ show_progress "$PID" "Corrigindo dependências"
 wait "$PID"
 echo -e "\r${GREEN}✔ Dependências corrigidas${NC}    "
 echo
+
 # Recarrega systemd (silencioso)
 echo -ne "${CYAN}▶ Recarregando systemd...${NC}\n"
 run_silent systemctl daemon-reload
 echo -e "${GREEN}✔ Systemd recarregado${NC}"
+
 echo
 echo -e "${WHITE}════════════════════════════════════════════════════════════════════════════════════════${NC}"
 echo -e "${GREEN}✓ SISTEMA ATUALIZADO COM SUCESSO${NC}"
