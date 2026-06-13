@@ -100,6 +100,37 @@ echo -e "${CYAN}▶ INICIANDO CONFIGURAÇÃO DO SISTEMA${NC}"
 echo
 
 # ==============================================================================
+# PATH GLOBAL DO SISTEMA
+# ==============================================================================
+echo -e "${WHITE}────────────────────────────────────────────────────────────────────────────────${NC}"
+echo -e "${CYAN}🛠️ CONFIGURANDO PATH GLOBAL${NC}"
+echo
+FIX_PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+PATH_OK=1
+[ -f /etc/environment ] || PATH_OK=0
+[ -f /etc/profile.d/path.sh ] || PATH_OK=0
+grep -q "^PATH=\"$FIX_PATH\"$" /etc/environment 2>/dev/null || PATH_OK=0
+grep -q "^export PATH=\"$FIX_PATH\"$" /etc/profile.d/path.sh 2>/dev/null || PATH_OK=0
+if [ "$PATH_OK" -eq 1 ]
+then
+    echo -e "${GREEN}✔ PATH global já configurado${NC}"
+else
+    echo -e "${YELLOW}⚠ Configurando PATH global...${NC}"
+    mkdir -p /etc/profile.d
+    cat > /etc/environment <<EOF
+PATH="$FIX_PATH"
+EOF
+    cat > /etc/profile.d/path.sh <<EOF
+export PATH="$FIX_PATH"
+EOF
+    chmod 644 /etc/environment
+    chmod 644 /etc/profile.d/path.sh
+    export PATH="$FIX_PATH"
+    echo -e "${GREEN}✔ PATH global configurado${NC}"
+fi
+echo
+
+# ==============================================================================
 # IPV4 PRIORITY
 # ==============================================================================
 echo -e "${WHITE}────────────────────────────────────────────────────────────────────────────────${NC}"
