@@ -125,10 +125,12 @@ export PATH="$FIX_PATH"
 EOF
     chmod 644 /etc/environment
     chmod 644 /etc/profile.d/path.sh
-    export PATH="$FIX_PATH"
-    source /etc/profile
     echo -e "${GREEN}✔ PATH global configurado${NC}"
 fi
+# Aplicação imediata na sessão atual
+export PATH="$FIX_PATH"
+source /etc/profile 2>/dev/null
+echo -e "${GREEN}✔ PATH aplicado na sessão atual${NC}"
 echo
 
 # ==============================================================================
