@@ -126,6 +126,7 @@ EOF
     chmod 644 /etc/environment
     chmod 644 /etc/profile.d/path.sh
     export PATH="$FIX_PATH"
+    source /etc/profile
     echo -e "${GREEN}✔ PATH global configurado${NC}"
 fi
 echo
